@@ -1,0 +1,5 @@
+<!-- Component: 	EvtCmpCloseModal -->
+<!-- Created by: 	OpFocus(Veena Sundara-Heragu) on 06/01/2017 -->
+<!-- Description: 	close the named modal dialog -->
+<aura:event type="COMPONENT" description="cause a modal to close">
+</aura:event>

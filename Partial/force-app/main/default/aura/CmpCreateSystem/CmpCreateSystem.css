@@ -1,0 +1,16 @@
+.THIS.slds-modal__header{
+	margin-left: -33px;
+    margin-right: -33px;
+}
+.THIS.slds-modal__footer{
+	margin-left: -33px;
+    margin-right: -33px;
+    margin-top: 40px;	
+}
+.THIS .slds-form-element__label {
+	padding-top: 15px;
+}
+.THIS.slds-modal__content {
+	margin-left: -33px;
+    margin-right: -33px;	
+}

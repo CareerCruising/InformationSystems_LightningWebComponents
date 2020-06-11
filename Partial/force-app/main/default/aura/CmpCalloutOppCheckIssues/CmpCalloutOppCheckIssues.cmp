@@ -1,0 +1,4 @@
+<aura:component description="CmpCalloutOppCheckIssues"               
+ implements="flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,force:lightningQuickAction">
+  <c:CmpCalloutAction calloutName="Opportunity_Check_Issues" sObjectName="{!v.sObjectName}" recordId="{!v.recordId}"/>
+</aura:component>

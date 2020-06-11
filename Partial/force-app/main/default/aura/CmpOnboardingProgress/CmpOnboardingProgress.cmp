@@ -1,0 +1,44 @@
+<!-- Component: 	CmpOnboardingProgress -->
+<!-- Created by: 	OpFocus(Veena Sundara-Heragu) on 10/17/2017 -->
+<!-- Description: 	Component to display progress bar of onboarding percent of related System -->
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global"
+				controller="CmpAccountSummaryCtrl">
+	
+	<aura:attribute name="accountLookupFieldName" type="String" access="public"
+					description="The API name of the account lookup field to use to display summary information" />
+
+	<lightning:workspaceAPI aura:id="workspace" />					
+	<aura:attribute name="accountWrapper" type="Object" access="private" />
+
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+	<!-- when parent record gets updated and saved, refresh this one too -->
+	<aura:handler event="force:refreshView" action="{!c.doInit}" /> 
+
+
+	<div class="slds-m-bottom-XX-small" style="border:1px solid #FAFAF9; border-radius: 4px;background-color:#ffffff;padding:8px;">
+
+        <div>
+        	<lightning:icon iconName="custom:custom19" size="small" alternativeText="System" 
+        					class="slds-m-right_xx-small slds-m-bottom--xxx-small"/>
+        	    <aura:if isTrue="{!v.accountWrapper.s.Name}">
+			    	<ui:outputURL target="_self" value="javascript:void(0);"  click="{!c.goToSystem}"
+			    					label="{!v.accountWrapper.s.Name}"/>
+
+					<div class="slds-float--right slds-p-right_medium">
+						Status: <ui:outputText value="{!v.accountWrapper.s.System_Status__c}"/>
+					</div>
+
+			    <aura:set attribute="else">
+			      	No system found
+			    </aura:set>
+			  </aura:if> 
+        </div>
+        <!--
+        <aura:if isTrue="{!v.accountWrapper.s.Name}">
+			<lightning:progressBar value="{!v.accountWrapper.onboradingCompletionPercent}" 
+									variant="circular"/>
+	    </aura:if> 
+		-->
+	</div>
+
+</aura:component>

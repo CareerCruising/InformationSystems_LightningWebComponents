@@ -1,0 +1,5 @@
+<apex:page controller="RfTestingController">
+    <apex:form >
+        <apex:commandButton title="Proceed" action="{!firstPageNext}" value="Testing button"></apex:commandButton>
+    </apex:form>
+</apex:page>

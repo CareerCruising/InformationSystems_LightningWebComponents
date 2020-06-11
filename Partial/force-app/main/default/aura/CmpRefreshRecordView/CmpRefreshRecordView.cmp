@@ -1,0 +1,7 @@
+<!-- Component: 	CmpRefreshRecordView-->
+<!-- Created by: 	OpFocus(Veena Sundara-Heragu) on 06/22/2017 -->
+<!-- Description: 	Component refresh the record view -->
+<aura:component implements="force:lightningQuickActionWithoutHeader">
+    <aura:handler event="aura:doneRendering" action="{!c.doneRendering}"/>
+    <aura:attribute name="isDoneRendering" type="Boolean" default="false"/>
+</aura:component>

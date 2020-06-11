@@ -1,0 +1,151 @@
+<apex:page controller="GraphicsPackController"
+   tabStyle="Account"
+   applyBodyTag="false"
+   docType="html-5.0"
+   sidebar="true"
+   showHeader="true"
+   title="Graphics Pack"
+   standardStylesheets="false">
+   <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <head>
+         <title>Graphics Pack</title>
+         <apex:stylesheet value="{!URLFOR($Resource.SLDS202forLtng, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+         <apex:stylesheet value="{!URLFOR($Resource.SLDS202forLtng, 'scss/dependencies/_index.scss')}" />
+         <apex:includeScript value="{!URLFOR($Resource.jqueryforltng)}" />
+      </head>
+      <body class="gp slds">
+         <apex:form id="frm1">
+         <div class="gp slds">
+            <div class="approvalsetuppage">
+               <div class="slds-page-header" role="banner">
+                  <div class="slds-grid slds-wrap slds-p-top--small">
+                     <div class="slds-col slds-has-flexi-truncate">
+                        <div class="slds-media slds-media--center slds-no-space slds-grow">
+                           <div class="slds-media__figure">
+                              <svg aria-hidden="true" class="slds-icon slds-icon-standard-opportunity">
+                                 <use xlink:href="{!URLFOR($Resource.SLDS202forLtng, '/assets/icons/custom-sprite/svg/symbols.svg#custom83')}"></use>
+                              </svg>
+                           </div>
+                           <div class="slds-media__body">
+                              <p class="slds-text-heading--label" style="opacity: 1;">Graphics Pack</p>
+                           </div>
+                           <div class="slds-button-group" role="group">
+                              <div class="slds-form-element">
+                                  <!-- <label class="slds-form-element__label" for="select-01">Select Size</label> -->
+                                  <div class="slds-form-element__control">
+                                    <div class="slds-select_container" style="width: 70px;">
+                                      <apex:selectList value="{!graphicSize}" size="1" styleClass="slds-select" id="T">
+                                          <apex:selectOptions value="{!GraphicSizeOptions}"></apex:selectOptions>
+                                          <apex:actionSupport status="statusone" event="onchange" >
+                                          </apex:actionSupport>                        
+                                      </apex:selectList>
+                                    </div>
+                                  </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+                <apex:outputPanel id="tabpanels">
+                 <div class="slds-tabs--scoped">
+                  <ul class="slds-tabs--scoped__nav" role="tablist">
+                    <li class="slds-tabs--scoped__item slds-text-title--caps slds-active" title="Farm Fresh"         
+                      role="presentation"><a class="slds-tabs--scoped__link" href="#" role="tab" onclick="selectTab(this);" 
+                      tabindex="-1" aria-selected="false" aria-controls="tab-scoped-3" id="tab-scoped-3__item">Farm Fresh</a></li>
+                    <li class="slds-tabs--scoped__item slds-text-title--caps" title="Icon Shock"         
+                      role="presentation"><a class="slds-tabs--scoped__link" href="#" role="tab" onclick="selectTab(this);" 
+                      tabindex="-1" aria-selected="false" aria-controls="tab-scoped-4" id="tab-scoped-4__item">Icon Shock</a></li>  
+                    <li class="slds-tabs--scoped__item slds-text-title--caps" title="Tango Desktop Project"   
+                      role="presentation"><a class="slds-tabs--scoped__link" href="#" role="tab" onclick="selectTab(this);" 
+                      tabindex="-1" aria-selected="false" aria-controls="tab-scoped-5" id="tab-scoped-5__item">Tango Desktop Project</a></li>  
+                    <li class="slds-tabs--scoped__item slds-text-title--caps" title="Visual Farm"                
+                      role="presentation"><a class="slds-tabs--scoped__link" href="#" role="tab" onclick="selectTab(this);" 
+                      tabindex="-1" aria-selected="false" aria-controls="tab-scoped-6" id="tab-scoped-6__item">Visual Farm</a></li>  
+                    <li class="slds-tabs--scoped__item slds-text-title--caps" title="Flags" 
+                      role="presentation"><a class="slds-tabs--scoped__link" href="#" role="tab" onclick="selectTab(this);" 
+                      tabindex="0" aria-selected="true" aria-controls="tab-scoped-1" id="tab-scoped-1__item">Flags</a></li>
+                    <li class="slds-tabs--scoped__item slds-text-title--caps" title="Silk"               
+                      role="presentation"><a class="slds-tabs--scoped__link" href="#" role="tab" onclick="selectTab(this);" 
+                      tabindex="-1" aria-selected="false" aria-controls="tab-scoped-2" id="tab-scoped-2__item">Silk</a></li>
+                    <li class="slds-tabs--scoped__item slds-text-title--caps" title="How to Use"
+                      role="presentation"><a class="slds-tabs--scoped__link" href="#" role="tab" onclick="selectTab(this);" 
+                      tabindex="-1" aria-selected="false" aria-controls="tab-scoped-6" id="tab-scoped-7__item">About</a></li>  
+                  </ul>
+
+                  <div id="tab-scoped-3" class="slds-tabs--scoped__content slds-show" role="tabpanel" aria-labelledby="tab-scoped-3__item">
+                      <c:ImageGallery imagesetting="{!GraphicsPackSetting['fatcow']}" imagesMap="{!mapfatcow16Images}" rendered="{!IF(graphicSize == '16', true, false)}" />
+                      
+                      <c:ImageGallery imagesetting="{!GraphicsPackSetting['fatcow']}" imagesMap="{!mapfatcow32Images}" rendered="{!IF(graphicSize == '32', true, false)}" />
+                 </div> 
+ 
+                  <div id="tab-scoped-4" class="slds-tabs--scoped__content slds-hide" role="tabpanel" aria-labelledby="tab-scoped-4__item">
+                      <c:ImageGallery imagesetting="{!GraphicsPackSetting['iconshock']}" imagesMap="{!mapiconshock16Images}" rendered="{!IF(graphicSize=='16', true, false)}" />
+                      
+                      <c:ImageGallery imagesetting="{!GraphicsPackSetting['iconshock']}" imagesMap="{!mapiconshock32Images}" rendered="{!IF(graphicSize=='32', true, false)}" />
+                  </div>
+                  
+                  <div id="tab-scoped-5" class="slds-tabs--scoped__content slds-hide" role="tabpanel" aria-labelledby="tab-scoped-5__item">
+                      <c:ImageGallery imagesetting="{!GraphicsPackSetting['tangodesktopproject']}"  imagesMap="{!maptango16Images}" rendered="{!IF(graphicSize=='16', true, false)}" />
+                      
+                      <c:ImageGallery imagesetting="{!GraphicsPackSetting['tangodesktopproject']}" imagesMap="{!maptango32Images}" rendered="{!IF(graphicSize=='32', true, false)}" />
+                  </div>
+                  
+                  <div id="tab-scoped-6" class="slds-tabs--scoped__content slds-hide" role="tabpanel" aria-labelledby="tab-scoped-6__item">
+                      <c:ImageGallery imagesetting="{!GraphicsPackSetting['visualpharm']}" imagesMap="{!mapvpharm16Images}" rendered="{!IF(graphicSize=='16', true, false)}" />
+                      
+                      <c:ImageGallery imagesetting="{!GraphicsPackSetting['visualpharm']}" imagesMap="{!mapvpharm32Images}" rendered="{!IF(graphicSize=='32', true, false)}" />
+                  </div>
+                  
+                  <div id="tab-scoped-1" class="slds-tabs--scoped__content slds-hide" role="tabpanel" aria-labelledby="tab-scoped-1__item">
+                      <c:ImageGallery imagesetting="{!GraphicsPackSetting['flags']}"  imagesMap="{!mapflags16Images}" rendered="{!IF(graphicSize=='16', true, false)}" />
+                      <apex:outputPanel rendered="{!IF(graphicSize=='32', true, false)}">
+                          Not Available
+                      </apex:outputPanel>
+                  </div>
+                  
+                  <div id="tab-scoped-2" class="slds-tabs--scoped__content slds-hide" role="tabpanel" aria-labelledby="tab-scoped-2__item">
+                      <c:ImageGallery imagesetting="{!GraphicsPackSetting['silk']}" imagesMap="{!mapsilk16Images}" rendered="{!IF(graphicSize=='16', true, false)}" />
+                      <apex:outputPanel rendered="{!IF(graphicSize=='32', true, false)}">
+                          Not Available
+                      </apex:outputPanel>
+                  </div>
+                                    
+                  <div id="tab-scoped-7" class="slds-tabs--scoped__content slds-hide" role="tabpanel" aria-labelledby="tab-scoped-7__item">
+                      <c:AboutGraphicsPack />
+                  </div>
+                
+                </div>
+                </apex:outputPanel>
+                
+               </div>
+               
+            </div>
+         </apex:form>
+
+            <script>
+                function selectTab(elmnt) {
+                    // slds-active
+                    $(elmnt).parent("li").siblings(".slds-active").removeClass("slds-active");
+                    $(elmnt).parent("li").addClass("slds-active");
+                
+                    // tabindex
+                    $(elmnt).parent("li").siblings().children("a").attr("tabindex", -1);
+                    $(elmnt).attr("tabindex", 0);
+                
+                    // aria-selected
+                    $(elmnt).parent("li").siblings().children("a").attr("aria-selected", false);
+                    $(elmnt).attr("aria-selected", true);
+                
+                    // hiding previouly selected tab (slds-show/slds-hide)
+                    $(elmnt).parent('.slds-tabs--scoped__item').parent().siblings("div[role='tabpanel']").addClass("slds-hide");
+                    $(elmnt).parent('.slds-tabs--scoped__item').parent().siblings("div[role='tabpanel']").removeClass("slds-show");
+
+                    // displaying newly selected tab (slds-show/slds-hide)                    
+                    $(elmnt).parent('.slds-tabs--scoped__item').parent().siblings("div[aria-labelledby='"+$(elmnt).prop('id')+"']").addClass("slds-show");
+                    $(elmnt).parent('.slds-tabs--scoped__item').parent().siblings("div[aria-labelledby='"+$(elmnt).prop('id')+"']").addClass("slds-hide");
+                    }
+            </script>
+      </body>
+   </html>
+</apex:page>

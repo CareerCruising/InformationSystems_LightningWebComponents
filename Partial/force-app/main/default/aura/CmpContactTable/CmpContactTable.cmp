@@ -1,0 +1,68 @@
+<!-- Component: 	CmpContactTable -->
+<!-- Created by: 	OpFocus(Veena Sundara-Heragu) on 7/23/18 -->
+<!-- Description: 	 lightning:datatable to add/edit/delete contacts -->
+<aura:component description="CmpContactTable"
+                controller="CmpContactTableCtrl"
+                implements="force:hasRecordId,force:lightningQuickAction,flexipage:availableForRecordHome">
+    <!-- attributes -->
+    <aura:attribute name="modalTitle" type="String" default="Manage Contacts"/>
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="lstColumn" type="List"/>
+    <aura:attribute name="mode" type="String" default="List" description="List or Edit"/>
+    <aura:attribute name="editRecordId" type="String"/>
+
+    <!-- events-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="onSaveSuccess" event="force:recordSaveSuccess" action="{!c.handleSaveSuccess}"/>
+    <aura:handler name="change" value="{!v.mode}" action="{!c.setModalTitle}" />
+
+    <lightning:card>
+        <div class="slds-p-left--large">
+            <lightning:button label="Manage Contacts" onclick="{! c.manageProducts }"/>
+        </div>
+    </lightning:card>
+
+
+    <!-- modal dialog to manage products -->
+    <c:CmpModal aura:id="productsModal"
+                title="{!v.modalTitle}"
+                allowClose="true"
+                class="slds-modal--large">
+
+        <aura:set attribute="footer">
+            <aura:if isTrue="{!v.mode == 'Edit'}">
+                <lightning:button label="Save" onclick="{!c.saveEdit}"/>
+                <lightning:button label="Cancel" onclick="{!c.cancelEdit}"/>
+            </aura:if>
+        </aura:set>
+
+        <!-- BODY OF MODAL -->
+
+        <lightning:spinner aura:id="mySpinner" variant="brand" size="large" class="slds-hide"
+                           alternativeText="waiting"/>
+
+
+        <!-- show list of products when mode is List-->
+        <aura:if isTrue="{!v.mode == 'List'}">
+
+            <lightning:button label="Add" onclick="{!c.add}"/>
+            <div style="height: 300px;">
+                <lightning:datatable
+                        keyField="Id"
+                        data="{! v.data }"
+                        columns="{! v.lstColumn }"
+                        hideCheckboxColumn="true"
+                        onsave="{!c.save}"
+                        onrowaction="{! c.handleRowAction }"/>
+            </div>
+        </aura:if>
+
+        <!-- show edit record details when mode is Edit -->
+        <aura:if isTrue="{!v.mode == 'Edit'}">
+            <div style="height: 300px;overflow: auto;">
+                <force:recordEdit aura:id="edit" recordId="{!v.editRecordId}"/>
+            </div>
+        </aura:if>
+    </c:CmpModal>
+
+</aura:component>

@@ -1,0 +1,41 @@
+<aura:component implements="flexiPage:availableForAllPageTypes,ltngfw:IntBase,force:hasRecordId" extends="ltngfw:CmpBase" controller="CmpNeedsAnalysisCtrl">
+	
+	<aura:attribute name="lookupField" description="Field API for Lookup to Needs_Analysis__c record" type="String"/>
+	<aura:attribute name="naid" type="String" access="global"/>
+	<aura:attribute name="checklist" type="List"/>
+	<aura:handler event="force:refreshView" action="{!c.init}"/>
+
+	<lightning:card title="Needs Analysis">
+		<aura:set attribute="actions">
+			<lightning:button label="Edit" onclick="{!c.editNA}" disabled="{!v.naid == null}"/>
+		</aura:set>
+
+		<div class="slds-grid slds-wrap slds-p-around_small">
+			<div class="slds-col slds-size_1-of-2">
+				<ul>
+					<aura:iteration items="{!v.checklist}" var="item">
+						<li>
+							<lightning:icon iconName="utility:check" size="x-small" class="slds-p-right_small green-check"/>
+							{!item}
+						</li>
+					</aura:iteration>
+				</ul>
+			</div>
+			
+            <div class="slds-col slds-size_1-of-2">
+                <div aura:id="recordView" class="slds-hide">
+                    <lightning:recordViewForm recordId="{!v.naid}" objectApiName="Needs_Analysis__c">
+                        <lightning:outputField fieldName="Course_Planner_Interest__c" class="field-label"/>
+                        <lightning:outputField fieldName="Transcripts_Interest__c" class="field-label"/>
+                        <lightning:outputField fieldName="Challenges_with_Current_System__c" class="field-label"/>
+                        <lightning:outputField fieldName="Client_Facing_List_of_Priorities__c" class="field-label"/>
+                        <lightning:outputField fieldName="Client_Profile__c" class="field-label"/>
+                        <lightning:outputField fieldName="Client_Circumstances__c" class="field-label"/>
+                    </lightning:recordViewForm>	
+                </div>
+			</div>
+		</div>
+
+	</lightning:card>
+
+</aura:component>

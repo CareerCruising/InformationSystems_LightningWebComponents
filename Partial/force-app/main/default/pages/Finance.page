@@ -1,0 +1,9 @@
+<apex:page >
+    <apex:includeScript value="/support/console/42.0/integration.js"/>
+    <apex:includeScript value="{!$Resource.SubtabFromIframe}"/>
+    <c:HelpLabel LabelText="Why is this blank?" HelpText="You must be logged into IS Admin. Click to login." HelpURL="https://is.xello.world/config/MyProfile" HelpTarget="_blank"/>
+    <div style="margin-bottom:5px;color:#F5F5F5;float:right;">
+        <apex:outputText value="/AdminSF/index" escape="false"/>
+    </div>
+    <apex:iframe src="https://is.xello.world/AdminSF/index" scrolling="true" height="1950px" id="aaSlx"/>
+</apex:page>

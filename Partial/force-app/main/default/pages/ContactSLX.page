@@ -1,0 +1,15 @@
+<apex:page standardController="contact">
+    <apex:includeScript value="/support/console/42.0/integration.js"/>
+    <apex:includeScript value="{!$Resource.SubtabFromIframe}"/>
+    <apex:form >
+        <c:RefreshIcon />
+        <c:HelpLabel LabelText="Why is this blank?" HelpText="You must be logged into IS Admin. Click to login." HelpURL="https://is.xello.world/config/MyProfile" HelpTarget="_blank"/>
+        <div style="margin-bottom:5px;color:#F5F5F5;float:right;">
+            <apex:outputText value="/account/SlxOld#/cid={!contact.SlxContactId__c}" escape="false"/>
+        </div>
+    </apex:form>
+    <apex:outputPanel id="theFrame">
+        <apex:iframe src="https://is.xello.world/account/SlxOld#/cid={!contact.SlxContactId__c}" scrolling="true" height="1950px" id="aaSlx"/>
+    </apex:outputPanel>
+  
+</apex:page>

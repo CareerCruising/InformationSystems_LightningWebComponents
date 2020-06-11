@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+	<types>
+		<members>bikeCard</members>
+		<members>data</members>
+		<members>detail</members>
+		<members>selector</members>
+		<members>tile</members>
+		<members>list</members>
+		<name>LightningComponentBundle</name>
+	</types>
+	<version>48.0</version>
+</Package>

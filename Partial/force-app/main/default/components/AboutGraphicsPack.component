@@ -1,0 +1,221 @@
+<apex:component >
+   <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <head>
+         <apex:stylesheet value="{!URLFOR($Resource.SLDS202forLtng, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+         <apex:stylesheet value="{!URLFOR($Resource.SLDS202forLtng, 'scss/dependencies/_index.scss')}" />
+         <apex:includeScript value="{!URLFOR($Resource.jqueryforltng)}" />
+         <apex:stylesheet value="{!URLFOR($Resource.highlightjs, 'styles/default.css')}" />
+         <apex:includeScript value="{!URLFOR($Resource.highlightjs, 'highlight.pack.js')}" />
+         <script>hljs.initHighlightingOnLoad();</script>
+      </head>
+      <body class="gp slds">
+         <div class="gp slds">
+            <div class="approvalsetuppage">
+                <div class="slds-tabs--default">
+                  <ul class="slds-tabs--default__nav" role="tablist">
+                    <li class="slds-tabs--default__item slds-text-title--caps slds-active" title="Item One"
+                        role="presentation"><a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" onclick="selectAboutTab(this);" tabindex="0" aria-selected="true" aria-controls="tab-default-1" id="tab-default-1__item">Overview</a></li>
+                    <li class="slds-tabs--default__item slds-text-title--caps" title="Item Two"
+                        role="presentation"><a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" onclick="selectAboutTab(this);" tabindex="-1" aria-selected="false" aria-controls="tab-default-2" id="tab-default-2__item">Tab example</a></li>
+                    <li class="slds-tabs--default__item slds-text-title--caps" title="Item Three"
+                        role="presentation"><a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" onclick="selectAboutTab(this);" tabindex="-1" aria-selected="false" aria-controls="tab-default-3" id="tab-default-3__item">Image Formula examples</a></li>
+                  </ul>
+                  <div id="tab-default-1" class="slds-tabs--default__content slds-show" role="tabpanel" aria-labelledby="tab-default-1__item">
+                      <div class="slds-text-longform">
+                          <p>
+                            'Lightning Graphics Pack' contains hundreds of images that can be used in salesforce applications for tabs, image formulas, and visualforce pages (subject to Attribution).
+                          </p>
+                          <p>
+                            Clicking on the different images/links at the top of this page will allow you to browser the installed images in the 'Graphics Pack' package.                  
+                          </p>
+                      </div>
+                  
+                      <h3 class="slds-section-title--divider">What is in the package?</h3>
+                      <div class="slds-text-longform">
+                          <p>
+                            Graphics pack contains images in sizes of 16x16 and 32x32 pixels:
+                            <ul>
+                                <li>
+                                    The 32x32 pixel images can be used in tabs (for example the elephant on this tab)
+                                </li>
+                                <li>
+                                    The 16x16 pixel images can be used in image formula fields (for example the light bulbs, deck chairs, etc shown in the screen shot further down this page)
+                                </li>
+                            </ul>
+                            
+                            All images are stored twice within this package
+                            
+                            <ul>
+                                <li>
+                                   Once in a zipped static resource file called 'Graphics Pack' for use in Visualforce pages
+                                </li>
+                                <li>
+                                    And once in the documents tab under two folders
+                                        <ul>
+                                            <li>'Graphics Pack for Formulas' for 16x16 pixel images </li>
+                                            <li>'Graphics Pack for Tabs' for 32x32 pixel images </li>
+                                        </ul>    
+                                </li>     
+                            </ul>
+                            The images are displayed in several tabs which can be accessed from the 'Graphics Pack' tab on the 'Lightning Graphics Pack' application.
+                          </p>
+                      </div>
+                      <h3 class="slds-section-title--divider">Sandboxes</h3>
+                      <div class="slds-text-longform">
+                          <p>
+                              If development is being done in a sandbox ensure that the sandbox was created from a production system that already has "Graphics Pack" installed as newly created image formulas will reference the document id for the graphic ( as a sandbox will contain the same graphic document id as the production system in this scenario ). When the image formula is promoted from sandbox to production it will reference the graphic with the correct document id.
+                          </p>
+                          
+                          <p>
+                              If you install "Graphics Pack" into the sandbox first ( before promoting to the production system ) and then create a formula field that uses a graphic document id then promote the image formula and graphic to the production system the graphics document id will be different and the image formula will not work correctly.
+                          </p>
+                      </div>
+                      
+                      <h3 class="slds-section-title--divider">Attribution</h3>
+                      <div class="slds-text-longform">
+                          <p>
+                            In order to use the graphics in this package most require an attribution to the author. The pages within this package that display the images contain an attribution, if these pages are removed then the attribution must be created elsewhere in order to continue using the images.
+                          </p>
+                      </div>
+                  </div>
+                  
+                  <div id="tab-default-2" class="slds-tabs--default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-2__item">
+                      <h3 class="slds-section-title--divider">Setup</h3>
+                      <div class="slds-text-longform">
+                          <p>In order to use one of the images in the package for a tab</p>
+                          <ul>
+                            <li>Browse the larger images (32x32 pixels) in this package using the images/link at the top of this page to identify the required image</li>
+                            <li>Note the name of the image (as needed later)</li>
+                            <li>When creating a new tab click on the magnifying glass for 'Tab Style'</li>
+                            <li>Click on 'Create your own style' button</li>
+                            <li>Select a Color</li>
+                            <li>Click on 'Insert an Image'</li>
+                            <li>Click on 'Search in Documents' link</li>
+                            <li>Search on previously noted image name. As there are a lot of images within Graphics Pack it is easier to search for image name rather than browse</li>
+                            <li>Ensure the chosen image is from the 'Graphics Pack for Tabs' folder</li>
+                            <li>The image may not initially appear next to the 'Insert an Image' button but click 'OK' anyway</li>
+                            <li>Complete the rest of the tab wizard</li>
+                            <li>Navigate to the new tab to verify the image is displayed correctly</li>
+                        </ul>
+                      </div>
+                         
+                  </div>
+                  <div id="tab-default-3" class="slds-tabs--default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-3__item">
+                      <h3 class="slds-section-title--divider">Setup</h3>
+                      <div class="slds-text-longform">
+                        <ul>                 
+                        <li>In order to use images in the package for a image formulas</li>
+                        <li>Browse the smaller images (16x16 pixels) in this package using the images/link at the top of this page to identify the required images</li>
+                        <li>Note the name of the images (as needed later)</li>
+                        <li>Click on 'Documents' tab</li>
+                        <li>Select 'Graphics Pack for Formulas' folder</li>
+                        <li>Click on name of images noted from earlier step</li>
+                        <li>Note the Document Id of the image by looking at the last part of the URL, it will be in the form of 015xxxxxxxxxxxx</li>
+                        </ul>
+                        The Document Id is used within the image formulas
+                      </div>
+                      
+                      <h3 class="slds-section-title--divider">Record showing Image Formulas</h3>
+                      <div class="slds-text-longform">
+                          <p>
+                              Below is an example of how images formulas can be used with the images within the 'Graphics Pack' package.
+                          </p>
+                              <apex:image value="{!URLFOR($Resource.LightningGraphicsPackExample)}" />
+                          <p>
+                              The following sections provides the details on the image formulas. Please search the on line documentation on 'Examples of Advanced Formula Fields' to see how to create image formulas.
+                          </p>
+                      </div>
+                      
+                      <h3 class="slds-section-title--divider">Simple 'Out of x' examples</h3>
+                      <div class="slds-text-longform">
+                          Out of 5 Deck Chairs
+                          <pre>
+                              <code>
+                                IF ( VALUE(TEXT(XXX)) > 0, IMAGE("/servlet/servlet.FileDownload?file=YYY", "*", 16, 16),"")
+                                +
+                                IF ( VALUE(TEXT(XXX)) > 1, IMAGE("/servlet/servlet.FileDownload?file=YYY", "*", 16, 16),"")
+                                +
+                                IF ( VALUE(TEXT(XXX)) > 2, IMAGE("/servlet/servlet.FileDownload?file=YYY", "*", 16, 16),"")
+                                +
+                                IF ( VALUE(TEXT(XXX)) > 3, IMAGE("/servlet/servlet.FileDownload?file=YYY", "*", 16, 16),"")
+                                +
+                                IF ( VALUE(TEXT(XXX)) > 4, IMAGE("/servlet/servlet.FileDownload?file=YYY", "*", 16, 16),"")
+                          </code>
+                          </pre>
+                          
+                          <ul>
+                              <li>Where XXX is a picklist with values 1,2,3,4,5</li>
+                              <li>Where YYY is the Document Id of the image (the Document id does not need to be the same for example see Out of 3 Currency)</li>
+                          </ul>
+                      </div>
+                      
+                      <h3 class="slds-section-title--divider">On/Off 'Out of x' examples</h3>
+                      <div class="slds-text-longform">
+                          Out of 3 Lightbulbs
+                          <pre>
+                              <code>
+                                IF ( VALUE(TEXT(XXX)) > 0, IMAGE("/servlet/servlet.FileDownload?file=YYY", "*", 16, 16), IMAGE("/servlet/servlet.FileDownload?file=ZZZ", "-", 16, 16))
+                                +
+                                IF ( VALUE(TEXT(XXX)) > 1, IMAGE("/servlet/servlet.FileDownload?file=YYY", "*", 16, 16), IMAGE("/servlet/servlet.FileDownload?file=ZZZ", "-", 16, 16))
+                                +
+                                IF ( VALUE(TEXT(XXX)) > 2, IMAGE("/servlet/servlet.FileDownload?file=YYY", "*", 16, 16), IMAGE("/servlet/servlet.FileDownload?file=ZZZ", "-", 16, 16))
+                              </code>
+                           </pre>
+                          <ul>
+                              <li>Where XXX is a picklist with values 1,2,3</li>
+                              <li>Where YYY is the Document Id of the "on" image</li>
+                              <li>Where ZZZ is the Document Id of the "off" image</li>
+                          </ul>   
+                      </div>
+                      
+                      <h3 class="slds-section-title--divider">'Positions', 'Up or Down', or 'Red Amber Green' examples</h3>
+                      <div class="slds-text-longform">
+                          Red Amber Green
+                          <pre>
+                              <code>
+                                CASE( WWW ,
+                                "Red", IMAGE("/servlet/servlet.FileDownload?file=XXX","Red",16,16),
+                                "Amber", IMAGE("/servlet/servlet.FileDownload?file=YYY","Amber",16,16),
+                                "Green", IMAGE("/servlet/servlet.FileDownload?file=ZZZ","Green",16,16),
+                                "")
+                              </code>
+                          </pre>
+                          <ul>
+                              <li>Where WWW is a picklist with values "Red","Amber","Green"</li>
+                              <li>Where XXX is the Document Id of the "Red" image</li>
+                              <li>Where YYY is the Document Id of the "Amber" image</li>
+                              <li>Where ZZZ is the Document Id of the "Green" image</li>
+                          </ul>   
+                      </div>
+                  </div>
+                </div>
+               </div>
+            </div>
+            
+            <script>
+                function selectAboutTab(elmnt, tab) {
+                    // slds-active
+                    $(elmnt).parent("li").siblings(".slds-active").removeClass("slds-active");
+                    $(elmnt).parent("li").addClass("slds-active");
+                
+                    // tabindex
+                    $(elmnt).parent("li").siblings().children("a").attr("tabindex", -1);
+                    $(elmnt).attr("tabindex", 0);
+                
+                    // aria-selected
+                    $(elmnt).parent("li").siblings().children("a").attr("aria-selected", false);
+                    $(elmnt).attr("aria-selected", true);
+                
+                    // hiding previouly selected tab (slds-show/slds-hide)
+                    $(elmnt).parent('.slds-tabs--default__item').parent().siblings("div[role='tabpanel']").addClass("slds-hide");
+                    $(elmnt).parent('.slds-tabs--default__item').parent().siblings("div[role='tabpanel']").removeClass("slds-show");
+
+                    // displaying newly selected tab (slds-show/slds-hide)                    
+                    $(elmnt).parent('.slds-tabs--default__item').parent().siblings("div[aria-labelledby='"+$(elmnt).prop('id')+"']").addClass("slds-show");
+                    $(elmnt).parent('.slds-tabs--default__item').parent().siblings("div[aria-labelledby='"+$(elmnt).prop('id')+"']").addClass("slds-hide");
+
+                }
+            </script>
+      </body>
+   </html>
+</apex:component>

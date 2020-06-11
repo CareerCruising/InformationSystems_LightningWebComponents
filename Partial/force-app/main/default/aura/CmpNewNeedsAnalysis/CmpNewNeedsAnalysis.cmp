@@ -1,0 +1,48 @@
+<!-- Component: 	CmpNewNeedsAnalysis -->
+<!-- Created by: 	OpFocus(John Pipkin) on 10/30/2018 -->
+<!-- Description: 	Quick action on Account or Opportunity to create a new Needs_Analysis__c record and relate to -->
+<!--				parent account/opportunity based on context. If in console, open created record in subtab -->
+<aura:component implements="force:lightningQuickAction,force:hasRecordId,ltngfw:IntBase,force:hasSObjectName" controller="CmpNewNeedsAnalysisCtrl"
+				extends="ltngfw:CmpBase">
+
+    <aura:attribute name="opp" type="Opportunity"/>
+    <aura:attribute name="oppWithFields" type="Opportunity"/>
+	<aura:attribute name="acc" type="Account"/>
+    <aura:attribute name="accWithFields" type="Account"/>
+	<aura:attribute name="na" type="Needs_Analysis__c"/>
+    <aura:attribute name="naWithFields" type="Needs_Analysis__c"/>
+	<aura:attribute name="errors" type="String"/>
+    <aura:attribute name="mapRtIds" type="String"/>
+    <aura:attribute name="blnInitDone" type="Boolean"/>
+    <aura:attribute name="blnRecordCreated" type="Boolean"/>
+
+	<lightning:workspaceAPI aura:id="workspace"/>
+	<lightning:spinner aura:id="spinner" size="small" class="slds-hide"/>
+
+	<aura:handler name="change" value="{!v.oppWithFields}" action="{!c.createNewNARecord}"/>
+    <aura:handler name="change" value="{!v.mapRtIds}" action="{!c.createNewNARecord}"/>
+	<aura:handler name="change" value="{!v.accWithFields}" action="{!c.createNewNARecord}"/>
+
+    <aura:method name="createNewForOpp"/>
+    <aura:method name="createNewForAcc"/>
+    <aura:method name="createNewRecord"/>
+
+	<!-- if on Opportunity page -->
+	<aura:if isTrue="{!v.sObjectName == 'Opportunity'}">
+		<force:recordData targetRecord="{!v.opp}" mode="VIEW" fields="Id,AccountId,Needs_Analysis__c,Account.RecordType.DeveloperName,RecordTypeId" recordId="{!v.recordId}"
+            targetFields="{!v.oppWithFields}"/>
+	</aura:if>
+
+	<!-- if on Account page -->
+	<aura:if isTrue="{!v.sObjectName == 'Account'}">
+		<force:recordData targetRecord="{!v.acc}" mode="VIEW" fields="Id,Primary_Needs_Analysis__c,RecordType.DeveloperName,RecordTypeId"
+                          targetFields="{!v.accWithFields}" recordId="{!v.recordId}"/>
+	</aura:if>
+
+	<force:recordData targetRecord="{!v.na}" mode="EDIT" fields="Id,Account__c,From_Opp__c" targetFields="{!v.naWithFields}"
+                      aura:id="newNA" targetError="{!v.errors}"/>
+
+
+	<!-- <lightning:button label="Create New Needs Analysis" onclick="{!c.createNewRecord}" variant="brand"/> -->
+
+</aura:component>

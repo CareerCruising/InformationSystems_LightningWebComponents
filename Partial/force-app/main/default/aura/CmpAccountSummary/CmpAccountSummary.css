@@ -1,0 +1,18 @@
+.THIS.parentDiv {
+	padding:10px;
+	border: 1px solid rgb(216, 221, 230);
+	border-radius: .25rem;
+}
+
+.THIS .white {
+	background-color : white;
+}
+.THIS .green {
+	background-color : green;
+	color: white;
+}
+
+.THIS .gray {
+	background-color : gray;
+	color: white;
+}

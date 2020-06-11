@@ -1,0 +1,6 @@
+<apex:page standardcontroller="Opportunity" extensions="DelOpportunityCtrl" action="{!init}">
+    <apex:slds />
+    <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+        <h2>{!errorMsg}. Please click &nbsp; <a href="/{!opp.Id}">here</a>&nbsp; to return to your Opportunity.</h2>
+    </div>
+</apex:page>

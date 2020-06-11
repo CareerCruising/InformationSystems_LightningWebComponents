@@ -1,0 +1,6 @@
+<apex:page >
+
+    <apex:canvasApp applicationName="Adminapp"
+    height="1950px" scrolling="yes"/>
+
+</apex:page>

@@ -1,0 +1,38 @@
+<aura:component description="CmpCalloutAction"
+                access="GLOBAL"
+                extends="ltngfw:CmpBase"
+                controller="CmpCalloutActionCtrl"
+                implements="ltngfw:IntBase,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,force:lightningQuickActionWithoutHeader">
+
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+    <aura:attribute name="calloutName" type="String" default="{!v.sObjectName}"/>
+
+    <aura:html tag="style">
+        .cuf-content {
+            padding: 0rem !important;
+        }
+        .slds-p-around--medium {
+            padding: 0rem !important;
+        }
+        .slds-modal__content{
+            overflow-y:hidden !important;
+            height:unset !important;
+            max-height:unset !important;
+        }
+        .slds-modal__container {
+            margin-top: 10rem !important;
+            height : 10rem;
+            <!-- adjust these 2 based on how wide you want it to be -->
+            width: 30%;
+            max-width: 30rem;
+        }
+        .slds-modal__close {
+            display:none;
+        }
+    </aura:html>
+
+    <!--Content-->
+    <div class="slds-modal__content" style="overflow: auto;">
+        <lightning:spinner aura:id="mySpinner" variant="brand" alternativeText="Making Callout. Please Wait..." size="medium"/>
+    </div>
+ </aura:component>

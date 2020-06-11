@@ -1,0 +1,63 @@
+<!-- Component: 	CmpChangeOppAccount -->
+<!-- Created by: 	Rick Fleischmann and Veena Sundara-Heragu (Opfocus) on 21/03/2018 -->
+<!-- Description: 	Header for Modal dialog -->
+<aura:component implements="force:lightningQuickActionWithoutHeader,force:hasRecordId" controller="CmpChangeOppAccountCtrl">
+
+    <aura:attribute name="testRecordId" type="String" description="String value that holds the Id of the selected record"/>
+
+    <aura:attribute name="newAccountId" type="String" description="String value that holds the Id of the selected record"/>
+    <aura:attribute name="newAccount" type="Account" />
+
+    <aura:attribute name="existingAccount" type="Account" />
+
+    <aura:attribute name="existingAccountName" type="String" access="public"/>
+
+    <aura:attribute name="modalClassName" type="String" default="slds-modal slds-modal--large" access="private"/>
+    <aura:attribute name="backdropClassName" type="String" default="slds-backdrop" access="private"/>
+
+    <!--events-->
+    <aura:handler name="EvtCmpCloseModal" event="c:EvtCmpCloseModal" action="{!c.closeModal}"/>
+    <aura:handler event="aura:systemError" action="{!c.handleSystemError}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+
+    <c:CmpModalHeader modalName="modalAccount" title="{!v.existingAccountName}" allowClose="false"
+                      style="{'color:green;'}">
+
+    </c:CmpModalHeader>
+
+        <!--<div class="slds-modal__content" style="overflow: auto;">-->
+
+        <lightning:spinner aura:id="mySpinner" variant="brand" size="large" class="slds-hide"
+                           alternativeText="waiting"/>
+
+        <div class="slds-text-heading--small">This will also update the account of any orders for the opportunity</div>
+        <br/>
+
+        <c:strike_lookup label="Choose new Account"
+            object="Account"
+            searchField="Name"
+            placeholder="Select an option"
+            iconName="standard:account"
+            subtitleField="Industry"
+            order="Name"
+            limit="5"
+            loadingMessage="Loading..."
+            errorMessage="Invalid input"
+            value="{!v.newAccountId}"/>
+
+           <!--
+            <ui:outputText value="{!v.newAccount.Name}"/>
+            <ui:outputText value="{!v.newAccountId}"/>-->
+
+    <c:CmpModalFooter >
+        <div class="slds-clearfix">
+            <div class="slds-float&#45;&#45;right">
+                <lightning:button label="Cancel" onclick="{!c.closeModal}"/>
+                <lightning:button label="Save" onclick="{!c.save}" variant="brand"/>
+            </div>
+        </div>
+    </c:CmpModalFooter>
+
+
+</aura:component>

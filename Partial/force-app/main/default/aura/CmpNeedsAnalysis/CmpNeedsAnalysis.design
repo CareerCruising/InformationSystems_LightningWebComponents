@@ -1,0 +1,6 @@
+<design:component>
+
+	<design:attribute name="lookupField" label="Needs Analysis Lookup Field Name" required="true"/>
+	<design:attribute name="debugMode" label="Debug Mode" />
+
+</design:component>

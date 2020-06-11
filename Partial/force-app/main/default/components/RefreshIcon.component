@@ -1,0 +1,13 @@
+<!--
+ - Created by veenaheragu on 6/18/18.
+ -->
+
+<apex:component id="RefreshIcon">
+
+    <apex:actionFunction name="refreshIframe" rerender="theFrame" />
+    <span onclick="refreshIframe();return false;" style="cursor:pointer;">
+      <svg aria-hidden="true" class="slds-icon" width="20px" height="20px" style="fill:#D6D6D6">
+        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/action-sprite/svg/symbols.svg#refresh')}" />
+      </svg>
+    </span>
+</apex:component>

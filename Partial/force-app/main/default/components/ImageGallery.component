@@ -1,0 +1,118 @@
+<apex:component allowDML="false" >
+   <apex:attribute name="imagesetting" required="true" type="GraphicsPackSettings__mdt" description="Type of Graphic to display" />   
+   <apex:attribute name="imagesMap" required="true" type="map" description="map of images" />
+   
+   <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <head>
+         <title>Graphics Pack</title>
+         <apex:stylesheet value="{!URLFOR($Resource.SLDS202forLtng, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />         
+         <style>
+             .gp .slds-page-header {
+                padding-top: 0.5rem;
+                padding-bottom: 0.5rem;
+                padding-right: 1rem;
+                padding-left: 1rem;
+                border-radius: 0.25rem 0.25rem 0.25rem 0.25rem;
+             }
+             
+             .gp .slds-p-top--small {
+                 padding-top: 0.3rem;
+                 padding-bottom: 0.3rem;
+             }
+             
+             .gp .slds-tabs--scoped__content {
+                padding: 0.5rem;
+            }
+            .gp .slds-image__crop img {
+                top: 35%;
+             }
+             
+             .gp dd, .gp figure {
+                margin: 0;
+                width: 80%;
+            }
+            
+            .preview_container {
+                width: 5.8rem;
+                height: 6rem;
+                display: inline-block;
+                vertical-align: top;
+                margin: 0.8rem 1rem 0px 2rem;
+            }
+            .preview {
+                text-align: center;
+                width: 9.8rem;
+                height: 9rem;
+                background-color: #f3f5f5;
+            }
+       </style>
+      </head>
+      <body class="gp slds">
+         <div class="gp slds">
+              <div class="slds-m-top--small"></div> 
+                  <apex:repeat id="imagetyperepeat" value="{!imagesMap}" var="imageType">
+                      <div class="slds-m-top--small"></div>
+                      <h3 class="slds-section-title--divider">{!imageType}</h3>
+                          <apex:repeat id="imagerepeat" value="{!imagesMap[imageType]}" var="image">    
+                      <div class="preview_container">
+                              <div style="width:9.8rem;">
+                                <figure class="slds-image slds-image--card">
+                                  <a href="{!URLFOR($Resource.GraphicsPackNew, '/'+image.Image_URL__c)}" target="_blank" class="slds-image__crop slds-image__crop--4-by-3" >
+                                      <img id="{!image.Label}" src="{!URLFOR($Resource.GraphicsPackNew, '/'+ image.Image_URL__c)}" alt="Description of the image"  />          
+                                  </a>
+                                  <div class="slds-button-group slds-image__actions" role="group">
+                                    <button class="slds-button slds-button--icon-border-filled slds-button--icon-x-small">
+                                      <svg aria-hidden="true" class="slds-button__icon">
+                                        <use xlink:href="{!URLFOR($Resource.SLDS202forLtng, '/assets/icons/utility-sprite/svg/symbols.svg#download')}"></use>
+                                      </svg>
+                                      <span class="slds-assistive-text">Download</span>
+                                    </button>
+                                  </div>
+                                  <figcaption class="slds-image__title slds-image__title--card">
+                                    <span class="slds-icon_container slds-m-right--x-small" title="image">
+                                      <svg aria-hidden="true" class="slds-icon slds-icon--x-small">
+                                        <use xlink:href="{!URLFOR($Resource.SLDS202forLtng, '/assets/icons/doctype-sprite/svg/symbols.svg#image')}"></use>
+                                      </svg>
+                                      <span class="slds-assistive-text">image</span>
+                                    </span>
+                                    <span class="slds-image__text slds-truncate" title="Image Title">{!image.Label}</span>
+                                  </figcaption>
+                                </figure>
+                         </div>
+                     </div>
+                         </apex:repeat>   
+                  </apex:repeat>
+                  
+                  <div class="slds-m-top--small"></div>      
+                     <h3 class="slds-section-title--divider">License Information</h3>
+                         <div class="slds-grid">
+                          <div class="slds-col">
+                            <div>
+                                <dl>
+                                  <dt>Details:</dt>
+                                  <dd>
+                                      <apex:outputPanel rendered="{!IF(imagesetting.LicenseURL__c==null, true, false)}">
+                                          {!imagesetting.License__c}{!imagesetting.License2__c}
+                                      </apex:outputPanel>
+                                      <apex:outputPanel rendered="{!IF(imagesetting.LicenseURL__c!=null, true, false)}">
+                                          <a class=".slds-button" href="{!imagesetting.LicenseURL__c}">{!imagesetting.License__c}{!imagesetting.License2__c}</a>
+                                      </apex:outputPanel> 
+                                  </dd>
+                                </dl>  
+                            </div>
+                          </div>
+                          <div class="slds-col">
+                            <div>
+                                <dl>
+                                  <dt>Attribution:</dt>
+                                  <dd>
+                                     <a class=".slds-button" href="{!imagesetting.AttributionURL__c}">{!imagesetting.AttributionText__c}</a>    
+                                  </dd>
+                                </dl>
+                            </div>
+                          </div>
+                      </div>
+          </div>
+      </body>
+   </html>
+</apex:component>

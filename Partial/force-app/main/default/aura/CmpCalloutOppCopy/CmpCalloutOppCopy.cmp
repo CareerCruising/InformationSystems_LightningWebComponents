@@ -1,0 +1,4 @@
+<aura:component description="CmpCalloutOppCopy"               
+ implements="flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,force:lightningQuickAction">
+  <c:CmpCalloutAction calloutName="Opportunity_Copy" sObjectName="{!v.sObjectName}" recordId="{!v.recordId}"/>
+</aura:component>

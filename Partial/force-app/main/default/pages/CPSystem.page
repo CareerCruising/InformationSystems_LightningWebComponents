@@ -1,0 +1,6 @@
+<apex:page standardController="System__c">
+    <div style="margin-bottom:5px;color:#F5F5F5;float:right;">
+        <apex:outputText value="https://www.careercruising.com/Admin/CP/SLX_System.aspx?SystemID={!TEXT(System__c.System_ID__c)}" escape="false"/>
+    </div>
+    <apex:iframe src="https://www.careercruising.com/Admin/CP/SLX_System.aspx?SystemID={!TEXT(System__c.System_ID__c)}" scrolling="true" height="1450px" id="AccountCPSystem"/>
+</apex:page>

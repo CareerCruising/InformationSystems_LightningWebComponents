@@ -1,0 +1,58 @@
+<!-- Component: 	CmpModal -->
+<!-- Created by: 	OpFocus(Veena Sundara-Heragu) on 12/15/2017 -->
+<!-- Description: 	Component display Modal dialog -->
+<aura:component description="CmpModal"
+                access="global">
+
+    <aura:attribute name="name" type="String" />
+    <aura:attribute name="class" type="String" />
+
+    <aura:attribute name="modalClassName" type="String" default="slds-modal" access="private"/>
+    <aura:attribute name="backdropClassName" type="String" default="slds-backdrop" access="private"/>
+
+    <!-- header attributes -->
+    <aura:attribute name="title" type="String" />
+    <aura:attribute name="allowClose" type="Boolean" required="true" default="true"/>
+
+    <aura:attribute name="footer" type="Aura.Component[]" />
+
+
+    <!--methods-->
+    <aura:method name="openModal" action="{!c.openModal}" description="open the modal" />
+    <aura:method name="closeModal" action="{!c.closeModal}" description="open the modal" />
+
+
+    <div class="{!v.modalClassName + ' ' + v.class}" aria-hidden="false" role="dialog">
+        <div class="slds-modal__container">
+
+            <!-- HEADER -->
+            <aura:if isTrue="{!v.title}">
+
+                <div class="{! v.title != ''? 'slds-modal__header' : 'slds-modal__header slds-modal__header--empty'}">
+
+                    <aura:if isTrue="{!v.allowClose}">
+                        <lightning:buttonIcon iconName="utility:close" alternativeText="Close" variant="bare-inverse"
+                                              onclick="{!c.closeModal}" class="slds-modal__close" size="large"/>
+                    </aura:if>
+
+                    <aura:if isTrue="{!v.title != ''}" >
+                        <h2 class="slds-text-heading--medium">{!v.title}</h2>
+                    </aura:if>
+                </div>
+
+            </aura:if>
+
+            <!-- BODY -->
+            <div class="slds-modal__content slds-p-around_small" style="overflow: visible;">
+                {!v.body}
+            </div>
+
+            <!-- FOOTER -->
+            <div class="slds-modal__footer" style="text-align: left;">
+                {!v.footer}
+            </div>
+
+        </div>
+    </div>
+    <div class="{!v.backdropClassName}"></div>
+</aura:component>

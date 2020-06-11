@@ -1,0 +1,29 @@
+<!-- Component: 	CmpAccountSummary -->
+<!-- Created by: 	OpFocus(Veena Sundara-Heragu) on 06/27/2017 -->
+<!-- Description: 	Component to display summary information of account that current record has a lookup to -->
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global"
+				controller="CmpAccountSummaryCtrl">
+	
+	<aura:attribute name="accountLookupFieldName" type="String" access="public"
+					description="The API name of the account lookup field to use to display summary information" />
+
+
+	<aura:attribute name="accountWrapper" type="Object" access="private" />
+	<aura:attribute name="perc" type="String" default="25" access="private"/>
+
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+	<!-- when parent record gets updated and saved, refresh this one too -->
+	<aura:handler event="force:refreshView" action="{!c.doInit}" /> 
+
+
+	<div class="slds-m-bottom-XX-small">
+		<div>License Status</div>
+
+		<!-- the css cass will be set based on field values so that button appearance changes -->
+	    <lightning:buttonGroup class="slds-p-bottom_medium">
+	        <lightning:button class="{!v.accountWrapper.sColor}" label="S" />
+	        <lightning:button class="{!v.accountWrapper.rColor}" label="R" />
+	        <lightning:button class="{!v.accountWrapper.xColor}" label="X" />
+	    </lightning:buttonGroup>
+	</div>
+</aura:component>

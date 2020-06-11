@@ -1,0 +1,3 @@
+<aura:component implements="force:lightningQuickActionWithoutHeader,force:hasRecordId" >
+    <iframe src="{!'https://adminapp.careercruising.com/account/SiteMgmt#/aid=' + v.recordId}"/>
+</aura:component>

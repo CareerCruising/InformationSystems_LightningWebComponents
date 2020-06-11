@@ -1,0 +1,30 @@
+<aura:component implements="flexipage:availableForAllPageTypes" access="global" >
+    <lightning:card >
+        <aura:set attribute="title">
+            Quick Links
+        </aura:set>
+        <p class="slds-p-horizontal--small">
+            <a href="/one/one.app#/sObject/Task/home">
+                <lightning:icon iconName="action:new_task" title="My Tasks"/>
+            </a>
+            &nbsp;
+            <a href="/one/one.app#/sObject/Lead/list?filterName=00B41000008IvryEAC">
+                <lightning:icon iconName="action:new_lead" title="My Open Leads"/>
+            </a>
+            &nbsp;
+            <a href="/one/one.app#/sObject/Opportunity/list?filterName=00B41000008Jk6FEAS">
+                <lightning:icon iconName="action:new_opportunity" title="My Open Opportunities"/>
+            </a>
+            &nbsp;
+            <a href="/one/one.app#/sObject/Account/list?filterName=00B41000008rrfIEAQ">
+                <lightning:icon iconName="action:call" title="My Prospects (Working and Active)"/>
+            </a>
+            &nbsp;
+            <a href="/one/one.app#/sObject/00O41000007pPMGEA2/view">
+                <lightning:icon iconName="action:update" title="YTD Combined"/>
+            </a>      
+        </p>
+    </lightning:card>
+    
+    
+</aura:component>

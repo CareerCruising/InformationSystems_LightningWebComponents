@@ -1,0 +1,20 @@
+<template>
+    <lightning-card
+        title="Tests"
+        icon-name="custom:custom63"
+    >
+    <div class="slds-m-around_medium">
+             <template if:true={testList}>
+                <template for:each={testList} for:item="test">
+                    <div key={test}></div>
+                    <a  href="#" 
+                        key={test} 
+                        data-key={test}
+                        onclick={testClick}>
+                        {test}
+                    </a>
+                </template>
+            </template>
+    </div> 
+    </lightning-card>
+</template>

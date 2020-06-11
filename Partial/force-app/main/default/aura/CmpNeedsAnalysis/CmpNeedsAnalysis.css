@@ -1,0 +1,8 @@
+.THIS .green-check *{
+	fill: rgb(75, 202, 129);
+}
+
+.THIS .field-label > .slds-form-element__label {
+    font-size: .95rem;
+    font-weight: bold;
+}

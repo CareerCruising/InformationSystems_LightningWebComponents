@@ -1,0 +1,4 @@
+<aura:component description="CmpCalloutOppCeligoResetForTesting"               
+ implements="flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,force:lightningQuickAction">
+  <c:CmpCalloutAction calloutName="Opportunity_Celigo_Reset_For_Testing" sObjectName="{!v.sObjectName}" recordId="{!v.recordId}"/>
+</aura:component>

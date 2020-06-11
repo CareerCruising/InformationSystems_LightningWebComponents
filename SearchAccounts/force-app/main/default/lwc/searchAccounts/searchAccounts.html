@@ -1,0 +1,18 @@
+<template>
+    <lightning-card title = "Search Accounts" icon-name = "custom:custom10">  
+
+        <div class = "slds-m-around_medium">
+            <lightning-input type="search" onblur={findAccountResult} class = "slds-m-bottom_small" label = "Search"> </lightning-input>
+            
+            <lightning-datatable key-field="Id" data={accountList} columns={columnList} hide-checkbox-column="true" show-row-number-column="true">
+            </lightning-datatable>
+
+            <template if:true= {noRecordsFound}>
+                --No Account Records Found--
+            </template>
+            
+        </div>
+        
+    </lightning-card>
+    
+</template>

@@ -1,0 +1,11 @@
+<apex:page standardController="Account">
+    <apex:form >
+        <c:RefreshIcon />
+        <div style="margin-bottom:5px;color:#F5F5F5;float:right;">
+            <apex:outputText value="https://www.careercruising.com/admin/MTP_AddSchool.aspx?SchoolID={!TEXT(IF((account.InstitutionId__c != null),account.InstitutionId__c,account.SchoolId__c))}&EmailAddress={{$user.Email}}" escape="false"/>
+        </div>
+    </apex:form>
+    <apex:outputPanel id="theFrame">
+        <apex:iframe src="https://www.careercruising.com/admin/MTP_AddSchool.aspx?SchoolID={!TEXT(IF((account.InstitutionId__c != null),account.InstitutionId__c,account.SchoolId__c))}&EmailAddress={{$user.Email}}" scrolling="true" height="750px" id="AccountMTP"/>
+    </apex:outputPanel>
+</apex:page>

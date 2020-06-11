@@ -1,0 +1,4 @@
+<aura:component description="CmpCalloutOppSplits"               
+ implements="flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,force:lightningQuickAction">
+  <c:CmpCalloutAction calloutName="Opportunity_Split_Fix" sObjectName="{!v.sObjectName}" recordId="{!v.recordId}"/>
+</aura:component>

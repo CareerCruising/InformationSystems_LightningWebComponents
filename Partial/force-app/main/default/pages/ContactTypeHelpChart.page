@@ -1,0 +1,33 @@
+<apex:page standardController="Contact" >
+<apex:slds />
+<div class="slds-text-body_regular slds-p-around_medium">Multiple types can be selected, however the data is often too long and crowds reporting. This is a mapping of the full name to coded abbreviations.</div>
+    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+        <thead>
+            <tr>
+                <th>Picklist Value</th>
+                <th>Stands For</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><th>OL</th><th>Overall Lead</th></tr>
+            <tr><th>LD </th><th>Lead</th></tr>
+            <tr><th>IT</th><th>IT - DI</th></tr>
+            <tr><th>K-5</th><th>Elem Only</th></tr>
+            <tr><th>6-8</th><th>MS Only</th></tr>
+            <tr><th>6-12</th><th>MS and HS</th></tr>
+            <tr><th>9-12</th><th>HS Only</th></tr>
+            <tr><th>K-12</th><th>All Grades</th></tr>
+            <tr><th>SSO</th><th>Single Sign On</th></tr>
+            <tr><th>CP</th><th>Course Planner</th></tr>
+            <tr><th>LCS</th><th>Lessons or PCS</th></tr>
+            <tr><th>eT</th><th>e-Transcripts</th></tr>
+            <tr><th>CR</th><th>College Readiness</th></tr>
+            <tr><th>LR</th><th>Letters of Rec</th></tr>
+            <tr><th>Rts</th><th>Reports</th></tr>
+            <tr><th>ST</th><th>Student Tracker</th></tr>
+            <tr><th>IN</th><th>Inspire</th></tr>
+            <tr><th>MTP </th><th>Method Test Prep</th></tr>
+            <tr><th>RG</th><th>Real Game</th></tr>
+        </tbody>
+    </table>
+</apex:page>

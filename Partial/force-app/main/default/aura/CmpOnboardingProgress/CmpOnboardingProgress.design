@@ -1,0 +1,4 @@
+<design:component >
+	<design:attribute name="accountLookupFieldName" label="Account Lookup Field Name"
+					description="The API name of the account lookup field to use to display summary information" />	
+</design:component>

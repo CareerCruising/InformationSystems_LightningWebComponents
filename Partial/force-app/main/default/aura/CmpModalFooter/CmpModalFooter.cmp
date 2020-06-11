@@ -1,0 +1,9 @@
+<!-- Component: 	CmpModalFooter -->
+<!-- Created by: 	OpFocus(Veena Sundara-Heragu) on 06/01/2017 -->
+<!-- Description: 	Footer for Modal dialog -->
+<aura:component >
+
+      <div class="slds-modal__footer" style="text-align: left;">
+		{!v.body}	
+	</div>
+</aura:component>

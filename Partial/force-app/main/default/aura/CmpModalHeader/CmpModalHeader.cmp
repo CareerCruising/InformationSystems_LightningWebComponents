@@ -1,0 +1,25 @@
+<!-- Component: 	CmpModalHeader -->
+<!-- Created by: 	OpFocus(Veena Sundara-Heragu) on 06/01/2017 -->
+<!-- Description: 	Header for Modal dialog -->
+<aura:component >
+    <aura:attribute name="title" type="String" access="public"  />
+    <aura:attribute name="modalName" type="String" access="public" required="true"/>
+    <aura:attribute name="allowClose" type="Boolean" access="public" required="true" default="true"/>
+    <aura:attribute name="style" access="public" type="String" />
+    
+    <aura:registerEvent name="EvtCmpCloseModal" type="c:EvtCmpCloseModal"/>
+    
+    <div class="{! v.title != ''? 'slds-modal__header' : 'slds-modal__header slds-modal__header--empty'}"
+         style="{!v.style}">
+
+            <aura:if isTrue="{!v.allowClose}">
+                <lightning:buttonIcon iconName="utility:close" alternativeText="Close" variant="bare-inverse"
+								onclick="{!c.closeMyModal}" class="slds-modal__close" size="large"/>
+            </aura:if>
+            
+        <aura:if isTrue="{!v.title != ''}" >
+        	<h2 class="slds-text-heading--medium">{!v.title}</h2>
+        </aura:if>
+    </div>	
+    
+</aura:component>

@@ -1,0 +1,95 @@
+<!-- Component: 	CmpCreateSystem -->
+<!-- Created by: 	OpFocus(Veena Sundara-Heragu) on 06/01/2017 -->
+<!-- Description: 	Component Create or View System record -->
+<aura:component implements="force:lightningQuickActionWithoutHeader,force:hasRecordId" controller="CmpCreateSystemCtrl">
+
+	<aura:attribute name="newSystem" type="System__c" 
+	               default="{ 'sobjectType': 'System__c' }"/>
+	<aura:attribute name="existingSystem" type="System__c" />
+
+	<aura:attribute name="title" type="String" access="public"/>
+
+	<!-- this is set to true in the helper if creation is allowed -->
+	<aura:attribute name="allowCreate" type="Boolean" access="public" default="false"/>
+
+	<!-- this is set to true in the helper if School district. Used to display warning if create is allowed -->
+	<aura:attribute name="isNotDistrict" type="Boolean" access="public" default="false"/>
+
+	<aura:attribute name="modalClassName" type="String" default="slds-modal slds-modal--large" access="private"/>
+	<aura:attribute name="backdropClassName" type="String" default="slds-backdrop" access="private"/>
+
+	<!--events-->
+	<aura:handler name="EvtCmpCloseModal" event="c:EvtCmpCloseModal" action="{!c.closeModal}"/>
+	<aura:handler event="aura:systemError" action="{!c.handleSystemError}"/>
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+	<!-- These are required here because there is a bug and force:inputField will not work when it
+		 is not the immediate child of the component -->
+	<force:outputField value="{!v.newSystem.System_ID__c}" class="slds-hide"></force:outputField>
+	<force:outputField value="{!v.newSystem.Transfer_Schedule__c}" class="slds-hide"></force:outputField>
+
+	<!-- HEADER -->
+    <c:CmpModalHeader modalName="newAccount" title="{!v.title}" allowClose="false"
+    					style="{! v.existingSystem ? 'color:red;' : 'color:green;'}"> 
+    </c:CmpModalHeader>
+
+    <!-- MODAL BODY -->
+    <div class="slds-modal__content" style="overflow: auto;">
+
+        <lightning:spinner aura:id="mySpinner" variant="brand" size="large" class="slds-hide"
+        					alternativeText="waiting"/>
+
+
+
+		<div class="{!v.allowCreate ? '' : 'slds-hide'}" >	
+					<!-- create new record -->
+	
+				<aura:if isTrue="{!v.isNotDistrict}">
+	    			<div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning" role="alert">
+					  <h1>Warning! This is not a School District</h1>
+					</div>
+				</aura:if>
+
+				<lightning:layout >
+					<lightning:layoutItem padding="horizontal-large" size="12" >
+						<div class="slds-form-element">
+							<label class="slds-form-element__label">System ID</label>
+							<div class="slds-form-element__control">
+								<force:inputField aura:id="systemName" value="{!v.newSystem.System_ID__c}"/>	
+							</div>
+						</div>
+					</lightning:layoutItem>
+				</lightning:layout>
+
+		</div>
+			
+		
+			<aura:if isTrue="{!v.existingSystem}">
+				<!-- show existing record -->
+				<lightning:layout >
+					<lightning:layoutItem padding="horizontal-large" size="12" >
+						<force:recordView aura:id="edit" recordId="{!v.existingSystem.Id}"/>
+					</lightning:layoutItem>
+				</lightning:layout>
+			</aura:if>
+
+	</div>
+
+	<!-- FOOTER -->
+	<c:CmpModalFooter >
+		<div class="slds-clearfix">
+			<div class="slds-float--right">
+				<aura:if isTrue="{!v.existingSystem}">
+					<lightning:button label="Close" onclick="{!c.closeModal}"/>	
+				<aura:set attribute="else">
+					<lightning:button label="Cancel" onclick="{!c.closeModal}"/>
+					<lightning:button label="Save" onclick="{!c.save}" variant="brand"/>
+				</aura:set>
+				</aura:if>
+			</div>
+		</div>
+	</c:CmpModalFooter>
+
+
+
+</aura:component>
