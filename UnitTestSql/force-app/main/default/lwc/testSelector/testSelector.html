@@ -1,29 +1,33 @@
 <template>
-    <div class="wrapper">
-    <section class="content">
-        <div class="slds-grid slds-gutters">
-            <div class="slds-col slds-size_1-of-3">
-                <main class="main" >
-                    <c-test-list 
-                        ontestclick={handleTestClick}>
-                    </c-test-list>
-                </main>
-            </div>
-            <div class="slds-col slds-size_2-of-3">
-                <div class="main">
-                         <c-test-sub-test-list 
-                            onsubtestclick={handleSubTestClick} 
-                            sub-tests = {subTests}>
-                        </c-test-sub-test-list>
+<div class="c-container">
+        <lightning-layout multiple-rows="true">
+            <lightning-layout-item padding="around-small" size="12">
+                <lightning-layout>
+                    <lightning-layout-item padding="around-small" size="3">
+                        <div class="page-section page-right">
+                            <c-test-list 
+                                ontestclick={handleTestClick}>
+                            </c-test-list>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="6">
+                        <div class="page-section page-main">
+                             <c-test-sub-test-list 
+                                onsubtestclick={handleSubTestClick} 
+                                sub-tests = {subTests}>
+                            </c-test-sub-test-list>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </lightning-layout-item>
+            <lightning-layout-item flexibility="auto" padding="around-small" size="12">
+                <div class="page-section page-main">
+                    <h2>Results</h2>
+                    <c-test-sub-test-detail-list
+                        sub-test-name={subTestName}
+                    ></c-test-sub-test-detail-list>
                 </div>
-            </div>
-            <div>
-                     <c-test-sub-test-detail-list
-                        jsondata={jsondata}
-                        columns={columns}>
-                    </c-test-sub-test-detail-list>
-            </div>
-        </div>
-    </section>
+            </lightning-layout-item>
+        </lightning-layout>
     </div>
 </template>

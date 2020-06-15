@@ -1,8 +1,31 @@
 public with sharing class UnitTestController {
     @AuraEnabled(cacheable=true)
-    public static List<UnitTestResult__c> getSubTestResultList(String SubTest) {
+    public static Object getSubTestResultColumns(String SubTest) {
         String v1 = SubTest;
-        return [SELECT Name, TestName__c, ResultDescription__c, Columns__c, Json__c FROM UnitTestResult__c WHERE ResultDescription__c = :v1];
+        List<UnitTestResult__c> Ulist =  [SELECT Columns__c FROM UnitTestResult__c WHERE ResultDescription__c = :v1];
+        String columnjson = Ulist[0].Columns__c;
+        Object result;
+        result = (Object) JSON.deserializeUntyped(columnjson);
+        system.debug('==> Columns: ' + result);
+
+        return result;
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static List<Object> getSubTestResultList(String SubTest) {
+        String v1 = SubTest;
+        List<UnitTestResult__c> Ulist =  [select Json__c FROM UnitTestResult__c WHERE ResultDescription__c = :v1];
+        
+
+        Object result;
+        List<Object> results = new List<Object>{};
+
+        for(UnitTestResult__c testResult : Ulist){
+            result = (Object) JSON.deserializeUntyped(testResult.Json__c);
+            results.add(result);
+        }    
+        return results;
+
     }
 
     @AuraEnabled(cacheable=true)

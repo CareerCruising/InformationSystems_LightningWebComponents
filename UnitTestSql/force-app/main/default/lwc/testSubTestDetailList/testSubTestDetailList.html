@@ -1,9 +1,16 @@
+
+
 <template>
     <div style="height: 300px;">
-        <lightning-datatable
-                key-field="id"
-                data={jsondata}
-                columns={columns}>
-        </lightning-datatable>
+        <template if:true={jsondata}>
+            <lightning-datatable
+                    key-field="id"
+                    data={jsondata}
+                    columns={cols}>
+            </lightning-datatable>
+        </template>
+        <template if:false={jsondata}>
+            <p>no data</p>
+        </template>
     </div>    
 </template>
