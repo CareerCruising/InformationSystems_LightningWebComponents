@@ -26,6 +26,7 @@ get endpointURL() {
     retval ({error,data}){
         if (data) {
             this.resultjson = data.SiteDataAccount;
+            console.log('GetJson data ==> : ', data);
             console.log('GetJson resultjson ==> : ', this.resultjson); 
             console.log('GetJson endpointURL ==> : ', this.endpointURL); 
             console.log('GetJson recordId ==> : ', this.recordId) ; 
