@@ -1,45 +1,44 @@
 <template>
-    <lightning-card title="MiscRestApiCall" icon-name="custom:custom63">
-        <div class="slds-m-around_medium">
-            <lightning-layout vertical-align="end" class="slds-m-bottom_small">
-                <lightning-layout-item flexibility="grow">
-                    <lightning-input
-                        type="search"
-                        onchange={handleSearchKeyChange}
-                        label="Search Books"
-                        value={searchKey}
-                    ></lightning-input>
-                </lightning-layout-item>
-                <lightning-layout-item class="slds-p-left_xx-small">
-                    <lightning-button
-                        label="Search"
-                        onclick={handleSearchClick}
-                    ></lightning-button>
-                </lightning-layout-item>
-            </lightning-layout>
-            <template if:true={data}>
-                <template for:each={data.SiteDataAccount} for:item="row">
-                    <p key={row.SchoolLoginsTotal}>{row.SchoolLoginsTotal}</p>
-                </template>
+    <article class="slds-card">
+        <div class="slds-card__body slds-card__body_inner">
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col slds-size_2-of-3 slds-text-heading_small">
+                    <div style="width: 250px;">
+                        <lightning-combobox
+                                name="progress"
+                                label="Select option"
+                                value={MonthOptionSelected}
+                                placeholder="Select Progress"
+                                options={MonthOptions}
+                                onchange={handleMonthOptionChange} 
+                                ></lightning-combobox>
+                    </div>
+
+
+                    
+                </div>
+                <div class="slds-col slds-size_1-of-3"></div>
+            </div>
+
+            <template if:true={loading}>
+                <lightning-spinner alternative-text="Loading"></lightning-spinner>
             </template>
 
-            <template if:true={data}>
-                <div style="height: 300px;">
-                    <lightning-datatable
-                            key-field="Id"
-                            data={data.SiteDataAccount}
-                            columns={col}
-                            hide-checkbox-column
-                            resize-column-disabled
-                            column-widths-mode="auto"
-                            >
+            <template if:true={NoStatsFound}>
+                <div>No Usage stats found for this account.</div>
+            </template>
+            <template if:true={data.SiteDataAccount}>
+                <div style="height: 1000px;">
+                    <lightning-datatable key-field="Id" data={data.SiteDataAccount} columns={col} hide-checkbox-column
+                        resize-column-disabled column-widths-mode="auto">
                     </lightning-datatable>
-                </div> 
+                </div>
             </template>
-
+            
             <template if:true={error}>
-                <c-error-panel errors={error}></c-error-panel>
+                <pre>{error}</pre>
+                <div>Error:{error}</div>
             </template>
         </div>
-    </lightning-card>
+    </article>
 </template>
