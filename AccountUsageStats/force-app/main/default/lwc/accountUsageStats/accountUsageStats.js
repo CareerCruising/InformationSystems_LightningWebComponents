@@ -20,7 +20,10 @@ export default class app extends LightningElement {
                 year: 'numeric',
             },
         },
-        { fieldName: 'AppDataSource', label: 'Source', type: 'text' },
+        {
+            fieldName: 'AppDataSource', label: 'Source', type: 'text', cellAttributes:
+                { iconName: { fieldName: 'trendIcon' }, iconPosition: 'right' }
+        },
         { fieldName: 'SchoolLoginsTotal', label: 'App Logins', type: 'number' },
         { fieldName: 'StudentLoginsTotal', label: 'Student Logins', type: 'number' },
         { fieldName: 'StudentLoginsUnique', label: 'Unique Logins', type: 'number' },
