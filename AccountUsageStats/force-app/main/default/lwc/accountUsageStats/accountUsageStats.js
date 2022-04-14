@@ -1,13 +1,14 @@
 import { LightningElement, api } from 'lwc';
 
-// The base URL (in this case https://www.googleapis.com/ must be added to the CSP Trusted Sites in Setup)
+// The base URL (in this case https://is.xello.world/) must be added to the CSP Trusted Sites in Setup
 const QUERY_URL =
-    'https://localhost/api/Integrations/GetUsage?AccId=';
+    'https://is.xello.world/api/Integrations/GetUsage?AccId=';
 
 export default class app extends LightningElement {
 
-    accountId = '0014100001dLp2LAAS';
-    //searchKey = '0014100001dLp2LAAS';
+    @api recordId;
+    //recordId = '00141000019hQuvAAE';
+
     NoStatsFound = null;
     loading = false;
     data = [];
@@ -20,10 +21,7 @@ export default class app extends LightningElement {
                 year: 'numeric',
             },
         },
-        {
-            fieldName: 'AppDataSource', label: 'Source', type: 'text', cellAttributes:
-                { iconName: { fieldName: 'trendIcon' }, iconPosition: 'right' }
-        },
+        {fieldName: 'AppDataSource', label: 'Source', type: 'text' },
         { fieldName: 'SchoolLoginsTotal', label: 'App Logins', type: 'number' },
         { fieldName: 'StudentLoginsTotal', label: 'Student Logins', type: 'number' },
         { fieldName: 'StudentLoginsUnique', label: 'Unique Logins', type: 'number' },
@@ -53,13 +51,13 @@ export default class app extends LightningElement {
         this.fetchUsageStats();
     }
     handleSearchKeyChange(event) {
-        this.accountId = event.target.value;
+        this.recordId = event.target.value;
     }
 
     fetchUsageStats() {
         // Use standard Fetch API 
         this.loading = true;
-        fetch(QUERY_URL + this.accountId + '&Mth=' + this.MonthOptionSelected)
+        fetch(QUERY_URL + this.recordId + '&Mth=' + this.MonthOptionSelected)
             .then((response) => {
                 // fetch isn't throwing an error if the request fails.
                 // Therefore we have to check the ok property.

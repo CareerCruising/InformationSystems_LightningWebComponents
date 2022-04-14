@@ -1,0 +1,48 @@
+@import 'c/commonCSS';
+.AmountCurrentText {
+    color:#5d87be;
+    font-weight: bold;
+}
+.AmountFutureText {
+    color:#578566;
+    font-weight: bold;
+}
+.TimelineBar
+{
+    padding: 1px 5px;
+    border-radius: 5px;
+    margin: 2px;
+    position: absolute;
+    top: 1px;
+}
+.RevenueCurrent{
+    background-color: #B0C4DF;
+}
+.RevenueFuture{
+    background-color: #b2ddc0;
+}
+td.ProductMrrName {
+    width: 150px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.TimeTickOutline{
+    width: 99%;
+    position: absolute;
+    padding: 2px;
+    bottom: 0px;
+}
+.TimeTicks{
+    border-left: #c0c0c0 solid 1px;
+    position: absolute;
+    padding: 6px;
+    bottom: 0px;
+}
+.TimeTickContainer{
+    position: relative;
+}
+
+
+

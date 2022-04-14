@@ -1,0 +1,8 @@
+@isTest
+private class QuickUtilsTest {
+    @isTest static void CopyOpptest(){
+        boolean IsId = true;
+        string result = QuickUtils.CopyOpp('0061K00000j1eU1QAI', IsId); 
+        System.assertEquals(true,IsId);
+    }
+}

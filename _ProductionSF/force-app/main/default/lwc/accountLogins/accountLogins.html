@@ -1,0 +1,55 @@
+<template>
+    <div class="slds-p-vertical_x-small" style="width: 250px;">
+        <lightning-combobox
+                name="progress"
+                value={MonthOptionSelected}
+                placeholder="Select Progress"
+                options={MonthOptions}
+                onchange={handleMonthOptionChange} 
+                ></lightning-combobox>
+    </div>
+    
+    <template if:true={LoginData.Loaded}>
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Source</th>
+                    <th class="slds-text-align_right">Students</th>
+                    <th class="slds-text-align_right">Student Logins</th>
+                    <th class="slds-text-align_right">Unique Logins</th>
+                    <th class="slds-text-align_right">
+                        Avg Logins <lightning-helptext content="Student Logins / Unique Logins"></lightning-helptext>
+                    </th>
+                    <th class="slds-text-align_right">
+                        Login Ratio <lightning-helptext content="Unique Logins / Students"></lightning-helptext>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <template for:each={LoginData.SiteDataAccount} for:item="month">
+                    <tr key={month.Id}>
+                        <td class="bold-text-light"><lightning-formatted-date-time value={month.Date} month="short" year="numeric"></lightning-formatted-date-time></td>
+                        <td>
+                            <lightning-badge label={month.AppDataSource} class={month.AppDataSource}></lightning-badge>
+                        </td>
+                        <td class="slds-text-align_right"><lightning-formatted-number value={month.StudentCount}></lightning-formatted-number></td>
+                        <td class="slds-text-align_right"><lightning-formatted-number value={month.StudentLoginsTotal}></lightning-formatted-number></td>
+                        <td class="slds-text-align_right"><lightning-formatted-number value={month.StudentLoginsUnique}></lightning-formatted-number></td>
+                        <td class="slds-text-align_right bold-text-light"><lightning-formatted-number value={month.AvgLogins} minimum-fraction-digits="1" maximum-fraction-digits="1"></lightning-formatted-number></td>
+                        <td class="slds-text-align_right bold-text-light">
+                            <lightning-formatted-number value={month.LoginRatio} format-style="percent" minimum-fraction-digits="1" maximum-fraction-digits="1"></lightning-formatted-number>
+                            <div style="padding-left:50%;"><lightning-progress-bar value={month.UniqueStudentLoginRatio} size="medium"></lightning-progress-bar></div>
+                        </td>
+                    </tr>            
+                </template>
+            </tbody>                                 
+        </table>
+    </template>  
+
+    <template if:true={NoStatsFound}>
+        <div>No Usage stats found for this account.</div>
+    </template>
+    
+
+</template>

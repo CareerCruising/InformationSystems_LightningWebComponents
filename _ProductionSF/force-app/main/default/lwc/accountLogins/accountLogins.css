@@ -1,0 +1,24 @@
+@import 'c/commonCSS';
+
+.THIS .myDataTable th {
+    text-align: right !important;
+}
+
+td .Xello {
+    color: white;
+    background-color: #2E844A;
+    opacity: 0.5;
+    padding: 1px 7px;
+}
+td .CC2 {
+    color: white;
+    background-color: #0070D2;
+    opacity: 0.5;
+    padding: 1px 7px;
+}
+td .CAS {
+    color: white;
+    background-color: #E83458;
+    opacity: 0.5;
+    padding: 1px 7px;
+}

@@ -1,0 +1,5 @@
+@import 'c/commonCSS';
+.BadgeButton lightning-badge{
+    width: 100px;
+    border-radius: 5px;
+}

@@ -1,0 +1,35 @@
+.MyFieldTitle {
+    font-size: 12px;
+    color: #6F6F6F;
+}
+.MyFieldValue {
+    font-size: 14px;
+}
+.text-grey {
+    color: #ADADAD;
+}
+.slds-theme_blue {
+    color: white;
+    background-color: #0070D2;
+}
+.bold-text {
+    font-weight: bold;
+}
+.bold-text-light {
+    font-weight: bold;
+    color: #636363;
+}
+.BadgeMinPadding {
+    padding: 1px 7px;
+}
+.Opacity5 {
+    opacity: 0.5;
+}
+.ClickableLink{
+    cursor: pointer;
+    color: rgb(1, 118, 211);
+}
+.spinnerHolder{
+    position: relative;
+    display: inline-block;
+}

@@ -1,0 +1,55 @@
+<template>
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col">
+            <lightning-badge label="slds-badge" class="slds-badge"></lightning-badge>
+            <lightning-badge label="slds-badge_inverse" class="slds-badge_inverse"></lightning-badge>
+            <lightning-badge label="slds-badge_lightest" class="slds-badge_lightest"></lightning-badge>
+            <lightning-badge label="slds-theme_success" class="slds-theme_success"></lightning-badge>
+            <lightning-badge label="slds-theme_warning" class="slds-theme_warning"></lightning-badge>
+            <lightning-badge label="slds-theme_error" class="slds-theme_error"></lightning-badge>
+            <lightning-badge label="slds-theme_blue" class="slds-theme_blue"></lightning-badge>
+        </div>
+        <div class="slds-col">
+          <span>2</span>
+        </div>
+        <div class="slds-col">
+            <span class="slds-is-absolute">
+                <lightning-button variant="brand" label="Brand" title="Primary action" onmouseover={show} onmouseleave={hide} class="slds-m-left_x-small"></lightning-button>
+                <c-popover 
+                    show={showPopver} 
+                    onclose={handleClose} 
+                    body="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." 
+                    header="Popover Header" 
+                    footer="This is additional footer." 
+                    nubbin="top-left" 
+                    size="medium" 
+                    variant="Neutral"></c-popover>
+            </span>
+        </div>
+      </div>
+
+
+
+
+        <!-- <div class="slds-box slds-theme_shade">
+            <div>
+                <span class="slds-align_absolute-center">
+                    <c-popover show={showPopver} onclose={handleClose} body="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." header="Popover Header" footer="This is additional footer." nubbin="bottom-right" size="medium" variant="error" ></c-popover>
+                </span>
+                <span onmouseover={show}>
+                    <lightning-progress-indicator current-step="3" type="base" has-error="true" variant="base">
+                        <lightning-progress-step label="Step 1" value="1"></lightning-progress-step>
+                        <lightning-progress-step label="Step 2" value="2"></lightning-progress-step>
+                        <lightning-progress-step label="Step 3" value="3"></lightning-progress-step>
+                        <lightning-progress-step label="Step 4" value="4"></lightning-progress-step>
+                    </lightning-progress-indicator>
+                </span>
+            </div>
+        </div> -->
+
+   <div class="slds-p-around_medium lgc-bg">
+        Subscribe
+        <lightning-helptext content="You'll receive weekly updates"></lightning-helptext>
+    </div>
+
+</template>

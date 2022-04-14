@@ -2,7 +2,7 @@ import { LightningElement, api, track, wire } from 'lwc';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 import { NavigationMixin } from 'lightning/navigation';
 
-export default class AccountKeyInfo extends NavigationMixin(LightningElement) {
+export default class AccountKeyStats extends NavigationMixin(LightningElement) {
     @api recordId;
     @track record;
     @wire(getRecord, { recordId: '$recordId', fields: [
@@ -28,7 +28,7 @@ export default class AccountKeyInfo extends NavigationMixin(LightningElement) {
 
 
     get WeirdButWorks() {  //Forces call from HTML
-
+        console.log(this.account.data);
         this.OverallAdoptionGrade = getFieldValue(this.account.data, 'Account.GradeSummaryAdoption__c')
         this.OverallAdoptionClass = 'metric Grade' + this.OverallAdoptionGrade;
 

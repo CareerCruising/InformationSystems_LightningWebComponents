@@ -1,0 +1,63 @@
+<template>
+    <template if:true={account.data}>   
+        <article class="slds-card" if:true={WeirdButWorks}>
+            <div class="slds-card__body slds-card__body_inner">
+
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col">
+                        <div><a onclick={navigateToKB_AdoptionMetrics} objectid="ka01K000000b0cXQAQ">Adoption</a></div>
+                        <div class="akiContainer">
+                            <div class={OverallAdoptionClass}>
+                                {OverallAdoptionGrade}
+                            </div>               
+                            <div class="metric">
+                                <lightning-icon icon-name="utility:left" size="small"></lightning-icon>
+                            </div>             
+                            <div class={StudentLoginsClass}>
+                                <div>{StudentLoginsGrade}</div>
+                                <div><lightning-helptext icon-name="utility:percent" size="x-small" content={StudentLoginsTitle}></lightning-helptext></div>
+                            </div>
+                            <div class={LoginsPerStudentClass}>
+                                <div>{LoginsPerStudentGrade}</div>
+                                <div><lightning-helptext icon-name="utility:high_velocity_sales" size="x-small" content={LoginsPerStudentTitle}></lightning-helptext></div>
+                            </div>
+                            <div class={LessonsPerStudentClass}>
+                                <div>{LessonsPerStudentGrade}</div>
+                                <div><lightning-helptext icon-name="utility:note" size="x-small" content={LessonsPerStudentTitle}></lightning-helptext></div>
+                            </div>
+                            <div class={LessonsCompleteClass}>
+                                <div>{LessonsCompleteGrade}</div>
+                                <div><lightning-helptext icon-name="utility:chart" size="x-small" content={LessonsCompleteTitle}></lightning-helptext></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col" if:true={ShowRelationshipMetrics}>
+                        <div><a onclick={navigateToKB_RelationshipMetrics} objectid="ka01K000000b0cYQAQ">Relationship</a></div>
+                        <div class="akiContainer">
+                            <div class={OverallRelationshipClass}>
+                                {OverallRelationshipGrade}
+                            </div>               
+                            <div class="metric">
+                                <lightning-icon icon-name="utility:left" size="small"></lightning-icon>
+                            </div>             
+                            <div class={StrengthOfRelationshipClass}>
+                                <div>{StrengthOfRelationshipGrade}</div>
+                                <div><lightning-helptext icon-name="utility:emoji" size="x-small" content="Strength of relationship"></lightning-helptext></div>
+                            </div>
+                            <div class={PointsOfConnectionsClass}>
+                                <div>{PointsOfConnectionsGrade}</div>
+                                <div><lightning-helptext icon-name="utility:strategy" size="x-small" content="Points of connection"></lightning-helptext></div>
+                            </div>
+                            <div class={LastContactClass}>
+                                <div>{LastContactGrade}</div>
+                                <div><lightning-helptext icon-name="utility:comments" size="x-small" content="Last contact from client"></lightning-helptext></div>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>                
+                       
+            </div>
+
+        </article>
+    </template>
+</template>

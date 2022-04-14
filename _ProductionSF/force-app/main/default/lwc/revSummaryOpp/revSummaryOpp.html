@@ -1,0 +1,144 @@
+
+<template>
+    <div class="slds-grid">  
+        <div class="slds-p-horizontal_small slds-p-vertical_small">
+            <lightning-button-group>
+                <lightning-button-icon onclick={RefreshOppData} icon-name="utility:refresh"  title="Refresh Revenue Summary"></lightning-button-icon>
+                <lightning-button-icon if:false={Opp.isTimeLineVisible} onclick={TimelineToggle} icon-name="utility:chevronright"  title="Show Details"></lightning-button-icon>
+                <lightning-button-icon if:true={Opp.isTimeLineVisible} onclick={TimelineToggle} icon-name="utility:chevrondown"  title="Hide Details"></lightning-button-icon>
+            </lightning-button-group>            
+        </div>
+        <div class="slds-p-horizontal_small slds-p-vertical_small">
+            <p class="MyFieldTitle">Type</p>
+            <p if:true={Opp.IsLoaded} class="MyFieldValue">{Opp.Type}</p>
+        </div>        
+        <div class="slds-p-horizontal_small slds-p-vertical_small" if:true={Opp.ShowNew}>
+            <p class="MyFieldTitle">New Sales</p>
+            $<lightning-formatted-number if:true={Opp.IsLoaded} value={Opp.New_Sales__c} class="MyFieldValue" maximum-fraction-digits="0"></lightning-formatted-number>
+        </div>
+        <div class="slds-p-horizontal_small slds-p-vertical_small" if:true={Opp.ShowRenewal}>
+            <p class="MyFieldTitle">Renewal EARR</p>
+            <div if:true={Opp.IsLoaded}>
+                $<lightning-formatted-number value={Opp.Renewal_Expected_ARR__c} class="MyFieldValue" maximum-fraction-digits="0"></lightning-formatted-number>   
+                <span if:true={RenewalExpectedOveride} class="slds-p-left_x-small">
+                    <lightning-badge label="M" class="slds-theme_warning BadgeMinPadding Opacity5" title="Manually set by RevOpps."></lightning-badge>
+                </span>                         
+            </div>
+        </div>        
+        <div class="slds-p-horizontal_small slds-p-vertical_small" if:true={Opp.ShowRenewal}>
+            <p class="MyFieldTitle">Retention Amt</p>
+            $<lightning-formatted-number if:true={Opp.IsLoaded} value={Opp.Renewal_Adjusted_ARR__c} class="MyFieldValue" maximum-fraction-digits="0"></lightning-formatted-number>
+        </div>
+        <div class="slds-p-horizontal_small slds-p-vertical_small" if:true={Opp.ShowRenewal}>
+            <p class="MyFieldTitle">Retention Rate</p>
+            <span class={Opp.RenewalRateBadgeolor}>{Opp.RenewalRate}%</span>
+        </div>
+        <div class="slds-p-horizontal_small slds-p-vertical_small">
+            <p class="MyFieldTitle">Future EARR</p>
+            $<lightning-formatted-number if:true={Opp.IsLoaded} value={Opp.FutureExpectedArrRollup__c} class="MyFieldValue" maximum-fraction-digits="0"></lightning-formatted-number>
+        </div>
+        <div class="slds-p-horizontal_small slds-p-vertical_small" if:true={Opp.ShowRevChange}>
+            <p class="MyFieldTitle">Rev Change Amt</p>    
+            <div if:true={Opp.IsLoaded}>
+                $<lightning-formatted-number value={Opp.Revenue_Change_Amount__c} maximum-fraction-digits="0"></lightning-formatted-number>
+                <span if:true={Opp.Revenue_Change_Amount_Override__c} class="slds-p-left_xx-small">
+                    <lightning-badge label="M" class="slds-theme_warning BadgeMinPadding Opacity5" title="Manually set by RevOpps."></lightning-badge>
+                </span>     
+            </div>                       
+        </div>
+
+        <div class="slds-p-horizontal_small slds-p-vertical_small slds-col_bump-left">
+            <div if:false={Opp.IsLoaded} class="spinnerHolder" style="padding:10px;">
+                <lightning-spinner size="small" alternative-text="Loading"></lightning-spinner>
+            </div>
+        </div>
+    </div>
+
+    <div if:true={Opp.isTimeLineVisible}>
+        
+
+        <div if:true={Opp.IsLoaded}>
+            <!--TIMELINE CHART-->
+            <div class="slds-p-around_xx-small slds-text-heading_small" style="background-color:#F3F3F3;">Timeline</div>
+            <table style="width:100%;" class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <tbody>
+                    <tr class="ProductTimelineRow">
+                        <td style="height:5%;">Product</td>
+                        <td style="height:5%;" class="slds-text-align_right">Total</td>
+                        <td style="width:90%;" class="TimeTickContainer">
+                            <div class="TimeTickOutline slds-clearfix">&nbsp;
+                                <div class="slds-float_left">&nbsp;</div>
+                                <div class="slds-float_right">{Opp.DurationMths} Mths</div>
+                            </div>
+                            <template for:each={Opp.Ticks} for:item="row">
+                                <div key={row.TickText} class="TimeTicks" style={row.TickStyle}>
+                                    {row.TickText}&nbsp;
+                                </div>            
+                            </template>
+                        </td>
+                    </tr>                       
+                    <template for:each={Opp.LineItems} for:item="row">
+                        <tr key={row.Id}>
+                            <td class="slds-cell-wrap"><div class="slds-truncate">{row.ProductName}</div></td>
+                            <td class="slds-text-align_right slds-border_right">
+                                <lightning-icon if:true={row.ShowResubIcon} icon-name={row.ResubIcon} variant={row.ResubIconVariant} title={row.ResubIconText} size="xx-small" class="slds-p-right_xx-small Opacity5"></lightning-icon>
+                                <lightning-formatted-number value={row.TotalPrice} maximum-fraction-digits="0"></lightning-formatted-number>
+                            </td>
+                            <td style="position:relative;">
+                                <div class={row.LineClass} style={row.LineStyle} title={row.Title}>
+                                    <lightning-formatted-number value={row.LineValue} maximum-fraction-digits="0"></lightning-formatted-number>
+                                </div> 
+                                <div class="TimelineBar RevenueFuture" style={row.LineStyle2} if:true={row.LineSplit} title={row.Title}>
+                                    <lightning-formatted-number value={row.SecondaryRevenue} maximum-fraction-digits="0"></lightning-formatted-number>
+                                </div>                                 
+                            </td>
+                        </tr>         
+                    </template>
+                    <tr>
+                        <td></td>
+                        <td class="bold-text slds-text-align_right slds-border_right">$<lightning-formatted-number value={Opp.Amount} maximum-fraction-digits="0" if:true={Opp.Amount}></lightning-formatted-number></td>
+                        <td style="width:99%;position:relative;">
+                            <div style={Opp.PrimaryRevTickStyle} class="TimelineBar slds-text-align_right AmountCurrentText">
+                                $<lightning-formatted-number value={Opp.PrimaryRevenue__c} maximum-fraction-digits="0"></lightning-formatted-number>
+                            </div>
+                            <div if:true={Opp.HasLineSplits} style={Opp.SecondaryRevTickStyle} class="TimelineBar slds-text-align_right AmountFutureText">
+                                $<lightning-formatted-number value={Opp.SecondaryRevenue} maximum-fraction-digits="0"></lightning-formatted-number>
+                            </div>
+                        </td>
+                    </tr>   
+                </tbody>                                 
+            </table>
+            
+            <!--CARD SUMMARY-->             
+            <div class="slds-p-around_xx-small slds-text-heading_small" style="background-color:#F3F3F3;">Revenue Breakdown</div>                  
+            <div class="slds-grid slds-gutters slds-p-top_medium">
+                <div class="slds-col slds-size_4-of-12">
+                    <table class="slds-table slds-table_cell-buffer">
+                        <tbody>  
+                            <tr>
+                                 <td>Primary Revenue</td>
+                                  <td class="slds-text-align_right AmountCurrentText">
+                                      <span if:true={PrimaryRevenueOveride} style="padding-right: 8px;">
+                                          <lightning-badge label="M" class="slds-theme_warning BadgeMinPadding Opacity5" title="Manually set by RevOpps."></lightning-badge>
+                                      </span>                            
+                                      $<lightning-formatted-number value={Opp.PrimaryRevenue__c} maximum-fraction-digits="0" title="PrimaryRevenue__c"></lightning-formatted-number>
+                                  </td>
+                            </tr>  
+                            <tr>
+                                <td>Secondary Revenue</td>
+                                <td class="slds-text-align_right AmountFutureText">$<lightning-formatted-number value={Opp.SecondaryRevenue__c} maximum-fraction-digits="0"></lightning-formatted-number></td>
+                            </tr>         
+                            <tr>
+                                <td class="slds-border_top">Total Amount</td>
+                                <td class="slds-text-align_right bold-text slds-border_top">$<lightning-formatted-number value={Opp.Amount} maximum-fraction-digits="0"></lightning-formatted-number></td>
+                            </tr>                                  
+                        </tbody>                                  
+                    </table>   
+                </div>
+            </div> 
+
+        </div>
+
+    </div>
+
+</template>
