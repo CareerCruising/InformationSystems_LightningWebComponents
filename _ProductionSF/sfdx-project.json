@@ -1,9 +1,7 @@
 {
   "packageDirectories": [
-    {
-      "path": "force-app",
-      "default": true
-    }
+    {"path": "force-app","default": true},
+    {"path": "force-app/callouts","default": false}
   ],
   "name": "_ProductionSF",
   "namespace": "",

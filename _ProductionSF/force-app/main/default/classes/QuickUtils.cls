@@ -8,7 +8,6 @@ public with sharing class QuickUtils {
     }
 
     @AuraEnabled
-    //public static List<LogResult> CopyOpp(String SourceOppId, Boolean IsTest) {
     public static string CopyOpp(String SourceOppId, Boolean IsTest) {
         String UserId = UserInfo.getUserId();
         LogResult resultLog = new LogResult();
@@ -16,8 +15,8 @@ public with sharing class QuickUtils {
         resultLog.Id = '';
 
         Opportunity NewOpp = new Opportunity();
-        Account acc = new Account();
-
+        Account acc = new Account(); 
+              
         List<Opportunity> sourceOpp = [
                 SELECT 
                 AccountId
@@ -192,16 +191,16 @@ public with sharing class QuickUtils {
             NewOpp.StageName = '10R-Renewal';
         }
         if(NewOpp.LeadSource == null) NewOpp.LeadSource = 'Other - None';
-        
-        Map<String,Object> fieldsMap = (Map<String,Object>) JSON.deserializeUntyped(JSON.serialize(NewOpp));
-        System.debug(fieldsMap);
-        
+
+
+        System.debug(JSON.serializePretty(NewOpp));
+
         if(IsTest == false) {
             try {
                 insert NewOpp; resultLog.Id = NewOpp.Id;
             } catch(DmlException e) {
                 resultLog.Error = resultLog.Error + e.getMessage() + '; '; 
-                System.debug('The following exception has occurred: ' + e.getMessage());
+                System.debug('Error inserting Opp1: ' + e.getMessage());
             } finally {
                 return JSON.serialize(resultLog);
             }       
@@ -212,7 +211,9 @@ public with sharing class QuickUtils {
         for(OpportunityLineItem a : oliList){
             a.Id = NULL;
             a.OpportunityId = NewOpp.Id;
+            System.debug('oliList: ' + a.OpportunityId);
         }   
+        
         for(Opp_Contact_Roles__c a : ocr){
             a.Id = NULL;
             a.RelatedOpportunity__c = NewOpp.Id;
@@ -222,9 +223,14 @@ public with sharing class QuickUtils {
             a.OpportunityId = NewOpp.Id;
         }                  
 		if(IsTest == false) {
-            insert oliList;
-            insert ocr;
-            insert otm;
+            try {
+                insert oliList; insert ocr; insert otm;
+            } catch(DmlException e) {
+                resultLog.Error = resultLog.Error + e.getMessage() + '; '; 
+                System.debug('Error inserting child items: ' + e.getMessage());
+            } finally {
+                return JSON.serialize(resultLog);
+            }             
         }
              
         return JSON.serialize(resultLog);

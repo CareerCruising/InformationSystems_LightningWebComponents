@@ -1,0 +1,26 @@
+<template>
+    <lightning-quick-action-panel>
+        <!--HEADER-->
+        <div class="slds-grid slds-gutters slds-border_bottom" style="height: 60px;">
+            <div class="slds-col slds-size_3-of-4 slds-text-heading_medium slds-p-top_small">
+                <strong>Creating Renewal</strong>
+            </div>
+            <div class="slds-col slds-size_1-of-4">
+                <div class="slds-float_right">
+                    <div if:true={ActionPanel.Spinner} role="status" class="slds-spinner slds-spinner_medium slds-spinner_inline" style="position:relative;top:25px;right:20px">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>   
+                    <lightning-icon if:true={ActionPanel.Alert} icon-name="utility:warning" alternative-text="Warning!" variant="warning" title="warning variant small" size="large"></lightning-icon>             
+                </div>
+            </div>
+        </div>
+        <div>
+            <div if:true={ActionPanel.Alert} class="slds-p-top_small"><strong>Sorry, we had an issue:</strong></div>
+            <div class="slds-p-top_small">{ActionPanel.Message}</div>
+        </div>
+      </lightning-quick-action-panel>
+
+
+</template>

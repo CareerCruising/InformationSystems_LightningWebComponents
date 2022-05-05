@@ -14,7 +14,7 @@
         </div>
         <div class="slds-col">
             <span class="slds-is-absolute">
-                <lightning-button variant="brand" label="Brand" title="Primary action" onmouseover={show} onmouseleave={hide} class="slds-m-left_x-small"></lightning-button>
+                <lightning-button variant="brand" label="Popover" title="Primary action" onmouseover={show} onmouseleave={hide} class="slds-m-left_x-small"></lightning-button>
                 <c-popover 
                     show={showPopver} 
                     onclose={handleClose} 
@@ -27,8 +27,6 @@
             </span>
         </div>
       </div>
-
-
 
 
         <!-- <div class="slds-box slds-theme_shade">
@@ -51,5 +49,62 @@
         Subscribe
         <lightning-helptext content="You'll receive weekly updates"></lightning-helptext>
     </div>
+
+    <!--SF OBJECT DESCRIPTIONS-->
+    <lightning-button variant="brand" label="Describe.SalesforceObject" title="Primary action" onclick={DescribeObj} class="slds-m-left_x-small"></lightning-button>
+
+    <template if:true={data.IsLoaded}>
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout">
+            <thead>
+                <tr>
+                    <th onclick={sort} data-ascending="true" data-sortname="label">Name</th>
+                    <th onclick={sort} data-ascending="true" data-sortname="type">Type</th>
+                    <th onclick={sort} data-ascending="true" data-sortname="calculated">Calculated</th>
+                    <th>Createable</th>
+                    <th>AllowNulls</th>
+                    <th>Updateable</th>
+                    <th>Other</th>
+                </tr>
+            </thead>
+            <tbody>
+                <template for:each={data.SfField} for:item="field">
+                    <tr key={field.keyIndex}>
+                        <td>
+                            {field.label}
+                            <div class="text-grey slds-text-body_small">{field.name}</div>
+                        </td>
+                        <td>
+                            {field.type}
+                            <div class="text-grey slds-text-body_small">{field.byteLength} bytes</div>
+                        </td>    
+                        <td>
+                            {field.calculated}
+                            <div class="text-grey slds-text-body_small" if:true={field.FormulaExists}>
+                                <p class="slds-truncate" title={field.calculatedFormula}>{field.calculatedFormula}</p>
+                            </div>
+                        </td>
+                        <td>{field.createable}</td>
+                        <td>{field.nillable}</td>
+                        <td>{field.updateable}</td>
+                        <td>
+                            <lightning-icon icon-name="utility:right" alternative-text="Expand" size="x-small" title="Expand" onclick={ToggleObj} data-id={field.keyIndex}></lightning-icon>
+                            <template for:each={field.fieldArray} for:item="attr" if:false={field.Hidden}>
+                                <div key={attr.key}>
+                                    <!-- <lightning-icon icon-name="utility:right" alternative-text="Expand" size="x-small" title="Expand" onclick={ToggleObj}></lightning-icon> -->
+                                    <div>
+                                        {attr.key}: {attr.value}
+                                    </div>
+                                </div>            
+                            </template>
+                            <div if:false={field.Hidden}>{field.Pretty}</div>
+                        </td>
+                    </tr>            
+                </template>
+            </tbody>                                 
+        </table>
+
+
+    </template>
+
 
 </template>
