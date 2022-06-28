@@ -1,110 +1,174 @@
 <template>
-    <div class="slds-grid slds-gutters">
-        <div class="slds-col">
+    <lightning-tabset>
+        <lightning-tab label="Popovers" style="padding:5px 5px;">
+            <div class="slds-grid slds-gutters">
+                <!--Salesforce Popover-->
+                <div class="slds-col">
+                    <div>
+                        This is a sentence with a 
+                        <span data-popovername="MyTest1" onmouseover={PopoverShow} onmouseleave={PopoverHide} class="slds-is-relative test-xxxx">
+                            Hover over Popup
+                            <section if:true={popover.MyTest1} class="slds-popover slds-nubbin_top-left slds-is-absolute" role="dialog" style="left:0px; top:40px;">
+                                <div class="slds-popover__body">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore etdolore magna aliqua.</div>
+                            </section> 
+                        </span> 
+                        that is used inside an element.<br>You need to set the style of the child section. In this case it's left:0px; top:40px;                    
+                    </div>
+
+                    <div data-popovername="MyTest2" onclick={PopoverShow} ondblclick={PopoverHide} class="slds-is-relative test-xxxx">
+                        Click Popup on DIV (left:100%; top:0px;)
+                        <section if:true={popover.MyTest2} class="slds-popover slds-nubbin_left-top slds-is-absolute" role="dialog" style="left:100%; top:0px;">
+                            <lightning-icon data-popovername="MyTest2" onclick={PopoverHide} icon-name="utility:close" alternative-text="Close" title="Close" size="xx-small" class="HoverLink slds-float_right slds-popover__close"></lightning-icon>
+                            <div class="slds-popover__body">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore etdolore magna aliqua.</div>
+                        </section> 
+                    </div>
+
+                    <div data-popovername="MyTestFullFormat" onclick={PopoverShow} class="slds-is-relative test-xxxx">
+                        Click Popup with full formatting
+                        <section if:true={popover.MyTestFullFormat} class="slds-popover slds-nubbin_top-left slds-is-absolute" role="dialog" style="left:0px; top:40px;">
+                            <lightning-icon data-popovername="MyTestFullFormat" onclick={PopoverHide} icon-name="utility:close" alternative-text="Close" title="Close" size="xx-small" class="HoverLink slds-float_right slds-popover__close"></lightning-icon>
+                            <div class="slds-popover__body" id="dialog-body-id-110">
+                                <div class="slds-media">
+                                  <div class="slds-media__body">
+                                    <header class="slds-popover__header">
+                                        <h2 class="slds-text-heading_small" id="dialog-heading-id-117">Header title</h2>
+                                    </header>                                      
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                    <ul class="slds-list_dotted">
+                                        <li>Basic ordered list</li>
+                                        <li>List Item</li>
+                                        <li>List Item</li>
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+                              <footer class="slds-popover__footer">
+                                <div class="slds-grid slds-grid_vertical-align-center">
+                                  <button class="slds-button slds-button_neutral slds-col_bump-left">Learn More</button>
+                                </div>
+                              </footer>
+                        </section> 
+                    </div>
+
+
+                    <p><a href="https://www.lightningdesignsystem.com/components/popovers/#Nubbins" target="_blank">Nubbins:</a></p>           
+                    <ul class="slds-list_dotted">
+
+                        <li data-popovername="li_Pop1" onmouseover={PopoverShow} onmouseleave={PopoverHide} class="slds-is-relative test-xxxx">
+                            slds-nubbin_top-left style="left:0px;top:40px;"
+                            <section if:true={popover.li_Pop1} class="slds-popover slds-nubbin_top-left slds-is-absolute" role="dialog" style="left:0px;top:40px;">
+                                <div class="slds-popover__body">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore etdolore magna aliqua.</div>
+                            </section> 
+                        </li>
+
+                        <li data-popovername="li_Pop2" onmouseover={PopoverShow} onmouseleave={PopoverHide} class="slds-is-relative test-xxxx">
+                            slds-nubbin_right-bottom style="left:0px;top:40px;"
+                            <section if:true={popover.li_Pop2} class="slds-popover slds-nubbin_right-bottom slds-is-absolute" role="dialog" style="left:0px;top:40px;">
+                                <div class="slds-popover__body">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore etdolore magna aliqua.</div>
+                            </section>                          
+                        </li>
+
+                        <li data-popovername="li_Pop3" onmouseover={PopoverShow} onmouseleave={PopoverHide} class="slds-is-relative test-xxxx">
+                            slds-nubbin_right-bottom style="right:0px;bottom:0px;"
+                            <section if:true={popover.li_Pop3} class="slds-popover slds-nubbin_bottom-right slds-is-absolute" role="dialog" style="right:0px;bottom:0px;">
+                                <div class="slds-popover__body">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore etdolore magna aliqua.</div>
+                            </section>                          
+                        </li>
+
+                    </ul>
+                   
+
+                </div>             
+                <!--Salesforce HelpText-->
+                <div class="slds-col">
+                    This is a HelpText icon
+                    <lightning-helptext content="It appears fine in the UI, no formatting"></lightning-helptext>  
+                </div>
+                <div class="slds-col">
+                    You can span a <span class="hovertext" data-hover="Hello, this is the tooltip and it has a specific width" style="border-bottom: 1px dotted black;">WORD</span> that is s simple tooltip.
+                    <ul>
+                        <li>You cannot format or use HTML</li>
+                        <li>It has a specific width</li>
+                        <li>It always appears bottom left of the span</li>
+                    </ul>       
+                </div>                
+            </div>            
+         
+            
+        </lightning-tab>
+        <lightning-tab label="Badges">
             <lightning-badge label="slds-badge" class="slds-badge"></lightning-badge>
             <lightning-badge label="slds-badge_inverse" class="slds-badge_inverse"></lightning-badge>
             <lightning-badge label="slds-badge_lightest" class="slds-badge_lightest"></lightning-badge>
             <lightning-badge label="slds-theme_success" class="slds-theme_success"></lightning-badge>
             <lightning-badge label="slds-theme_warning" class="slds-theme_warning"></lightning-badge>
             <lightning-badge label="slds-theme_error" class="slds-theme_error"></lightning-badge>
-            <lightning-badge label="slds-theme_blue" class="slds-theme_blue"></lightning-badge>
-        </div>
-        <div class="slds-col">
-          <span>2</span>
-        </div>
-        <div class="slds-col">
-            <span class="slds-is-absolute">
-                <lightning-button variant="brand" label="Popover" title="Primary action" onmouseover={show} onmouseleave={hide} class="slds-m-left_x-small"></lightning-button>
-                <c-popover 
-                    show={showPopver} 
-                    onclose={handleClose} 
-                    body="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." 
-                    header="Popover Header" 
-                    footer="This is additional footer." 
-                    nubbin="top-left" 
-                    size="medium" 
-                    variant="Neutral"></c-popover>
-            </span>
-        </div>
-      </div>
+            <lightning-badge label="slds-theme_blue" class="slds-theme_blue"></lightning-badge>            
+        </lightning-tab>
+        <lightning-tab label="Describe">
+            <!--SF OBJECT DESCRIPTIONS-->
+            <lightning-button variant="brand" label="Describe.SalesforceObject" title="Primary action" onclick={DescribeObj} class="slds-m-left_x-small"></lightning-button>
 
-
-        <!-- <div class="slds-box slds-theme_shade">
-            <div>
-                <span class="slds-align_absolute-center">
-                    <c-popover show={showPopver} onclose={handleClose} body="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." header="Popover Header" footer="This is additional footer." nubbin="bottom-right" size="medium" variant="error" ></c-popover>
-                </span>
-                <span onmouseover={show}>
-                    <lightning-progress-indicator current-step="3" type="base" has-error="true" variant="base">
-                        <lightning-progress-step label="Step 1" value="1"></lightning-progress-step>
-                        <lightning-progress-step label="Step 2" value="2"></lightning-progress-step>
-                        <lightning-progress-step label="Step 3" value="3"></lightning-progress-step>
-                        <lightning-progress-step label="Step 4" value="4"></lightning-progress-step>
-                    </lightning-progress-indicator>
-                </span>
-            </div>
-        </div> -->
-
-   <div class="slds-p-around_medium lgc-bg">
-        Subscribe
-        <lightning-helptext content="You'll receive weekly updates"></lightning-helptext>
-    </div>
-
-    <!--SF OBJECT DESCRIPTIONS-->
-    <lightning-button variant="brand" label="Describe.SalesforceObject" title="Primary action" onclick={DescribeObj} class="slds-m-left_x-small"></lightning-button>
-
-    <template if:true={data.IsLoaded}>
-        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout">
-            <thead>
-                <tr>
-                    <th onclick={sort} data-ascending="true" data-sortname="label">Name</th>
-                    <th onclick={sort} data-ascending="true" data-sortname="type">Type</th>
-                    <th onclick={sort} data-ascending="true" data-sortname="calculated">Calculated</th>
-                    <th>Createable</th>
-                    <th>AllowNulls</th>
-                    <th>Updateable</th>
-                    <th>Other</th>
-                </tr>
-            </thead>
-            <tbody>
-                <template for:each={data.SfField} for:item="field">
-                    <tr key={field.keyIndex}>
-                        <td>
-                            {field.label}
-                            <div class="text-grey slds-text-body_small">{field.name}</div>
-                        </td>
-                        <td>
-                            {field.type}
-                            <div class="text-grey slds-text-body_small">{field.byteLength} bytes</div>
-                        </td>    
-                        <td>
-                            {field.calculated}
-                            <div class="text-grey slds-text-body_small" if:true={field.FormulaExists}>
-                                <p class="slds-truncate" title={field.calculatedFormula}>{field.calculatedFormula}</p>
-                            </div>
-                        </td>
-                        <td>{field.createable}</td>
-                        <td>{field.nillable}</td>
-                        <td>{field.updateable}</td>
-                        <td>
-                            <lightning-icon icon-name="utility:right" alternative-text="Expand" size="x-small" title="Expand" onclick={ToggleObj} data-id={field.keyIndex}></lightning-icon>
-                            <template for:each={field.fieldArray} for:item="attr" if:false={field.Hidden}>
-                                <div key={attr.key}>
-                                    <!-- <lightning-icon icon-name="utility:right" alternative-text="Expand" size="x-small" title="Expand" onclick={ToggleObj}></lightning-icon> -->
-                                    <div>
-                                        {attr.key}: {attr.value}
+            <template if:true={data.IsLoaded}>
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout">
+                    <thead>
+                        <tr>
+                            <th onclick={sort} data-ascending="true" data-sortname="label">Name</th>
+                            <th onclick={sort} data-ascending="true" data-sortname="type">Type</th>
+                            <th onclick={sort} data-ascending="true" data-sortname="inlineHelpText">HelpText</th>
+                            <th onclick={sort} data-ascending="true" data-sortname="calculated">Calculated</th>
+                            <th>Createable</th>
+                            <th>AllowNulls</th>
+                            <th>Updateable</th>
+                            <th>Other</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={data.SfField} for:item="field">
+                            <tr key={field.keyIndex}>
+                                <td>
+                                    {field.label}
+                                    <div class="text-grey slds-text-body_small">{field.name}</div>
+                                </td>
+                                <td>
+                                    {field.type}
+                                    <div class="text-grey slds-text-body_small">{field.byteLength} bytes</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate" title={field.inlineHelpText}>{field.inlineHelpText}</div>
+                                </td>                        
+                                <td>
+                                    {field.calculated}
+                                    <div class="text-grey slds-text-body_small" if:true={field.FormulaExists}>
+                                        <p class="slds-truncate" title={field.calculatedFormula}>{field.calculatedFormula}</p>
                                     </div>
-                                </div>            
-                            </template>
-                            <div if:false={field.Hidden}>{field.Pretty}</div>
-                        </td>
-                    </tr>            
-                </template>
-            </tbody>                                 
-        </table>
+                                </td>
+                                <td>{field.createable}</td>
+                                <td>{field.nillable}</td>
+                                <td>{field.updateable}</td>
+                                <td>
+                                    <lightning-icon icon-name="utility:right" alternative-text="Expand" size="x-small" title="Expand" onclick={ToggleObj} data-id={field.keyIndex}></lightning-icon>
+                                    <template for:each={field.fieldArray} for:item="attr" if:false={field.Hidden}>
+                                        <div key={attr.key}>
+                                            <!-- <lightning-icon icon-name="utility:right" alternative-text="Expand" size="x-small" title="Expand" onclick={ToggleObj}></lightning-icon> -->
+                                            <div>
+                                                {attr.key}: {attr.value}
+                                            </div>
+                                        </div>            
+                                    </template>
+                                    <div if:false={field.Hidden}>{field.Pretty}</div>
+                                </td>
+                            </tr>            
+                        </template>
+                    </tbody>                                 
+                </table>
 
 
-    </template>
+            </template>            
+        </lightning-tab>
+    </lightning-tabset>
+
+
 
 
 </template>

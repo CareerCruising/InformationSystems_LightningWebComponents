@@ -5,31 +5,31 @@
     <template if:true={accSF_Loaded}>
         <div style="padding:10px;">
             <div class="slds-grid slds-wrap">       
-                <div class="slds-col slds-size_5-of-12 slds-p-bottom_small">
+                <div class="slds-col slds-size_3-of-12 slds-p-bottom_small">
                     <p class="MyFieldTitle">InstitutionId</p>
                     <p class="MyFieldValue">{acc.InstitutionId__c.value}</p>
                 </div>     
-                <div class="slds-col slds-size_5-of-12 slds-p-bottom_small">
-                    <p class="MyFieldTitle">SftpPath</p>
-                    <p if:true={sftp.HasFolder} class="MyFieldValue">{sftp.SftpInfo.SftpPath}</p>
-                </div>          
-                <div class="slds-col slds-size_2-of-12 slds-p-bottom_small">
-                    <div class="lgc-bg slds-float_right">
-                        <lightning-button-menu alternative-text="Show menu" menu-alignment="auto">
-                            <lightning-menu-item value="MenuItemTwo" onclick={fetchSftpData} label="Refresh" icon-name="utility:refresh"></lightning-menu-item>
-                            <lightning-menu-item if:true={sftp.IsOwner} value="MenuItemOne" onclick={ToggleCredentials} label="Show Credentials" icon-name="utility:lock"></lightning-menu-item>
-                            <lightning-menu-item if:true={sftp.IsAnthony} value="MenuItemThree" onclick={handleReportNew} label="Add Report" icon-name="utility:add"></lightning-menu-item>
-                        </lightning-button-menu>
-                    </div>
-                </div>                     
-                <div class="slds-col slds-size_5-of-12">
+                <div class="slds-col slds-size_3-of-12">
                     <p class="MyFieldTitle">IntegrationDistrictId</p>
                     <p if:true={sftp.HasFolder} class="MyFieldValue">{sftp.SftpInfo.IntegrationDistrictId}</p>
-                </div>      
-                <div class="slds-col slds-size_7-of-12">
+                </div>  
+                <div class="slds-col slds-size_3-of-12">
                     <p class="MyFieldTitle">SftpFolder</p>
-                    <p if:true={sftp.HasFolder} class="MyFieldValue">{sftp.SftpInfo.SftpFolder}</p>
-                </div>   
+                    <div if:true={sftp.HasFolder}>
+                        <p class="MyFieldValue">{sftp.SftpInfo.SftpFolder}</p>
+                        <p if:true={sftp.IsAnthony} class="text-grey slds-text-body_small">{sftp.SftpInfo.SftpPath}</p>
+                    </div>
+                </div>          
+                <div class="slds-col slds-size_3-of-12 slds-p-bottom_small">
+                    <div class="slds-float_right">
+                        <lightning-button if:true={sftp.HasFolder} label="Credentials" title="Credentials" icon-name="utility:lock" onclick={ToggleCredentials} class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                    <div class="slds-float_right">
+                        <lightning-button if:true={sftp.IsAnthony} label="New Report" title="New Report" icon-name="utility:add" onclick={handleReportNew} class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                </div>                     
+    
+
             </div>  
         </div>
     </template>
@@ -44,7 +44,7 @@
                     <th>Filename</th>
                     <th>LastRun</th>
                     <th>Status</th>
-                    <th>Type</th>
+                    <th>SourceServer</th>
                     <th if:true={sftp.IsAnthony}>Code</th>
                 </tr>
             </thead>
@@ -54,23 +54,32 @@
                         <td>{report.ID}</td>
                         <td>
                             <div>{report.FileName}</div>
-                            <div class="text-grey slds-text-body_small">{report.FileFolder}</div>
+                            <div if:true={report.HasExtractsFolder} class="text-grey slds-text-body_small">in folder <strong>\Extracts</strong></div>
+                            <div if:false={report.HasExtractsFolder} class="text-grey slds-text-body_small">\</div>
                         </td>
                         <td>
                             <div><lightning-formatted-date-time value={report.LastRunDate} month="short" day="numeric" year="numeric"></lightning-formatted-date-time></div>
-                            <div if:true={report.LastRowCount} class="text-grey slds-text-body_small"><lightning-formatted-number value={report.LastRowCount}></lightning-formatted-number> rows</div>
+                            <div if:true={report.LastRowCount} class="text-grey slds-text-body_small">
+                                <lightning-formatted-number value={report.LastRowCount}></lightning-formatted-number> rows
+                                (<lightning-formatted-number value={report.DurationSeconds}></lightning-formatted-number> sec)
+                                <lightning-icon if:true={report.IsTooLong} icon-name="utility:warning" size="small" class="slds-p-right_xx-small hovertext" variant="warning" data-hover="This report is requires a lot of processing power. It might be overly complex or have inefficient code."></lightning-icon>
+                            </div>
                         </td>
                         <td>
                             <lightning-badge if:true={report.IsActive} label="Active" data-id={report.ID} onclick={handleToggleActive} class="slds-badge_inverse BadgeMinPadding"></lightning-badge>
                             <lightning-badge if:false={report.IsActive} label="Inactive" data-id={report.ID} onclick={handleToggleActive} class="slds-badge_lightest BadgeMinPadding"></lightning-badge>
-                        </td>
-                        <td>
-                            <lightning-badge if:true={report.IsXello} label="Xello" class="slds-theme_success BadgeMinPadding Opacity5"></lightning-badge>
-                            <lightning-badge if:false={report.IsXello} label="CC" class="slds-theme_blue BadgeMinPadding Opacity5"></lightning-badge>
                             <div class="slds-p-left_x-small text-grey slds-text-body_small">
                                 <lightning-icon icon-name="utility:event" size="xx-small" class="Opacity5 slds-p-right_xx-small"></lightning-icon>
-                                <spam if:true={report.IsMonthly}>Monthly</spam>
-                                <spam if:false={report.IsMonthly}>Nightly</spam>
+                                <span>{report.FrequencyText}</span>
+                            </div>                            
+                        </td>
+                        <td>
+                            <!-- <lightning-badge if:true={report.IsXello} label="Xello" class="slds-theme_success BadgeMinPadding Opacity5"></lightning-badge>
+                            <lightning-badge if:false={report.IsXello} label="CC" class="slds-theme_blue BadgeMinPadding Opacity5"></lightning-badge> -->
+                            <div if:true={report.IsXello} class="slds-text-color_success"><strong>Xello</strong></div>
+                            <div if:false={report.IsXello} class="slds-text-color_blue"><strong>CC</strong></div>
+                            <div class="text-grey slds-text-body_small">
+                                {report.SourceServer}
                             </div>
                         </td>                           
                         <td if:true={sftp.IsAnthony}>
@@ -84,7 +93,7 @@
     </template>  
     <template if:false={sftp.HasReports}>
         <div class="slds-box slds-theme_shade slds-theme_shade">
-            <p>There are no SFTP reports for this account</p>
+            <p>There are no custom reports / extracts for this account</p>
         </div>
     </template>
 
@@ -93,21 +102,36 @@
         <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
             <div class="slds-modal__container">
                 <!-- Modal/Popup Box LWC header here -->
-                <header class="slds-modal__header">
-                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Client SFTP Credentials</h2>
+                <header class="slds-modal__header" style="background-color:#F3F3F3;">
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+                        <lightning-icon icon-name="utility:warning" alternative-text="Warning!" variant="error"></lightning-icon>
+                        <span class="slds-p-left_medium slds-text-color_error">Sensitive Information</span>
+                    </h2>
                 </header>
                 <!-- Modal/Popup Box LWC body starts here -->
                 <div if:true={sftp.HasFolder} class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
-                    Please find your SFTP details below. You will need file transfer software installed on your computer (e.g. WinSCP, FileZilla, Cute FTP Professional) to complete the step of placing your data files in the account.<br>
-                    <br>
-                    Host: ftp.careercruising.com <br>
-                    Port: 22<br>
-                    Username: {sftp.SftpInfo.UserName}<br>
-                    Password: {sftp.SftpInfo.Password}<br>
+                    <div if:false={sftp.IsOwner}>
+                        The ability to view or copy a clients SFTP credentials are only available to the Account owner. This is highly sensitive information that gives access to private student data.
+                    </div>
+                    <div if:true={sftp.IsOwner}>
+                        <div class="slds-p-around_x-small" style="background-color:#FFE5E5;">
+                            This is highly sensitive information that gives access to private student data. Please be careful when passing this information to a client.
+                        </div>
+                        <div class="slds-p-around_x-small">
+                            Please find your SFTP details below. You will need file transfer software installed on your computer (e.g. WinSCP, FileZilla, Cute FTP Professional) to complete the step of placing your data files in the account.<br>
+                            <br>
+                            Host: ftp.careercruising.com <br>
+                            Port: 22<br>
+                            Username: {sftp.SftpInfo.UserName}<br>
+                            Password: {sftp.SftpInfo.Password}<br>
+                        </div>
+                    </div>
+
+
                 </div>
                 <!-- Modal/Popup Box LWC footer starts here -->
                 <footer class="slds-modal__footer">
-                    <button class="slds-button slds-button_brand" onclick={ToggleCredentials} title="OK">OK</button>
+                    <button class="slds-button" onclick={ToggleCredentials} title="OK">Close</button>
                 </footer>
             </div>
         </section>
@@ -129,12 +153,19 @@
                     <lightning-input onchange={handleReportInputChange} name="ReportName" value={CurrentReport.ReportName} label="ReportName" required></lightning-input>
                     <lightning-input onchange={handleReportInputChange} name="FileLocation" value={CurrentReport.FileLocation} label="File name/location (SFTP)" required></lightning-input>                       
                     <div class="slds-grid slds-gutters">
-                        <div class="slds-col BadgeButton">
-                            <label class="slds-form-element__label">Type</label>
-                            <div class="slds-form-element__control">
+                        <div class="slds-col">
+                            <!-- <label class="slds-form-element__label">Type</label> -->
+                            <lightning-combobox
+                                name="progress"
+                                label="SourceServer"
+                                value={CurrentReport.SourceServer}
+                                options={sftp.SourceServerOption}
+                                onchange={handleChangeSourceServer} 
+                            ></lightning-combobox>                            
+                            <!-- <div class="slds-form-element__control">
                                 <lightning-badge if:true={CurrentReport.IsXello} data-fieldname="IsXello" label="Xello" onclick={handleToggleAnyBoolean} class="slds-theme_success Opacity5"></lightning-badge>
                                 <lightning-badge if:false={CurrentReport.IsXello} data-fieldname="IsXello" label="CC" onclick={handleToggleAnyBoolean} class="slds-theme_blue Opacity5"></lightning-badge>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="slds-col BadgeButton">
                             <label class="slds-form-element__label">Status</label>
@@ -144,11 +175,19 @@
                             </div>
                         </div>
                         <div class="slds-col BadgeButton">
-                            <label class="slds-form-element__label">Frequency</label>
+                            <lightning-combobox
+                                name="progress"
+                                label="Frequency"
+                                value={CurrentReport.Frequency}
+                                options={sftp.FrequencyOption}
+                                onchange={handleChangeFrequency} 
+                            ></lightning-combobox>  
+
+                            <!-- <label class="slds-form-element__label">Frequency</label>
                             <div class="slds-form-element__control">
                                 <lightning-badge if:true={CurrentReport.IsMonthly} label="Monthly" data-fieldname="IsMonthly" onclick={handleToggleAnyBoolean} class="slds-badge_lightest"></lightning-badge>
                                 <lightning-badge if:false={CurrentReport.IsMonthly} label="Nightly" data-fieldname="IsMonthly" onclick={handleToggleAnyBoolean} class="slds-badge_lightest"></lightning-badge>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     
@@ -164,7 +203,7 @@
     </template>
 
     <!-- DEBUG TOGGLES -->
-    <template if:true={sftp.HasFolder}>
+    <template if:true={sftp.Debug}>
         <div class="slds-form-element">
             <div class="slds-form-element__control">
               <div class="slds-checkbox">

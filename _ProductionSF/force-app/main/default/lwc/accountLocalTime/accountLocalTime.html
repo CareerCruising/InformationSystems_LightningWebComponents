@@ -1,0 +1,29 @@
+<template>
+    <template if:true={accSF_Loaded}>
+        <div class="slds-grid slds-gutters slds-grid_vertical-align-center">
+            <div class="slds-col">
+                <div if:false={System.Visible}>
+                    <div class="slds-float_left slds-p-around_x-small">
+                        <lightning-icon icon-name="standard:custom" alternative-text="System" title="System"></lightning-icon>
+                    </div>                     
+                    <div class="slds-float_left slds-p-around_x-small">
+                        <span class="slds-text-color_weak">No System Found</span>
+                    </div>   
+                </div>
+                <div if:true={System.Visible}>
+                    <div class="slds-float_left slds-p-around_x-small">
+                        <lightning-icon icon-name="custom:custom19" alternative-text="System" title="System"></lightning-icon>
+                    </div>                
+                    <div class="slds-float_left slds-p-top_xx-small">
+                        <a onclick={navigateToSystem}>{System.Name}</a>
+                        <div class="slds-text-color_weak slds-text-body_small">Status: {System.Status}</div>
+                    </div> 
+                </div>
+            </div>
+            <div class="slds-col slds-text-align_right" if:true={PageVar.fetchDataLoaded}>
+                <div class="slds-text-heading_medium">{PageVar.AccountLocalTime.LocalTime}</div>
+                <div class="slds-text-color_weak slds-text-body_small" title={PageVar.AccountLocalTime.SQLKey}>Local Time</div>
+            </div>
+          </div>
+    </template>
+</template>

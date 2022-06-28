@@ -20,7 +20,7 @@
     color: #636363;
 }
 .BadgeMinPadding {
-    padding: 1px 7px;
+    padding: 2px 7px 4px 7px;
 }
 .Opacity5 {
     opacity: 0.5;
@@ -29,7 +29,44 @@
     cursor: pointer;
     color: rgb(1, 118, 211);
 }
+.HoverLink {
+    cursor: pointer;
+}
+.HoverLink:hover {
+    color: rgb(1, 118, 211);
+}
 .spinnerHolder{
     position: relative;
     display: inline-block;
+}
+.slds-text-color_blue{
+    color: rgb(1, 118, 211);
+}
+
+.hovertext {
+    position: relative;
+}
+
+.hovertext:before {
+    content: attr(data-hover);
+    visibility: hidden;
+    opacity: 0;
+    width: 200px;
+    background-color: #fff;
+    border-radius: 8px;
+    border: 1px solid #ADADAD;
+    padding: 5px;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+    white-space: normal;
+    overflow: hidden;
+    transition: opacity 0.5s ease-in-out;
+  
+    position: absolute;
+    z-index: 1;
+    top: 120%;
+}
+
+.hovertext:hover:before {
+    opacity: 1;
+    visibility: visible;
 }

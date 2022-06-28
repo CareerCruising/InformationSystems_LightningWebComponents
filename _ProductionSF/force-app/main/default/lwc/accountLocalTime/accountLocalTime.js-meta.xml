@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
-    <description>List of partner reports filtered by Partner Account</description>
     <apiVersion>54.0</apiVersion>
+    <description>Display local time based on state / province</description>
     <isExposed>true</isExposed>
     <targets>
         <target>lightning__RecordPage</target>
-    </targets>    
+    </targets>
 </LightningComponentBundle>

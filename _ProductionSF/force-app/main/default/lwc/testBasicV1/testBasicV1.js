@@ -5,6 +5,7 @@ import DescribeSalesforceObject from'@salesforce/apex/Describe.SalesforceObject'
 export default class TestBasicV1 extends LightningElement {    
     @api recordId;
     @api objectApiName;
+    @track popover = {} //Handles all popover logic
     @track data = {
         IsLoaded: false,
         SortField: 'label',
@@ -26,7 +27,7 @@ export default class TestBasicV1 extends LightningElement {
         ,'ArrRollup__c'
     ];
 
-    @track showPopver = false;
+    @track Popover1Visible = false;
 
     DescribeObj() {
         DescribeSalesforceObject({SfObjectName: 'Opportunity'})
@@ -43,6 +44,13 @@ export default class TestBasicV1 extends LightningElement {
                     if(TempField.calculatedFormula != null) {
                         TempField.FormulaExists = true;
                     }
+
+                    TempField.IsPicklist = false;
+                    if(TempField.type == 'picklist') {
+                        TempField.IsPicklist = true;
+                        console.log(TempField.picklistValues);
+                    }
+
                     //onsole.log(TempField, TempField.length);
                     for (const [key, value] of Object.entries(TempField)) {
                         var NewObj = {};
@@ -101,15 +109,12 @@ export default class TestBasicV1 extends LightningElement {
         //this.event.Hidden = !this.event.Hidden;
     }
 
-    show() {
-        this.showPopver = true;
+    PopoverShow(event) {
+        this.popover[event.target.dataset.popovername] = true;
     }
-    hide() {
-        this.showPopver = false;
-    }
-    handleClose() {
-        console.log('handleClose',this.showPopver)
-        this.showPopver = false;
+    PopoverHide(event) {
+        //onsole.log(event.target.dataset.popovername);
+        this.popover[event.target.dataset.popovername] = false;
     }
 
     SimpleTable = [

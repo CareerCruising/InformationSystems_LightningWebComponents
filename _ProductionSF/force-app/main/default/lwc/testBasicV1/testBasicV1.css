@@ -1,1 +1,6 @@
 @import 'c/commonCSS';
+.test-xxxx{
+    background-color:#dedede;
+    margin:5px;
+    padding:5px;
+}
