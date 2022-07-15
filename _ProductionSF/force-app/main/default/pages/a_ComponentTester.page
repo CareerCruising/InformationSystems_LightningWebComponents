@@ -7,7 +7,8 @@
             $Lightning.createComponent("c:{!$CurrentPage.parameters.comp}",// param comp required in URL
             { 
                 message   : 'Simple Message From VF Page', // You can pass the value to @api attributes if you have inside JavaScript Class.
-                recordId : '{!$CurrentPage.parameters.id}'
+                recordId : '{!$CurrentPage.parameters.id}',
+                objectApiName : '{!$CurrentPage.parameters.object}',
             },
             "LightningComponentid", // the Id of div tag where your component will be rendered
             function(cmp) {

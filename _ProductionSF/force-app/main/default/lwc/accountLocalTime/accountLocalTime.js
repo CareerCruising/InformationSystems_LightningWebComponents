@@ -4,6 +4,7 @@ import { NavigationMixin } from 'lightning/navigation';
 
 export default class AccountLocalTime extends NavigationMixin(LightningElement) {
 
+    @api objectApiName;
     @api recordId;
     @track record;
     @wire(getRecord, { recordId: '$recordId', fields: [

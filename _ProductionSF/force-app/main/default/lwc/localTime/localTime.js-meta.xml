@@ -9,8 +9,11 @@
     <targetConfigs>
         <targetConfig targets="lightning__RecordPage">
             <objects>
-                <object>Account</object>
+                <object>Case</object>
+                <object>Contact</object>
+                <object>Opportunity</object>
+                <object>System__c</object>
             </objects>
         </targetConfig>
-    </targetConfigs>    
+    </targetConfigs>      
 </LightningComponentBundle>
