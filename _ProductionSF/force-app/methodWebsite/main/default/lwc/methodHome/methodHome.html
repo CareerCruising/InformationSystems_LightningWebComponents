@@ -1,0 +1,138 @@
+<template>
+
+    <lightning-spinner if:false={PageVar.IsLoaded} size="medium" alternative-text="Loading"></lightning-spinner>
+
+    <div class="slds-box slds-box_x-small slds-theme_default">
+        <lightning-button-group class="slds-float_right">
+            <lightning-button-icon onclick={ToggleInfo} icon-name="utility:info_alt" alternative-text="Info" title="Info"></lightning-button-icon>
+            <lightning-button-icon onclick={fetchData} icon-name="utility:sync" alternative-text="sync" title="sync"></lightning-button-icon>
+        </lightning-button-group>
+
+        
+        <h2 class="slds-is-relative slds-card__header-title slds-p-around_x-small">Invoice / Xello / Methodize Sync Issues</h2>
+        <!-- SFTP REPORT TABLE -->
+        <div if:true={PageVar.IsLoaded}>
+            <template if:true={PageVar.ReportDataFound}>
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout">
+                    <thead>
+                        <tr>
+                            <th style="width:30%;">
+                                <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="Account__r_Name">Opp School</span></div>
+                                <div><span class="HoverLink text-grey slds-text-body_small" onclick={sort} data-ascending="true" data-sortname="Name">Opportunity</span></div>
+                            </th>
+                            <th style="width:20%;">
+                                <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="Product2_Name">Opp Product</span></div>
+                                <div><span class="HoverLink text-grey slds-text-body_small" onclick={sort} data-ascending="true" data-sortname="Description">Opp SubDesc</span></div>                            
+                            </th>
+                            <th style="width:15%;">
+                                <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="OppStageSimple">Opp Stage</span></div>
+                                <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="StartDateText">Opp Contract</span></div>
+                            </th>          
+                            <th style="width:8%;">
+                                <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="TotalPrice">Total Price</span></div>
+                            </th>
+                            <th style="width:6%;">
+                                <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="SeatQtyParsed">Seats (O)</span></div>
+                                <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="NumberOfAccounts">Seats (M))</span></div>
+                            </th>  
+                            <th style="width:8%;">
+                                <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="EndDate__c">End Date (O)</span></div>
+                                <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="SubscriptionEndDate">End Date (M)</span></div>
+                            </th>                        
+                            <th style="width:13%;" title="This is the status based on the data we have in our Methodize table">
+                                Status
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={PageVar.ReportData} for:item="report">
+                            <tr key={report.Id}>
+                                <td class="slds-truncate">
+                                    <div class="ClickableLink" data-id={report.Account__c} onclick={navigateToSFRecordId}>{report.Account__r_Name}</div>
+                                    <div class="ClickableLink" data-id={report.Account__c} onclick={navigateToLink}>{report.Account__r_Name}</div>
+                                    <!-- <div class="text-grey slds-text-body_small ClickableLink" data-id={report.OpportunityId} onclick={navigateToSFRecordId}>{report.Name}</div> -->
+                                </td>
+                                <td class="slds-truncate">
+                                    <div>{report.Product2_Name}</div>
+                                    <div class="text-grey slds-text-body_small">{report.Description}</div>
+                                </td>
+                                <td>
+                                    {report.OppStageSimple}
+                                    <div class="text-grey slds-text-body_small">{report.StartDateFormatted} - {report.EndDateFormatted}</div>
+                                </td>
+                                <td>
+                                    <div class="hovertext slds-float_right" data-hover={report.TotalPriceCalc}>
+                                        <lightning-formatted-number value={report.TotalPrice} format-style="currency" maximum-fraction-digits="0"></lightning-formatted-number>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning-formatted-number value={report.SeatQtyParsed}></lightning-formatted-number>
+                                    </div>
+                                    <lightning-formatted-number if:true={report.QtyMatch} value={report.NumberOfAccounts}></lightning-formatted-number>
+                                    <span if:false={report.QtyMatch} class="slds-text-color_error">
+                                        <lightning-formatted-number if:true={report.NumberOfAccounts} value={report.NumberOfAccounts}></lightning-formatted-number>
+                                        <span if:false={report.NumberOfAccounts}>New</span>
+                                    </span>                                    
+                                </td>
+                                <td>
+                                    <div>{report.EndDateFormatted}</div>
+                                    <span if:true={report.DateMatch}>{report.SubscriptionEndDateFormatted}</span>
+                                    <span if:false={report.DateMatch} class="slds-text-color_error">
+                                        <span if:true={report.SubscriptionEndDateFormatted}>{report.SubscriptionEndDateFormatted}</span>
+                                        <span if:false={report.SubscriptionEndDateFormatted}>New</span>
+                                    </span> 
+                                </td>      
+                                <td>
+                                    <div>
+                                        <div class="slds-button-group SmallPadding" role="group">
+                                            <button class="slds-button slds-button_neutral btn-on">MTH:</button>
+                                            <button class="slds-button slds-button_neutral">S</button>
+                                            <button class="slds-button slds-button_neutral">E</button>
+                                        </div>
+                                    </div>
+                                </td>                  
+                            </tr>            
+                        </template>
+                    </tbody>                                 
+                </table>
+            </template>  
+            <template if:false={PageVar.ReportDataFound}>
+                <div class="slds-box slds-theme_shade slds-theme_shade">
+                    <p>Nice work, everything in Xello appears to match our invoicing.</p>
+                </div>
+            </template>
+        </div>
+
+        <!--INFO MODAL -->
+        <template if:true={PageVar.ShowInfo}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-02" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    
+                    <lightning-icon onclick={ToggleInfo} class="slds-modal__close HoverLink" variant="inverse" icon-name="utility:close" alternative-text="Close" title="Close"></lightning-icon>
+                   
+                    <!-- Modal/Popup Box LWC header here -->
+                    <header class="slds-modal__header">
+                        <h2 id="modal-heading-02" class="slds-text-heading_medium slds-hyphenate">Report Information</h2>
+                    </header>
+                    <!-- Modal/Popup Box LWC body starts here -->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-EditReport" style="height:fit-content">
+                        
+                        <ul class="slds-list_dotted" style="line-height:200%">
+                            <li>We start by checking for any MTP line items in Opportunities based on the following:</li>
+                            <ul class="slds-list_dotted">
+                                <li>The Opp must be Closed Won</li>
+                                <li>The End Date must be > 6 months ago from the current date</li>
+                                <li>The Start Date must be less than 6 months from the current date, or it could be a multiyear contract with a Start Date further into the future.</li>
+                            </ul>
+                            <li>We parse out the first number we find in the Sub Description and consider that the Quantity (this is not a bulletproof solution)</li>
+                            <li>We compare it to the Xello information (CC3.Mtp.MethodizeSchool) and highlight the differences</li>
+                        </ul>                        
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>        
+    </div>
+
+</template>
