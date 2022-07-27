@@ -10,3 +10,7 @@
     background-color: #10a500;
     color: #ffffff;
 }
+
+tr.rowFadedClass {
+    opacity: 0.5;
+}

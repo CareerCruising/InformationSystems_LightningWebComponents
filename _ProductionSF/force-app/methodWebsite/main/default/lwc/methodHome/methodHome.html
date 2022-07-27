@@ -29,7 +29,7 @@
                                 <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="StartDateText">Opp Contract</span></div>
                             </th>          
                             <th style="width:8%;">
-                                <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="TotalPrice">Total Price</span></div>
+                                <div class="slds-float_right"><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="TotalPrice">Total Price</span></div>
                             </th>
                             <th style="width:6%;">
                                 <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="SeatQtyParsed">Seats (O)</span></div>
@@ -46,11 +46,11 @@
                     </thead>
                     <tbody>
                         <template for:each={PageVar.ReportData} for:item="report">
-                            <tr key={report.Id}>
+                            <tr key={report.Id} class={report.RowClass}>
                                 <td class="slds-truncate">
                                     <div class="ClickableLink" data-id={report.Account__c} onclick={navigateToSFRecordId}>{report.Account__r_Name}</div>
-                                    <div class="ClickableLink" data-id={report.Account__c} onclick={navigateToLink}>{report.Account__r_Name}</div>
-                                    <!-- <div class="text-grey slds-text-body_small ClickableLink" data-id={report.OpportunityId} onclick={navigateToSFRecordId}>{report.Name}</div> -->
+                                    <!-- <div class="ClickableLink" data-id={report.Account__c} onclick={navigateToLink}>{report.Account__r_Name}</div> -->
+                                    <div class="text-grey slds-text-body_small ClickableLink" data-id={report.OpportunityId} onclick={navigateToSFRecordId}>{report.Name}</div>
                                 </td>
                                 <td class="slds-truncate">
                                     <div>{report.Product2_Name}</div>
@@ -72,7 +72,7 @@
                                     <lightning-formatted-number if:true={report.QtyMatch} value={report.NumberOfAccounts}></lightning-formatted-number>
                                     <span if:false={report.QtyMatch} class="slds-text-color_error">
                                         <lightning-formatted-number if:true={report.NumberOfAccounts} value={report.NumberOfAccounts}></lightning-formatted-number>
-                                        <span if:false={report.NumberOfAccounts}>New</span>
+                                        <span if:false={report.IsClosedLost}>New</span>&nbsp;
                                     </span>                                    
                                 </td>
                                 <td>
@@ -80,14 +80,14 @@
                                     <span if:true={report.DateMatch}>{report.SubscriptionEndDateFormatted}</span>
                                     <span if:false={report.DateMatch} class="slds-text-color_error">
                                         <span if:true={report.SubscriptionEndDateFormatted}>{report.SubscriptionEndDateFormatted}</span>
-                                        <span if:false={report.SubscriptionEndDateFormatted}>New</span>
+                                        <span if:false={report.IsClosedLost}>New</span>&nbsp;
                                     </span> 
                                 </td>      
                                 <td>
                                     <div>
                                         <div class="slds-button-group SmallPadding" role="group">
                                             <button class="slds-button slds-button_neutral btn-on">MTH:</button>
-                                            <button class="slds-button slds-button_neutral">S</button>
+                                            <button class="slds-button slds-button_neutral {{report.MthStudentColor}}">S</button>
                                             <button class="slds-button slds-button_neutral">E</button>
                                         </div>
                                     </div>

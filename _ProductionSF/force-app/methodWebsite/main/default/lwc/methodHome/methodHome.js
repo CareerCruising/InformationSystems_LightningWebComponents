@@ -48,13 +48,14 @@ export default class MethodHome extends NavigationMixin(LightningElement) {
                         entry.DateMatch = true;
                         if(entry.SubscriptionEndDateFormatted != entry.EndDateFormatted) entry.DateMatch = false;
 
-                        entry.QtyMatch = true;
-                        if(entry.SeatQtyParsed != entry.NumberOfAccounts) entry.QtyMatch = false; 
+                        entry.QtyMatch = (entry.SeatQtyParsed == entry.NumberOfAccounts) ? true : false; 
                         
                         //Links
                         entry.AccLink = '/Methodize/s/account?id=' + entry.Account__c
 
                         entry.TotalPriceCalc = entry.UnitPrice + ' x ' + entry.Quantity ;
+                        entry.RowClass = (entry.OppStageSimple == 'Closed Lost') ? 'rowFadedClass' : '';
+                        entry.IsClosedLost = (entry.OppStageSimple == 'Closed Lost') ? true : false;
                     });                    
                     this.PageVar.ReportDataFound = this.PageVar.ReportData.length > 0; //only make this true after confirmed so alert message does not appear (or flash) on screen
                 }
