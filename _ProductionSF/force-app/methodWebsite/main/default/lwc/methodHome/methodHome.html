@@ -5,14 +5,43 @@
     <div class="slds-box slds-box_x-small slds-theme_default">
         <lightning-button-group class="slds-float_right">
             <lightning-button-icon onclick={ToggleInfo} icon-name="utility:info_alt" alternative-text="Info" title="Info"></lightning-button-icon>
-            <lightning-button-icon onclick={fetchData} icon-name="utility:sync" alternative-text="sync" title="sync"></lightning-button-icon>
+            <lightning-button-icon onclick={fetchData} icon-name="utility:sync" alternative-text="Sync or Refresh" title="Sync or Refresh"></lightning-button-icon>
         </lightning-button-group>
 
         
-        <h2 class="slds-is-relative slds-card__header-title slds-p-around_x-small">Invoice / Xello / Methodize Sync Issues</h2>
-        <!-- SFTP REPORT TABLE -->
+        <h2 class="slds-is-relative slds-card__header-title slds-p-around_x-small">Opportunity Line Items</h2>
+        <!-- TABLE -->
         <div if:true={PageVar.IsLoaded}>
             <template if:true={PageVar.ReportDataFound}>
+                <!--Header / filters-->
+                <div class="slds-grid slds-gutters slds-p-bottom_x-small">
+                    <div class="slds-col">
+                        <lightning-combobox
+                            name="progress_1X"
+                            label="Opportunity Stage"
+                            value={PageVar.OppSimpleStatus}
+                            options={PageVar.OppSimpleStatusOptions}
+                            onchange={handleFilterByType} 
+                        ></lightning-combobox> 
+                    </div>
+                    <div class="slds-col">
+                        <lightning-combobox
+                            name="progress_2X"
+                            label="Filter 2"
+                            value={PageVar.OppSimpleStatus}
+                            options={PageVar.OppSimpleStatusOptions}
+                            onchange={handleFilterByType} 
+                        ></lightning-combobox> 
+                    </div>
+                    <div class="slds-col">
+                        <lightning-input type="date" name="StartDate" label="From Date" value={PageVar.DatetePicker.StartDateFormat}></lightning-input>
+                        <div>{PageVar.DatetePicker.StartDate}</div>
+                        <div>{PageVar.DatetePicker.StartDateFormat}</div>
+                    </div>
+                    <div class="slds-col">
+                        <lightning-input type="date" name="StartDate" label="To Date" value={PageVar.DatetePicker.EndDate}></lightning-input>
+                    </div>
+                </div>
                 <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout">
                     <thead>
                         <tr>
@@ -32,7 +61,7 @@
                                 <div class="slds-float_right"><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="TotalPrice">Total Price</span></div>
                             </th>
                             <th style="width:6%;">
-                                <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="SeatQtyParsed">Seats (O)</span></div>
+                                <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="OppSeatQtyParsed">Seats (O)</span></div>
                                 <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="NumberOfAccounts">Seats (M))</span></div>
                             </th>  
                             <th style="width:8%;">
@@ -61,35 +90,32 @@
                                     <div class="text-grey slds-text-body_small">{report.StartDateFormatted} - {report.EndDateFormatted}</div>
                                 </td>
                                 <td>
-                                    <div class="hovertext slds-float_right" data-hover={report.TotalPriceCalc}>
+                                    <div class="hovertext slds-text-align_right" data-hover={report.TotalPriceCalc}>
                                         <lightning-formatted-number value={report.TotalPrice} format-style="currency" maximum-fraction-digits="0"></lightning-formatted-number>
+                                    </div>
+                                    <div class="text-grey slds-text-body_small slds-text-align_right">
+                                        {report.Opportunity_Type}
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="slds-col slds-size_1-of-2">
-                                        <lightning-formatted-number value={report.SeatQtyParsed}></lightning-formatted-number>
+                                    <div>
+                                        <lightning-formatted-number value={report.OppSeatQtyParsed}></lightning-formatted-number>
                                     </div>
-                                    <lightning-formatted-number if:true={report.QtyMatch} value={report.NumberOfAccounts}></lightning-formatted-number>
-                                    <span if:false={report.QtyMatch} class="slds-text-color_error">
-                                        <lightning-formatted-number if:true={report.NumberOfAccounts} value={report.NumberOfAccounts}></lightning-formatted-number>
-                                        <span if:false={report.IsClosedLost}>New</span>&nbsp;
-                                    </span>                                    
+                                    <div class={report.QtyMatchClass}>
+                                        {report.NumberOfAccounts}
+                                    </div>
                                 </td>
                                 <td>
                                     <div>{report.EndDateFormatted}</div>
-                                    <span if:true={report.DateMatch}>{report.SubscriptionEndDateFormatted}</span>
-                                    <span if:false={report.DateMatch} class="slds-text-color_error">
-                                        <span if:true={report.SubscriptionEndDateFormatted}>{report.SubscriptionEndDateFormatted}</span>
-                                        <span if:false={report.IsClosedLost}>New</span>&nbsp;
-                                    </span> 
+                                    <div class={report.QtyMatchClass}>{report.SubscriptionEndDateFormatted}</div>
                                 </td>      
                                 <td>
                                     <div>
-                                        <div class="slds-button-group SmallPadding" role="group">
-                                            <button class="slds-button slds-button_neutral btn-on">MTH:</button>
-                                            <button class="slds-button slds-button_neutral {{report.MthStudentColor}}">S</button>
-                                            <button class="slds-button slds-button_neutral">E</button>
-                                        </div>
+                                        <div class="StatusBar">
+                                            <span class={report.MthTypeColor}>MTH</span>
+                                            <span class={report.MthStudentColor}>S</span>
+                                            <span class={report.MthEducatorColor}>E</span>
+                                          </div>
                                     </div>
                                 </td>                  
                             </tr>            
