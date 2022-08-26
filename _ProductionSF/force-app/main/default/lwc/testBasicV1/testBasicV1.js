@@ -109,6 +109,9 @@ export default class TestBasicV1 extends LightningElement {
         //this.event.Hidden = !this.event.Hidden;
     }
 
+    PopoverToggle(event) {
+        this.popover[event.target.dataset.popovername] = (this.popover[event.target.dataset.popovername]) ? false : true;
+    }
     PopoverShow(event) {
         this.popover[event.target.dataset.popovername] = true;
     }

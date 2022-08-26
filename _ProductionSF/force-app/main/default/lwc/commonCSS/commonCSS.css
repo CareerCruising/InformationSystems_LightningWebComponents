@@ -70,3 +70,20 @@
     opacity: 1;
     visibility: visible;
 }
+
+.tdOppColor {
+    width: 5px;
+    padding-left: 3px !important;
+}
+.colorClosedWon {
+    background-color: #98C8ED !important;
+    border-color: #98C8ED !important;
+}
+.colorOpen {
+    background-color: #FFDCAD !important;
+    border-color: #FFDCAD!important;
+}
+.colorClosedLost {
+    background-color: #CFCFCF !important;
+    border-color: #CFCFCF!important;
+}

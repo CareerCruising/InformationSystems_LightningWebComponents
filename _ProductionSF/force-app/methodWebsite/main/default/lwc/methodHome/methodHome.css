@@ -25,5 +25,15 @@
   }
 
 tr.rowFadedClass {
-    opacity: 0.5;
+    opacity: 0.8;
+}
+
+.LineInvoiced {
+  font-weight: bold;
+  font-size: 16px;
+}
+.LinePaid {
+  font-weight: bold;
+  color:#10a500;
+  font-size: 16px;
 }

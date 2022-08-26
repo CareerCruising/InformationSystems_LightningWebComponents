@@ -56,14 +56,14 @@
 
                         <li data-popovername="li_Pop1" onmouseover={PopoverShow} onmouseleave={PopoverHide} class="slds-is-relative test-xxxx">
                             slds-nubbin_top-left style="left:0px;top:40px;"
-                            <section if:true={popover.li_Pop1} class="slds-popover slds-nubbin_top-left slds-is-absolute" role="dialog" style="left:0px;top:40px;">
+                            <section if:true={popover.li_Pop1} class="slds-popover slds-nubbin_top-left slds-is-absolute" role="dialog" style="left:0px;top:40px;white-space:normal;">
                                 <div class="slds-popover__body">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore etdolore magna aliqua.</div>
                             </section> 
                         </li>
 
                         <li data-popovername="li_Pop2" onmouseover={PopoverShow} onmouseleave={PopoverHide} class="slds-is-relative test-xxxx">
                             slds-nubbin_right-bottom style="left:0px;top:40px;"
-                            <section if:true={popover.li_Pop2} class="slds-popover slds-nubbin_right-bottom slds-is-absolute" role="dialog" style="left:0px;top:40px;">
+                            <section if:true={popover.li_Pop2} class="slds-popover slds-nubbin_right-bottom slds-is-absolute" role="dialog" style="left:0px;top:40px;white-space:normal;">
                                 <div class="slds-popover__body">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore etdolore magna aliqua.</div>
                             </section>                          
                         </li>
@@ -105,6 +105,30 @@
             <lightning-badge label="slds-theme_error" class="slds-theme_error"></lightning-badge>
             <lightning-badge label="slds-theme_blue" class="slds-theme_blue"></lightning-badge>            
         </lightning-tab>
+        <lightning-tab label="DropDowns">
+            <div class="slds-m-top_medium slds-m-bottom_x-large">
+                <h2 class="slds-text-heading_small slds-m-bottom_medium">
+                    Button menu with only <code>lightning-menu-item</code> elements.
+                </h2>
+        
+                <!-- Simple -->
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-button-menu alternative-text="Show menu">
+                        <lightning-menu-item value="MenuItemOne" label="Menu Item One"></lightning-menu-item>
+                        <lightning-menu-item value="MenuItemTwo" label="Menu Item Two"></lightning-menu-item>
+                        <lightning-menu-item value="MenuItemThree" label="Menu Item Three"></lightning-menu-item>
+                        <lightning-menu-item value="MenuItemFour" label="Menu Item Four"></lightning-menu-item>
+                        <div>
+                            asdfasdfasd
+                            <ul>
+                                <li>sdfgsdf</li>
+                                <li>sdfgsdf</li>
+                            </ul>
+                        </div>
+                    </lightning-button-menu>
+                </div>
+            </div>          
+        </lightning-tab>        
         <lightning-tab label="Describe">
             <!--SF OBJECT DESCRIPTIONS-->
             <lightning-button variant="brand" label="Describe.SalesforceObject" title="Primary action" onclick={DescribeObj} class="slds-m-left_x-small"></lightning-button>

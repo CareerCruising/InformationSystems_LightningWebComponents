@@ -1,0 +1,62 @@
+@import 'c/commonCSS';
+
+.StatusBar {
+    padding: 3px 3px;
+    display: inline-flex;
+  }
+  .StatusBar > span {
+    border: 1px solid #ffffff;
+    border-left-width: 0px;
+    background-color: #d6d6d6;
+    padding: 2px 7px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+  .StatusBar > span.Status-On {
+    background-color: #10a500;
+    color: #ffffff;
+  }
+  .StatusBar > span:first-child {
+    border-radius: 8px 0 0 8px;
+  }
+  .StatusBar > span:last-child {
+    border-radius: 0 8px 8px 0;
+  }
+
+tr.rowFadedClass {
+    opacity: 0.8;
+}
+
+.LineInvoiced {
+  font-weight: bold;
+  font-size: 16px;
+}
+.LinePaid {
+  font-weight: bold;
+  color:#10a500;
+  font-size: 16px;
+}
+.tdContract > div {
+    position: relative;
+    width: 45px;
+}
+div.ContractFaded {
+    opacity: 0.5;
+}
+div.ContractDuration {
+    color: #a81c1c;
+    font-size: 10px;
+    position: absolute;
+    top: -3px;
+    right:5px;
+}
+div.ContractMonth {
+    font-size: 14px;
+    line-height: 13px;
+}
+div.ContractYear {
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 16px;
+}
