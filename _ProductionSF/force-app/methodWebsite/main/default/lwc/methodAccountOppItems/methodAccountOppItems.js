@@ -84,7 +84,7 @@ export default class MethodAccountOppItems extends NavigationMixin(LightningElem
 
                         //Opportunity Line Type
                         entry.OppTypeIcon = 'utility:sync';
-                        if(entry.Resub__c == 'N') entry.OppTypeIcon = 'utility:new';
+                        if(entry.Resub__c == 'New') entry.OppTypeIcon = 'utility:new';
 
                         //Opportunity SimpleStatus
                         entry.SimpleStatusClass = 'tdOppColor colorOpen';
@@ -101,9 +101,9 @@ export default class MethodAccountOppItems extends NavigationMixin(LightningElem
                         //Contract
                         entry.ContractMonth = new Date(entry.StartDate__c).toLocaleDateString('en-us', { month:"short"}).toUpperCase();
                         entry.ContractYear = new Date(entry.StartDate__c).toLocaleDateString('en-us', { year:"numeric"});
-                        entry.ContractDuration = 12 * entry.Contract_Duration__c;
+                        entry.ContractDuration = parseFloat((12 * entry.Contract_Duration__c).toFixed(1));
                         entry.ContractDuration = (entry.ContractDuration == 12) ? '': JSON.stringify(entry.ContractDuration);
-                        entry.ContractClass = (new Date(entry.StartDate__c) < new Date() && new Date(entry.EndDate__c) > new Date()) ? '' : 'ContractFaded';
+                        entry.ContractClass = (new Date(entry.StartDate__c) <= new Date().setHours(0,0,0,0) && new Date(entry.EndDate__c) >= new Date().setHours(0,0,0,0)) ? '' : 'ContractFaded';
 
                         entry.TotalPriceCalc = '$' + entry.UnitPrice + ' x qty ' + entry.Quantity;
                         entry.RowClass = (entry.OppStageSimple == 'Closed Lost') ? 'rowFadedClass' : '';

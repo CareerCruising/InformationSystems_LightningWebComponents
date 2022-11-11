@@ -8,6 +8,18 @@
 .text-grey {
     color: #ADADAD;
 }
+.text-purple {
+    color: #8b00d1;
+}
+.text-blue {
+    color: #0070d2;
+}
+.text-brown {
+    color: #b76400;
+}
+.text-green {
+    color: #2e844a;
+}
 .slds-theme_blue {
     color: white;
     background-color: #0070D2;
@@ -87,3 +99,16 @@
     background-color: #CFCFCF !important;
     border-color: #CFCFCF!important;
 }
+.BoxWithLabel {
+    border-radius: 8px;
+    border: 1px solid #ADADAD;
+    position:absolute;
+    margin-top: 10px;
+  }
+  .BoxWithLabel > .label {
+    position:relative;
+    top: -10px;
+    left: 8px;
+    background: #fff;
+    padding: 1px 5px;
+  }

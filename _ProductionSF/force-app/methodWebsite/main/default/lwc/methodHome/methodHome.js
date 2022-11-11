@@ -83,9 +83,6 @@ export default class MethodHome extends NavigationMixin(LightningElement) {
 
         var FromDate = '';
         var ToDate = '';
-        //console.log('UserData',this.PageVar.UserData);
-        // console.log(this.PageVar.DatetePicker.StartDate, this.PageVar.UserData.ToDate);
-        // console.log(this.PageVar.DatetePicker.EndDate, this.PageVar.UserData.ToDate);
         if(this.PageVar.DatetePicker.StartDate != this.PageVar.UserData.FromDate || this.PageVar.DatetePicker.EndDate != this.PageVar.UserData.ToDate) {
             FromDate = this.PageVar.DatetePicker.StartDate
             ToDate = this.PageVar.DatetePicker.EndDate
@@ -123,8 +120,11 @@ export default class MethodHome extends NavigationMixin(LightningElement) {
 
                         //Determine color for bar buttons:
                         entry.MthTypeColor = (entry.SubscriptionEndDate > new Date()) ? 'Status-On' : '';
+                        entry.MthTypeTitle = (entry.SubscriptionEndDate > new Date()) ? 'Valid site exists in Methodize' : 'Valid site does NOT exist in MEthodize';
                         entry.MthStudentColor = (entry.MethodStudentActive == 'Y') ? 'Status-On' : '';
+                        entry.MthStudentTitle = (entry.MethodStudentActive == 'Y') ? 'Visible to students' : 'NOT visible to students';
                         entry.MthEducatorColor = (entry.MethodEducatorActive == 'Y') ? 'Status-On' : '';
+                        entry.MthEducatorTitle = (entry.MethodEducatorActive == 'Y') ? 'Visible to educators' : 'NOT visible to educators';
 
                         //Compare to Date / Quantity to Method
                         entry.QtyMatchClass = (entry.OppSeatQtyParsed == entry.NumberOfAccounts) ? '' : 'slds-text-color_error'; 
@@ -135,7 +135,7 @@ export default class MethodHome extends NavigationMixin(LightningElement) {
 
                         //Opportunity Line Type
                         entry.OppTypeIcon = 'utility:sync';
-                        if(entry.Resub__c == 'N') entry.OppTypeIcon = 'utility:new';
+                        if(entry.Resub__c == 'New') entry.OppTypeIcon = 'utility:new';
 
                         //Opportunity SimpleStatus
                         entry.SimpleStatusClass = 'tdOppColor colorOpen';
@@ -156,7 +156,21 @@ export default class MethodHome extends NavigationMixin(LightningElement) {
                         entry.RowClass = (entry.OppStageSimple == 'Closed Lost') ? 'rowFadedClass' : '';
                         entry.IsClosedLost = (entry.OppStageSimple == 'Closed Lost') ? true : false;
                         
-                    });          
+                    });
+                    
+
+                    //Rebuild Opp stage drop menu labels to show quantity
+                    var OriginalArray = this.PageVar.ReportData;
+                    var TempArray
+                    this.PageVar.OppSimpleStatusOptions.forEach(function(entry) {
+                        if(entry.value == '') {
+                            entry.label = 'All (' + OriginalArray.length + ')';
+                        } else {
+                            TempArray = OriginalArray.filter(obj => obj.OppStageSimple == entry.value);
+                            entry.label = entry.value + ' (' + TempArray.length + ')';
+                        }
+                    });
+
                     this.filterData();       
                     this.PageVar.ReportDataFound = this.PageVar.ReportData.length > 0; //only make this true after confirmed so alert message does not appear (or flash) on screen
                 }

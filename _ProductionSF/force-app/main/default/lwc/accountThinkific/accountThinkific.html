@@ -1,0 +1,66 @@
+<template>
+    <lightning-spinner if:false={PageVar.IsLoaded} size="medium" alternative-text="Loading"></lightning-spinner>
+
+    <div if:true={PageVar.IsLoaded}>
+        <!--Header / filters-->
+        <div class="slds-grid slds-gutters slds-p-around_xx-small">
+            <div class="slds-col slds-p-top_x-small">
+                Count: {PageVar.ReportDataFiltered.length}
+            </div>   
+            <div class="slds-col">               
+                <!-- <div class="slds-col slds-p-top_small slds-float_right slds-text-align_right">
+                    <div>Records:</div>
+                    {PageVar.ReportDataFiltered.length} of {PageVar.ReportData.length}
+                </div>                    -->
+                <lightning-button-group class="slds-float_right">
+                    <lightning-button-menu alternative-text="Show menu" label={PageVar.DropMenu1Value}>
+                        <lightning-menu-item label="All Educators" data-label="All Educators" onclick={DropMenu1Change}></lightning-menu-item>
+                        <lightning-menu-item label="Educators with Courses" data-label="Educators with Courses" onclick={DropMenu1Change}></lightning-menu-item>
+                    </lightning-button-menu>			
+                    <lightning-button label="Download" title="Download" icon-name="utility:download" onclick={DownloadEducators}></lightning-button>
+                </lightning-button-group>                
+            </div>    
+                                
+        </div>
+        <!--Full table-->
+        <table if:true={PageVar.ReportDataFound} class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout">
+            <thead>
+                <tr>
+                    <th style="width:40%;">
+                        <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="LastName">Educator</span></div>
+                        <div><span class="HoverLink text-grey slds-text-body_small" onclick={sort} data-ascending="true" data-sortname="InstitutionName">Institution</span></div>
+                    </th>
+                    <th style="width:30%;">
+                        <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="CourseName">Course Name</span></div>
+                        <div><span class="HoverLink text-grey slds-text-body_small" onclick={sort} data-ascending="true" data-sortname="DateCreated">Date Started</span></div>                            
+                    </th>
+                    <th style="width:30%;">
+                        <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="Percent">Percent Completed</span></div>
+                        <div><span class="HoverLink text-grey slds-text-body_small" onclick={sort} data-ascending="true" data-sortname="DateCompleted">Date Completed</span></div>                            
+                    </th>                    
+                </tr>
+            </thead>
+            <tbody>
+                <template for:each={PageVar.ReportDataFiltered} for:item="report">
+                    <tr key={report.Id}>                          
+                        <td class="slds-truncate">
+                            <div>{report.FirstName} {report.LastName}</div>
+                            <div class="text-grey slds-text-body_small">{report.InstitutionName}</div>
+                        </td>
+                        <td class="slds-truncate">
+                            <div>{report.CourseName}</div>
+                            <div class="text-grey slds-text-body_small">{report.DateCreated}</div>
+                        </td>      
+                        <td class="slds-truncate">
+                            <div>{report.Percent}</div>
+                            <div class="text-grey slds-text-body_small">{report.DateCompleted}</div>
+                        </td>                                
+                    </tr>            
+                </template>
+            </tbody>                                 
+        </table>
+        <div if:false={PageVar.ReportDataFound} class="slds-box slds-theme_shade slds-theme_shade">
+            <p>No Educator data found</p>
+        </div>
+    </div>    
+</template>

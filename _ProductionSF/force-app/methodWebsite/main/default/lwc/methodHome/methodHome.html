@@ -3,10 +3,10 @@
     <lightning-spinner if:false={PageVar.IsLoaded} size="medium" alternative-text="Loading"></lightning-spinner>
 
     <div class="slds-box slds-box_x-small slds-theme_default">
-        <lightning-button-group class="slds-float_right">
+        <!-- <lightning-button-group class="slds-float_right">
             <lightning-button-icon onclick={ToggleInfo} icon-name="utility:info_alt" alternative-text="Info" title="Info"></lightning-button-icon>
             <lightning-button-icon onclick={fetchData} icon-name="utility:sync" alternative-text="Sync or Refresh" title="Sync or Refresh"></lightning-button-icon>
-        </lightning-button-group>
+        </lightning-button-group> -->
 
         
         <h2 class="slds-is-relative slds-card__header-title slds-p-around_x-small">Opportunity Line Items</h2>
@@ -14,6 +14,15 @@
         <div if:true={PageVar.IsLoaded}>
             <!--Header / filters-->
             <div class="slds-grid slds-gutters slds-p-bottom_x-small">
+                <div class="slds-col">
+                    <lightning-combobox
+                        name="progress_1X"
+                        label="Opportunity Stage"
+                        value={PageVar.OppSimpleStatus}
+                        options={PageVar.OppSimpleStatusOptions}
+                        onchange={handleFilterByType} 
+                    ></lightning-combobox> 
+                </div>   
                 <div class="slds-col slds-p-top_xx-small">
                     <div class="slds-is-relative">
                         <div class="slds-p-left_x-small slds-text-body_small">Date Range</div>
@@ -39,24 +48,7 @@
                         </section> 
                     </div>
                 </div>    
-                <div class="slds-col">
-                    <lightning-combobox
-                        name="progress_1X"
-                        label="Opportunity Stage"
-                        value={PageVar.OppSimpleStatus}
-                        options={PageVar.OppSimpleStatusOptions}
-                        onchange={handleFilterByType} 
-                    ></lightning-combobox> 
-                </div>             
-                <div class="slds-col">
-                    <lightning-combobox
-                        name="progress_1X"
-                        label="Opportunity Stage"
-                        value={PageVar.OppSimpleStatus}
-                        options={PageVar.OppSimpleStatusOptions}
-                        onchange={handleFilterByType} 
-                    ></lightning-combobox> 
-                </div>
+          
                 <div class="slds-col slds-p-top_small slds-text-align_right">
                     <div>Records:</div>
                     {PageVar.ReportDataFiltered.length} of {PageVar.ReportData.length}
@@ -244,8 +236,8 @@
                                 <div>
                                     <div class="StatusBar">
                                         <span class={report.MthTypeColor}>MTH</span>
-                                        <span class={report.MthStudentColor} title="Visible to students {report.MthTypeColor}">S</span>
-                                        <span class={report.MthEducatorColor} title="Visible to students {report.MthTypeColor}">E</span>
+                                        <span class={report.MthStudentColor} title={report.MthStudentTitle}>S</span>
+                                        <span class={report.MthEducatorColor} title={report.MthEducatorTitle}>E</span>
                                     </div>
                                 </div>
                                 <div class="slds-p-left_xx-small">

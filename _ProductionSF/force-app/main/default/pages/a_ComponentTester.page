@@ -1,8 +1,36 @@
 <apex:page>
-    <apex:includeLightning />   
-    <div id="LightningComponentid" />   
+    <apex:includeLightning />
+    <apex:slds /> 
+
+    <div class="slds-tabs_default">
+        <ul class="slds-tabs_default__nav" role="tablist">
+          <li id="Tab1" onclick="TabChange(this)" class="slds-tabs_default__item slds-is-active">
+            <a class="slds-tabs_default__link">Item One</a>
+          </li>
+          <li id="Tab2" onclick="TabChange(this)" class="slds-tabs_default__item">
+            <a class="slds-tabs_default__link">Item Two</a>
+          </li>
+          <li id="Tab3" onclick="TabChange(this)" class="slds-tabs_default__item">
+            <a class="slds-tabs_default__link">Item Three</a>
+          </li>
+        </ul>
+        <div id="TabContent1" data-parenttab="Tab1" class="slds-tabs_default__content slds-show">Item One Content</div>
+        <div id="TabContent2" data-parenttab="Tab2" class="slds-tabs_default__content slds-hide">Item Two Content</div>
+        <div id="TabContent3" data-parenttab="Tab3" class="slds-tabs_default__content slds-hide">Item Three Content</div>
+    </div>
+           
+     
     <!-- the Id of div tag which will be used to render your LWC component  -->
+    <div id="LightningComponentid" />
     <script>
+
+      //Create an entry for every tab (li)
+      var Tabs = [
+        { id: 'Tab1', value: 'D' },
+        { id: 'Tab2', value: 'W' },
+        { id: 'Tab3', value: 'M' }
+      ];
+
         $Lightning.use("c:TestLWC", function() {
             $Lightning.createComponent("c:{!$CurrentPage.parameters.comp}",// param comp required in URL
             { 
@@ -15,6 +43,28 @@
                 console.log('Calling the LWC Component');
             });
         });
+
+        function TabChange(CurrentTab) {
+            console.log(CurrentTab.id);
+            var elements;
+
+            elements = document.querySelectorAll('.slds-tabs_default__item');
+            for (el of elements) {
+              el.classList.remove('slds-is-active');
+              if(el.id == CurrentTab.id) el.classList.add('slds-is-active');
+            }
+
+            elements = document.querySelectorAll('.slds-tabs_default__content');
+            for (el of elements) {
+              el.classList.remove('slds-show');  
+              el.classList.add('slds-hide');  
+              if(el.dataset.parenttab == CurrentTab.id) {
+                el.classList.remove('slds-hide');  
+                el.classList.add('slds-show');  
+              }
+            }            
+            //console.log('TabChange');
+        } 
     </script>
 
 </apex:page>

@@ -1,0 +1,77 @@
+<template>
+    <lightning-spinner if:false={data.IsLoaded} size="medium" alternative-text="Loading"></lightning-spinner>
+    <div class="slds-p-left_xx-small">
+        <div class="MyDropDown">
+            <lightning-input type="text" value={ac.CurrentOption.label} onkeyup={SearchKeyUp} placeholder="Type object name..." class="slds-p-bottom_xx-small"></lightning-input>
+            <div if:true={ac.Visible} class="slds-dropdown slds-dropdown_left">
+                <ul class="slds-dropdown__list" role="menu" aria-label="Show More">
+                    <template for:each={ac.FilteredOptions} for:item="row">
+                        <li key={row.label} class="slds-dropdown__item" role="presentation">
+                            <a role="menuitem" onclick={SetCurrentOption} data-option={row.label}>{row.label}</a>
+                        </li>
+                    </template>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <template if:true={data.SfField}>
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout">
+            <thead>
+                <tr>
+                    <th>
+                        <div onclick={sort} data-sortname="label">Label</div>
+                        <div onclick={sort} data-sortname="name" class="text-grey slds-text-body_small">Name</div>
+                    </th>
+                    <th onclick={sort} data-ascending="true" data-sortname="type">Type</th>
+                    <th onclick={sort} data-ascending="true" data-sortname="inlineHelpText">HelpText</th>
+                    <th onclick={sort} data-ascending="true" data-sortname="calculated">Calculated</th>
+                    <th>Createable</th>
+                    <th>AllowNulls</th>
+                    <th>Updateable</th>
+                    <th>Other</th>
+                </tr>
+            </thead>
+            <tbody>
+                <template for:each={data.SfField} for:item="field">
+                    <tr key={field.keyIndex}>
+                        <td>
+                            {field.label}
+                            <div class="text-grey slds-text-body_small">{field.name}</div>
+                        </td>
+                        <td>
+                            {field.type}
+                            <div class="text-grey slds-text-body_small">{field.byteLength} bytes</div>
+                        </td>
+                        <td>
+                            <div class="slds-truncate" title={field.inlineHelpText}>{field.inlineHelpText}</div>
+                        </td>                        
+                        <td>
+                            {field.calculated}
+                            <div class="text-grey slds-text-body_small" if:true={field.FormulaExists}>
+                                <p class="slds-truncate" title={field.calculatedFormula}>{field.calculatedFormula}</p>
+                            </div>
+                        </td>
+                        <td>{field.createable}</td>
+                        <td>{field.nillable}</td>
+                        <td>{field.updateable}</td>
+                        <td>
+                            <lightning-icon icon-name="utility:right" alternative-text="Expand" size="x-small" title="Expand" onclick={ToggleObj} data-id={field.keyIndex}></lightning-icon>
+                            <template for:each={field.fieldArray} for:item="attr" if:false={field.Hidden}>
+                                <div key={attr.key}>
+                                    <!-- <lightning-icon icon-name="utility:right" alternative-text="Expand" size="x-small" title="Expand" onclick={ToggleObj}></lightning-icon> -->
+                                    <div>
+                                        {attr.key}: {attr.value}
+                                    </div>
+                                </div>            
+                            </template>
+                            <div if:false={field.Hidden}>{field.Pretty}</div>
+                        </td>
+                    </tr>            
+                </template>
+            </tbody>                                 
+        </table>
+
+
+    </template>  
+</template>

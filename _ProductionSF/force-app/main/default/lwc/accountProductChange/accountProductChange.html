@@ -1,0 +1,94 @@
+<template>
+    <lightning-spinner if:false={PageVar.IsLoaded} size="medium" alternative-text="Loading"></lightning-spinner>
+
+    <div if:true={PageVar.IsLoaded}>
+        <!--Header / filters-->
+        <div class="slds-grid slds-gutters slds-p-around_xx-small">
+            <div class="slds-col">    
+                <div if:true={accSF.data} class="ClickableLink" data-id={recordId} onclick={navigateToSFRecordId}>{accSF.data.fields.Name.value}</div>      
+            </div> 
+            <div if:true={PageVar.ShowTestIssue} class="slds-col slds-p-top_x-small">
+                <lightning-combobox
+                    name="progress_1X"
+                    label="Test Examples:"
+                    value={PageVar.TestIssueValue}
+                    options={PageVar.TestIssueOptions}
+                    onchange={handleTestIssueChange} 
+                ></lightning-combobox> 
+            </div>   
+            
+            <div class="slds-col">               
+                <lightning-button-group class="slds-float_right">			
+                    <lightning-button label="Download" title="Download" icon-name="utility:download" onclick={DownloadEducators}></lightning-button>
+                </lightning-button-group>                
+            </div>    
+                                
+        </div>
+        <!--Full table-->
+        <table if:true={PageVar.ReportDataFound} class="slds-table slds-no-row-hover slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout">
+            <thead style="background-color:rgb(228, 228, 228)">
+                <tr>
+                    <th style="width:20%;">
+                        <div>StartYear</div>
+                        <div class="text-grey slds-text-body_small">OppType</div>
+                    </th>
+                    <th style="width:20%;">
+                        <div>Product</div>
+                        <div class="text-grey slds-text-body_small">UnitMeasure</div>                            
+                    </th>
+                    <th style="width:20%;" class="slds-text-align_right">
+                        <div>Arr</div>
+                        <div class="text-grey slds-text-body_small">Price x Qty</div>
+                    </th>
+                    <th style="width:20%;" class="slds-text-align_right">
+                        <div>ArrChange</div>                   
+                    </th>      
+                    <th style="width:20%;" class="slds-text-align_right">
+                        <div>ChangeType</div>
+                        <div class="text-grey slds-text-body_small">Notes</div>
+                    </th>                                                                 
+                </tr>
+            </thead>
+            <tbody>
+                <template for:each={PageVar.ReportDataFiltered} for:item="report">
+                    <tr key={report.Id} class={report.RowClass}>                          
+                        <td class="slds-truncate">
+                            <div>{report.StartYear}</div>
+                            <div if:true={report.OppType}>
+                                <div class="ClickableLink text-grey slds-text-body_small slds-is-relative" data-id={report.OpportunityId} onclick={navigateToSFRecordId} title={report.OpportunityId}>{report.OppType}</div>                             
+                            </div>
+                             
+                        </td>
+                        <td class="slds-truncate">
+                            <div>{report.Product}</div>
+                            <div class="text-grey slds-text-body_small">{report.UnitMeasure}</div>
+                        </td>
+                        <td class="slds-text-align_right">
+                            <div><lightning-formatted-number value={report.Arr} maximum-fraction-digits="2" minimum-fraction-digits="2"></lightning-formatted-number></div>
+                            <div class="text-grey slds-text-body_small">
+                                <lightning-formatted-number value={report.AnnualPrice} maximum-fraction-digits="2" minimum-fraction-digits="2"></lightning-formatted-number>
+                                <span if:true={report.Quantity}> x </span>
+                                <lightning-formatted-number value={report.Quantity} maximum-fraction-digits="2" minimum-fraction-digits="2"></lightning-formatted-number>
+                            </div>
+                        </td> 
+                        <td class="slds-text-align_right">
+                            <div if:true={report.ChangeType} class="">
+                                <lightning-formatted-number value={report.ArrChange} maximum-fraction-digits="2" minimum-fraction-digits="2"></lightning-formatted-number>
+                            </div>
+                            <div if:false={report.ChangeType} class="text-grey">
+                                <lightning-formatted-number value={report.ArrChange} maximum-fraction-digits="2" minimum-fraction-digits="2"></lightning-formatted-number>
+                            </div>                            
+                        </td> 
+                        <td class="slds-truncate slds-text-align_right">
+                            <div>{report.ChangeType}</div>
+                            <div class="text-grey slds-text-body_small">{report.Note}</div>
+                        </td>  
+                    </tr>            
+                </template>
+            </tbody>                                 
+        </table>
+        <div if:false={PageVar.ReportDataFound} class="slds-box slds-theme_shade slds-theme_shade">
+            <p>No Educator data found</p>
+        </div>
+    </div>    
+</template>

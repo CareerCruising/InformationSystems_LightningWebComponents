@@ -132,7 +132,7 @@
         <lightning-tab label="Describe">
             <!--SF OBJECT DESCRIPTIONS-->
             <lightning-button variant="brand" label="Describe.SalesforceObject" title="Primary action" onclick={DescribeObj} class="slds-m-left_x-small"></lightning-button>
-
+            <lightning-button variant="brand" label="GetObjectList" title="Primary action" onclick={GetObjectList} class="slds-m-left_x-small"></lightning-button>
             <template if:true={data.IsLoaded}>
                 <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout">
                     <thead>

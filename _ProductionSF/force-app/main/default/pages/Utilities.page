@@ -1,0 +1,73 @@
+<apex:page>
+    <apex:includeLightning />
+    <apex:slds /> 
+
+    <div class="slds-tabs_default">
+        <ul class="slds-tabs_default__nav" role="tablist">
+            <li id="Tab1" onclick="TabChange(this)" class="slds-tabs_default__item slds-is-active">
+                <a class="slds-tabs_default__link">Search Code</a>
+            </li>
+            <li id="Tab2" onclick="TabChange(this)" class="slds-tabs_default__item">
+                <a class="slds-tabs_default__link">Describe Object</a>
+            </li>
+            <li id="Tab3" onclick="TabChange(this)" class="slds-tabs_default__item">
+                <a class="slds-tabs_default__link">Item Three</a>
+            </li>
+        </ul>
+        <div id="TabContent1" data-parenttab="Tab1" data-initiated="true" data-component="UtlSearchCode" class="slds-tabs_default__content slds-show"></div>
+        <div id="TabContent2" data-parenttab="Tab2" data-initiated="false" data-component="UtlDescribeObject" class="slds-tabs_default__content slds-hide"></div>
+        <div id="TabContent3" data-parenttab="Tab3" data-initiated="false" data-component="UtlOther" class="slds-tabs_default__content slds-hide"></div>
+    </div>
+           
+     
+    <!-- the Id of div tag which will be used to render your LWC component  -->
+    <div id="LightningComponentid" />
+    <script>
+
+        function TabChange(CurrentTab) {
+            
+            elements = document.querySelectorAll('.slds-tabs_default__item');
+            for (el of elements) {
+                el.classList.remove('slds-is-active');
+                if(el.id == CurrentTab.id) el.classList.add('slds-is-active');
+            }
+
+            elements = document.querySelectorAll('.slds-tabs_default__content');
+            for (el of elements) {
+                el.classList.remove('slds-show');  
+                el.classList.add('slds-hide');  
+                if(el.dataset.parenttab == CurrentTab.id) {
+                    el.classList.remove('slds-hide');  
+                    el.classList.add('slds-show');  
+                }
+            }            
+            CheckComponents();
+        } 
+
+        function CheckComponents() {
+            var elements = document.querySelectorAll('.slds-tabs_default__content');
+            for (el of elements) {
+                if(el.classList.contains('slds-show') && el.dataset.initiated == 'false') {
+                    //if the tab is visible but not initiated then render the component
+                    InitiateComponent(el.id, el.dataset.component);
+                    el.dataset.initiated = 'true'
+                }
+            }           
+        } 
+        
+        
+        function InitiateComponent(ElementId, ComponentName) {
+            $Lightning.use("c:TestLWC", function() {
+                $Lightning.createComponent("c:" + ComponentName,
+                    { label : "Press Me!" },
+                    ElementId, // the Id of div tag where your component will be rendered
+                    function(cmp) {
+                        console.log('Calling the LWC Component:' + "c:" + ComponentName);
+                    }
+                );
+            });         
+        } 
+        InitiateComponent('TabContent1', 'UtlSearchCode');
+
+    </script>
+</apex:page>

@@ -1,0 +1,13 @@
+@import 'c/commonCSS';
+.DarkRow > td {
+    background-color: rgb(245, 245, 245);
+    border-bottom: solid 1px transparent;
+}
+.LightRow > td {
+    background-color: white;
+    border-bottom: solid 1px transparent;
+}
+.DarkRow:hover > td, .LightRow:hover > td {
+    border-top-color: gray;
+    border-bottom-color: gray;
+}

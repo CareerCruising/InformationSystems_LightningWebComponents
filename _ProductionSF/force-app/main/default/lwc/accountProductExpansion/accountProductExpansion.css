@@ -1,0 +1,55 @@
+@import 'c/commonCSS';
+.DarkRow > td {
+    background-color: rgb(245, 245, 245);
+    border-bottom: solid 1px transparent;
+}
+.LightRow > td {
+    background-color: white;
+    border-bottom: solid 1px transparent;
+}
+.DarkRow:hover > td, .LightRow:hover > td {
+    border-top-color: gray;
+    border-bottom-color: gray;
+}
+.Pad1 {
+    padding-left: 15px !important;
+}
+.Pad2 {
+    padding-left: 30px !important;
+}
+.Pad3 {
+    padding-left: 45px !important;
+}
+.Pad4 {
+    padding-left: 60px !important;
+}
+.Pad5 {
+    padding-left: 75px !important;
+}
+.Pad6 {
+    padding-left: 90px !important;
+}
+.slds-progress-bar {
+    background: rgb(0,0,0,0) !important;
+}
+.pb-Purple {
+    background: #8b00d1 !important;
+}
+.pb-Green {
+    background: #2E844A !important;
+}
+.tbl_LeftBorder {
+    border-left: 1px solid #bdbdbd;
+}
+.RoundedBorder {
+    border: 1px solid #bdbdbd;
+    border-radius: 6px;
+}
+.RoundedBorder > div:first-child {
+    background:#bdbdbd;
+    font-weight: bold;
+    padding: 5px;
+}
+.PerSitePadding {
+    padding-right: 22px;
+}
