@@ -1,5 +1,8 @@
 <template>
     <lightning-spinner if:false={PageVar.IsLoaded} size="medium" alternative-text="Loading"></lightning-spinner>
+    <div class="slds-notify slds-notify_alert" role="alert">
+        <h2>This area is still being tested. Angie, Adrienne & Sarah will provide details when released.</h2>
+    </div>    
     <div if:true={PageVar.IsLoaded}>
         <!--Header / filters-->
         <div class="slds-grid slds-gutters slds-p-around_xx-small">
@@ -24,8 +27,9 @@
             
             <div class="slds-col">               
                 <lightning-button-group class="slds-float_right">			
-                    <lightning-button label="Download" title="Download" icon-name="utility:download" onclick={DownloadJson}></lightning-button>
-                    <lightning-button-menu alternative-text="Show menu" variant="border-filled" menu-alignment="right">
+                    <lightning-button label="Download" icon-name="utility:download" onclick={DownloadJson}></lightning-button>
+                    <lightning-button label="Info" icon-name="utility:info_alt" onclick={ToggleHelpDetails}></lightning-button>
+                    <lightning-button-menu if:true={PageVar.ShowTestIssue} alternative-text="Show menu" variant="border-filled" menu-alignment="right">
                         <lightning-menu-item label="TEST: Multi District" onclick={JumpToURL} data-url="https://xello--c.vf.force.com/apex/a_ComponentTester?Id=00141000019hiPoAAI&comp=AccountProductExpansion"></lightning-menu-item>
                         <lightning-menu-item label="TEST: Complex Hierarchy" onclick={JumpToURL} data-url="https://xello--c.vf.force.com/apex/a_ComponentTester?Id=0011K00002LUrZoQAL&comp=AccountProductExpansion"></lightning-menu-item>
                         <lightning-menu-item label="TEST: data showing 0" onclick={JumpToURL} data-url="https://xello--c.vf.force.com/apex/a_ComponentTester?Id=00141000019hYfnAAE&comp=AccountProductExpansion"></lightning-menu-item>
@@ -63,110 +67,38 @@
                             <div class="text-grey slds-text-body_small">{row.Type}</div>
                         </td>
                         <td class="slds-text-align_right">
-                            <!-- <lightning-formatted-number class="text-grey slds-text-body_small" value={row.XelloES_CS}></lightning-formatted-number>
-                            <div class="slds-progress-bar slds-progress-bar_circular">
-                                <span class="slds-progress-bar__value pb-Purple" data-value={row.XelloES_CS}></span>
-                            </div> 
-                            <lightning-formatted-number class="text-grey slds-text-body_small" value={row.XelloES_PI}></lightning-formatted-number>
-                            <div class="slds-progress-bar slds-progress-bar_circular">
-                                <span class="slds-progress-bar__value pb-Green" data-value={row.XelloES_PI}></span>
-                            </div>  -->
                             <lightning-formatted-number class="text-purple" value={row.XelloES_CS}></lightning-formatted-number><br>
                             <lightning-formatted-number class="slds-text-color_success" value={row.XelloES_PI}></lightning-formatted-number>                           
                         </td>
                         <td class="slds-text-align_right">
-                            <!-- <lightning-formatted-number class="text-grey slds-text-body_small" value={row.XelloMS_CS}></lightning-formatted-number>
-                            <div class="slds-progress-bar slds-progress-bar_circular">
-                                <span class="slds-progress-bar__value pb-Purple" data-value={row.XelloMS_CS}></span>
-                            </div> 
-                            <lightning-formatted-number class="text-grey slds-text-body_small" value={row.XelloMS_PI}></lightning-formatted-number>
-                            <div class="slds-progress-bar slds-progress-bar_circular">
-                                <span class="slds-progress-bar__value pb-Green" data-value={row.XelloMS_PI}></span>
-                            </div>  -->
                             <lightning-formatted-number class="text-purple" value={row.XelloMS_CS}></lightning-formatted-number><br>
                             <lightning-formatted-number class="slds-text-color_success" value={row.XelloMS_PI}></lightning-formatted-number>                             
                         </td>
                         <td class="slds-text-align_right">
-                            <!-- <lightning-formatted-number class="text-grey slds-text-body_small" value={row.XelloHS_CS}></lightning-formatted-number>
-                            <div class="slds-progress-bar slds-progress-bar_circular">
-                                <span class="slds-progress-bar__value pb-Purple" data-value={row.XelloHS_CS}></span>
-                            </div> 
-                            <lightning-formatted-number class="text-grey slds-text-body_small" value={row.XelloHS_PI}></lightning-formatted-number>
-                            <div class="slds-progress-bar slds-progress-bar_circular">
-                                <span class="slds-progress-bar__value pb-Green" data-value={row.XelloHS_PI}></span>
-                            </div>  -->
                             <lightning-formatted-number class="text-purple" value={row.XelloHS_CS}></lightning-formatted-number><br>
                             <lightning-formatted-number class="slds-text-color_success" value={row.XelloHS_PI}></lightning-formatted-number>                             
                         </td>
                         <td class="slds-text-align_right">
-                            <!-- <lightning-formatted-number class="text-grey slds-text-body_small" value={row.DiServices_CS}></lightning-formatted-number>
-                            <div class="slds-progress-bar slds-progress-bar_circular">
-                                <span class="slds-progress-bar__value pb-Purple" data-value={row.DiServices_CS}></span>
-                            </div> 
-                            <lightning-formatted-number class="text-grey slds-text-body_small" value={row.DiServices_PI}></lightning-formatted-number>
-                            <div class="slds-progress-bar slds-progress-bar_circular">
-                                <span class="slds-progress-bar__value pb-Green" data-value={row.DiServices_PI}></span>
-                            </div> -->
                             <lightning-formatted-number class="text-purple" value={row.DiServices_CS}></lightning-formatted-number><br>
                             <lightning-formatted-number class="slds-text-color_success" value={row.DiServices_PI}></lightning-formatted-number>
                         </td>
                         <td class="slds-text-align_right">
-                            <!-- <lightning-formatted-number class="text-grey slds-text-body_small" value={row.MethodASAT_CS}></lightning-formatted-number>
-                            <div class="slds-progress-bar slds-progress-bar_circular">
-                                <span class="slds-progress-bar__value pb-Purple" data-value={row.MethodASAT_CS}></span>
-                            </div> 
-                            <lightning-formatted-number class="text-grey slds-text-body_small" value={row.MethodASAT_PI}></lightning-formatted-number>
-                            <div class="slds-progress-bar slds-progress-bar_circular">
-                                <span class="slds-progress-bar__value pb-Green" data-value={row.MethodASAT_PI}></span>
-                            </div> -->
                             <lightning-formatted-number class="text-purple" value={row.MethodASAT_CS}></lightning-formatted-number><br>
                             <lightning-formatted-number class="slds-text-color_success" value={row.MethodASAT_PI}></lightning-formatted-number>
                         </td>
                         <td class="slds-text-align_right">
-                            <!-- <lightning-formatted-number class="text-grey slds-text-body_small" value={row.MethodFL_CS}></lightning-formatted-number>
-                            <div class="slds-progress-bar slds-progress-bar_circular">
-                                <span class="slds-progress-bar__value pb-Purple" data-value={row.MethodFL_CS}></span>
-                            </div> 
-                            <lightning-formatted-number class="text-grey slds-text-body_small" value={row.MethodFL_PI}></lightning-formatted-number>
-                            <div class="slds-progress-bar slds-progress-bar_circular">
-                                <span class="slds-progress-bar__value pb-Green" data-value={row.MethodFL_PI}></span>
-                            </div> -->
                             <lightning-formatted-number class="text-purple" value={row.MethodFL_CS}></lightning-formatted-number><br>
                             <lightning-formatted-number class="slds-text-color_success" value={row.MethodFL_PI}></lightning-formatted-number>
                         </td>
                         <td class="slds-text-align_right">
-                            <!-- <lightning-formatted-number class="text-grey slds-text-body_small" value={row.StuTracker_CS}></lightning-formatted-number>
-                            <div class="slds-progress-bar slds-progress-bar_circular">
-                                <span class="slds-progress-bar__value pb-Purple" data-value={row.StuTracker_CS}></span>
-                            </div> 
-                            <lightning-formatted-number class="text-grey slds-text-body_small" value={row.StuTracker_PI}></lightning-formatted-number>
-                            <div class="slds-progress-bar slds-progress-bar_circular">
-                                <span class="slds-progress-bar__value pb-Green" data-value={row.StuTracker_PI}></span>
-                            </div> -->
                             <lightning-formatted-number class="text-purple" value={row.StuTracker_CS}></lightning-formatted-number><br>
                             <lightning-formatted-number class="slds-text-color_success" value={row.StuTracker_PI}></lightning-formatted-number>
                         </td>
                         <td class="slds-text-align_right">
-                            <!-- <lightning-formatted-number class="text-grey slds-text-body_small" value={row.Intel_CS}></lightning-formatted-number>
-                            <div class="slds-progress-bar slds-progress-bar_circular">
-                                <span class="slds-progress-bar__value pb-Purple" data-value={row.Intel_CS}></span>
-                            </div> 
-                            <lightning-formatted-number class="text-grey slds-text-body_small" value={row.Intel_PI}></lightning-formatted-number>
-                            <div class="slds-progress-bar slds-progress-bar_circular">
-                                <span class="slds-progress-bar__value pb-Green" data-value={row.Intel_PI}></span>
-                            </div> -->
                             <lightning-formatted-number class="text-purple" value={row.Intel_CS}></lightning-formatted-number><br>
                             <lightning-formatted-number class="slds-text-color_success" value={row.Intel_PI}></lightning-formatted-number>
                         </td>
                         <td class="slds-text-align_right">
-                            <!-- <lightning-formatted-number class="text-grey slds-text-body_small" value={row.Total_CS}></lightning-formatted-number>
-                            <div class="slds-progress-bar slds-progress-bar_circular">
-                                <span class="slds-progress-bar__value pb-Purple" data-value={row.Total_CS}></span>
-                            </div> 
-                            <lightning-formatted-number class="text-grey slds-text-body_small" value={row.Total_PI}></lightning-formatted-number>
-                            <div class="slds-progress-bar slds-progress-bar_circular">
-                                <span class="slds-progress-bar__value pb-Green" data-value={row.Total_PI}></span>
-                            </div> -->
                             <strong><lightning-formatted-number class="text-purple" value={row.Total_CS}></lightning-formatted-number></strong><br>
                             <strong><lightning-formatted-number class="slds-text-color_success" value={row.Total_PI}></lightning-formatted-number></strong>
                         </td>                                                                                                                                                                        
@@ -189,18 +121,18 @@
                 <!-- HEADER -->
                 <header class="slds-modal__header" style="background-color:#F3F3F3;">
                     <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
-                        <span class="slds-p-left_medium">Expansion Details By Product</span>
+                        <span class="slds-p-left_medium">Expansion Details By Account / Product</span>
                     </h2>
                 </header>
 
                 <!-- BODY -->
                 <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
-                    <div class="slds-grid slds-gutters slds-p-around_xx-small">
+                    <div class="slds-grid slds-gutters slds-p-around_small">
                         <div class="slds-col slds-size_3-of-4">    
-                            <span class="ClickableLink" data-id={PageVar.ExpansionDetails.Account.AccountId} onclick={navigateToSFRecordId} title={PageVar.ExpansionDetails.Account.AccountId}>{PageVar.ExpansionDetails.Account.AccountName}</span> 
+                            <span class="bold-text">{PageVar.ExpansionDetails.Account.AccountName}</span> 
                             <div class="text-grey slds-text-body_small">{PageVar.ExpansionDetails.Account.Type}</div>                            
                         </div>                       
-                        <div class="slds-col slds-size_1-of-4">   
+                        <div class="slds-col slds-size_1-of-4 slds-p-bottom_xx-small">   
                             <div class="slds-grid slds-gutters slds-wrap RoundedBorder">
                                 <div class="slds-col slds-size_3-of-3 slds-text-align_center">                                   
                                     <span class="slds-p-right_xx-small">Student Count By Grade </span>
@@ -222,19 +154,19 @@
                             </div>   
                         </div>                  
                     </div>      
-                    <table class="slds-table slds-no-row-hover slds-table_cell-buffer slds-table_bordered tbl_ExpandDetails">
-                        <thead style="background-color:rgb(228, 228, 228)">
-                            <tr>
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered tbl_ExpandDetails" style="border-top: 1px solid transparent;">
+                        <thead>
+                            <tr class="tbl_FirstRowMainHeader">
                                 <th></th>
-                                <th class="tbl_LeftBorder slds-text-align_center" colspan="3">Potential</th>
                                 <th class="tbl_LeftBorder slds-text-align_center" colspan="3">Current</th>
+                                <th class="tbl_LeftBorder slds-text-align_center" colspan="3">Potential</th>
                                 <th class="tbl_LeftBorder slds-text-align_center" colspan="2">Expansion</th>
                             </tr>                            
-                            <tr>
+                            <tr class="DarkRow">
                                 <th>
                                     <div>Product</div>
                                 </th>
-                                <th class="tbl_LeftBorder slds-text-align_right" style="padding-right: 40px;">Price</th>
+                                <th class="tbl_LeftBorder slds-text-align_right">Price</th>
                                 <th class="slds-text-align_right">Quantity</th>
                                 <th class="slds-text-align_right">ARR</th>
                                 <th class="tbl_LeftBorder slds-text-align_right">Price</th>
@@ -248,33 +180,46 @@
                             <template for:each={PageVar.ExpansionDetails.Data} for:item="row">
                                 <tr key={row.Id} class={row.RowClass} if:true={row.Visible}>                          
                                     <td>{row.Product}</td>
+                                    
+                                    <!--CURRENT-->
+                                    <td class="tbl_LeftBorder slds-text-align_right">
+                                        <div if:true={row.CurrentMeasure}>
+                                            <lightning-formatted-number value={row.CurrentPrice} minimum-fraction-digits="2" maximum-fraction-digits="2"></lightning-formatted-number>
+                                            <div class="text-grey slds-text-body_small">{row.CurrentMeasure}</div>
+                                        </div>
+                                    </td>                                    
+                                    <td class="slds-text-align_right">
+                                        <div if:true={row.CurrentMeasure}>
+                                            <lightning-formatted-number value={row.CurrentQuantity} maximum-fraction-digits="0"></lightning-formatted-number>
+                                        </div>
+                                    </td>
+                                    <td class="slds-text-align_right bold-text">
+                                        <div if:true={row.CurrentMeasure}>
+                                            <lightning-formatted-number value={row.CurrentLineArr} maximum-fraction-digits="0"></lightning-formatted-number>
+                                        </div>
+                                    </td>                                    
+                                    
+                                    <!--POTENTIAL-->
                                     <td class="tbl_LeftBorder">
                                         <div class="slds-text-align_right" if:true={row.PricePerStudent}>
+                                            <span class="text-grey slds-text-body_small slds-p-right_x-small">Per Student</span>
                                             <lightning-formatted-number value={row.PricePerStudent} minimum-fraction-digits="2" maximum-fraction-digits="2"></lightning-formatted-number>
-                                            <span class="text-grey slds-text-body_small"> / student</span>                            
                                         </div>
+                                        <div class="slds-text-align_right text-grey" if:false={row.PricePerStudent}>--</div>                                        
                                         <div class="slds-text-align_right">
+                                            <span class="text-grey slds-text-body_small slds-p-right_x-small">Per Site</span>
                                             <lightning-formatted-number value={row.PricePerSite} minimum-fraction-digits="2" maximum-fraction-digits="2"></lightning-formatted-number>
-                                            <span class="text-grey slds-text-body_small PerSitePadding"> / site</span>                            
                                         </div>
                                     </td>
                                     <td class="slds-text-align_right">
                                         <lightning-formatted-number value={row.Quantity} maximum-fraction-digits="0"></lightning-formatted-number>
                                     </td>
-                                    <td class="slds-text-align_right">
+                                    <td class="slds-text-align_right bold-text">
                                         <lightning-formatted-number value={row.ArrMax} maximum-fraction-digits="0"></lightning-formatted-number>
                                     </td>
-                                    <td class="tbl_LeftBorder slds-text-align_right">
-                                        <lightning-formatted-number value={row.CurrentPrice} minimum-fraction-digits="2" maximum-fraction-digits="2"></lightning-formatted-number>
-                                        <div class="text-grey slds-text-body_small">{row.CurrentMeasure}</div>
-                                    </td>                                    
-                                    <td class="slds-text-align_right">
-                                        <lightning-formatted-number value={row.CurrentQuantity} maximum-fraction-digits="0"></lightning-formatted-number>
-                                    </td>
-                                    <td class="slds-text-align_right">
-                                        <lightning-formatted-number value={row.CurrentLineArr} maximum-fraction-digits="0"></lightning-formatted-number>
-                                    </td>                                          
-                                    <td class="tbl_LeftBorder slds-text-align_right">
+                                    
+                                    <!--EXPANSION-->                              
+                                    <td class="tbl_LeftBorder slds-text-align_right bold-text">
                                         <lightning-formatted-number class={row.ExpansionClass} value={row.ArrUpsell} maximum-fraction-digits="0"></lightning-formatted-number>
                                     </td>
                                     <td class="slds-text-align_right">
@@ -282,7 +227,24 @@
                                     </td>
                                 </tr>            
                             </template>
-                        </tbody>                                 
+                            <tr>
+                                <td class="bold-text">Total</td>
+                                <td class="tbl_LeftBorder slds-text-align_right bold-text" colspan="3">
+                                    <lightning-formatted-number value={PageVar.ExpansionDetails.CurrentTotal} maximum-fraction-digits="0"></lightning-formatted-number>
+                                </td>
+                                <td class="tbl_LeftBorder slds-text-align_right bold-text" colspan="3">
+                                    <lightning-formatted-number value={PageVar.ExpansionDetails.PotentialTotal} maximum-fraction-digits="0"></lightning-formatted-number>
+                                </td>
+                                <td class="tbl_LeftBorder slds-text-align_right bold-text">
+                                    <strong><lightning-formatted-number class="text-purple" value={PageVar.ExpansionDetails.Account.Total_CS} maximum-fraction-digits="0"></lightning-formatted-number></strong><br>
+                                    <strong><lightning-formatted-number class="slds-text-color_success" value={PageVar.ExpansionDetails.Account.Total_PI} maximum-fraction-digits="0"></lightning-formatted-number></strong>
+                                </td>
+                                <td>
+                                    <div class="text-purple"><strong>Cross Sell</strong></div>    
+                                    <div class="slds-text-color_success"><strong>Price Increase</strong></div>  
+                                </td>
+                            </tr>                             
+                        </tbody>            
                     </table>                                     
                 </div>
                 <!-- FOOTER -->
@@ -292,5 +254,73 @@
             </div>
         </section>
         <div class="slds-backdrop slds-backdrop_open"></div>
-    </template>    
+    </template>
+
+    <!-- Help MODAL -->
+    <template if:true={PageVar.HelpDetails.Visible}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_large">
+            <div class="slds-modal__container">
+                <lightning-icon onclick={ToggleHelpDetails} class="slds-modal__close HoverLink" variant="inverse" icon-name="utility:close" alternative-text="Close" title="Close"></lightning-icon>
+                
+                <!-- HEADER -->
+                <header class="slds-modal__header" style="background-color:#F3F3F3;">
+                    <h2 id="modal-heading-02" class="slds-text-heading_medium slds-hyphenate">
+                        <span class="slds-p-left_medium">Expansion Calculations</span>
+                    </h2>
+                </header>
+
+                <!-- BODY -->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                    <div class="slds-text-heading_medium">Understanding how we determine expansion values:</div>
+                    <div class="slds-grid slds-gutters slds-p-around_small">
+                        <ul class="slds-list_dotted">
+                            <li>Expansion values are complex and not always a perfect calculation since we have to make assumptions.</li>
+                            <li>Expansion values are calculated and update nightly.</li>
+                            <li class="slds-p-top_x-small">WHEN WE HAVE STUDENT COUNTS (FOR EACH GADE):
+								<ul class="slds-list_dotted">
+									<li>We ignore minimum site price. This is because we assume that the average district (as a whole) will beat the site price when all students are considered. We chose to be conservative so there may be more expansion available.</li>
+                                    <li>We use <a target="_blank" href="https://nces.ed.gov/ccd/districtsearch/">NCES data</a> where possible.</li>
+                                    <li>Expansion is based on grade level student counts, the Account Type (High School, Combined etc) is ignored.</li>
+                                    <li>If the site has purchased any product with Per Student pricing, we use that number for student counts.</li>
+                                    <li>We use territory pricing when available.</li>
+								</ul>
+							</li>                            
+                            <li class="slds-p-top_x-small">WHEN STUDENT COUNTS ARE NOT AVAILABLE:
+								<ul class="slds-list_dotted">
+									<li>We base expansion on per site pricing.</li>
+                                    <li>We base expansion on Account Type, mapped as follows:
+										<table class="slds-table slds-table_cell-buffer slds-table_bordered">
+											<thead>
+												<tr>
+													<th>Account Type</th>
+													<th>Expansion Type</th>
+												</tr>
+											</thead>
+											<tbody>
+                                                <tr><td>Alternative School / Tech Centre</td><td>High School</td></tr>
+                                                <tr><td>Combined School (K-12)</td><td>High School</td></tr>
+                                                <tr><td>Elementary School</td><td>Elementary School</td></tr>
+                                                <tr><td>High School</td><td>High School</td></tr>
+                                                <tr><td>Middle School</td><td>Middle School</td></tr>
+                                                <tr><td>Other</td><td>Middle School</td></tr>
+                                                <tr><td>School - Other</td><td>Middle School</td></tr>
+                                                <tr><td>Secondary</td><td>High School</td></tr>
+                                                <tr><td>Senior Elementary School</td><td>Elementary School</td></tr>
+											</tbody>
+										</table>
+                                    </li>
+								</ul>
+							</li>  
+                        </ul>                 
+                    </div>                                       
+                </div>
+                <!-- FOOTER -->
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_brand" onclick={ToggleHelpDetails} title="Close">Close</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>      
+
 </template>

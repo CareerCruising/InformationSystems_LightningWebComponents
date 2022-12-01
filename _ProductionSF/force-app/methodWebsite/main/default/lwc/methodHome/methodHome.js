@@ -58,11 +58,7 @@ export default class MethodHome extends NavigationMixin(LightningElement) {
 
         document.addEventListener('scroll', debounce(() => {
             if(document.documentElement.scrollHeight === window.pageYOffset + window.innerHeight) {
-                var TempList = this.PageVar.ReportDataFiltered;
-                var LastVisibleIndex = TempList.findIndex(obj => obj.Visible == false)
-                for(let i = LastVisibleIndex;i < TempList.length;i++){
-                    TempList[i].Visible = (i < LastVisibleIndex + 20) ? true : false;
-                }    
+                this.ShowMoreLines();
             }
         }, 100))
         function debounce(e,t=300){let u;return(...i)=>{clearTimeout(u),u=setTimeout(()=>{e.apply(this,i)},t)}}    
@@ -215,7 +211,6 @@ export default class MethodHome extends NavigationMixin(LightningElement) {
         //onsole.log(event.target.dataset.popovername);
         this.popover[event.target.dataset.popovername] = false;
     }
-
     ////////////////////////////////////////////////////////////////////////////////////
     //Filtering
     ////////////////////////////////////////////////////////////////////////////////////
@@ -234,7 +229,6 @@ export default class MethodHome extends NavigationMixin(LightningElement) {
     EndDateChange(event) {
         this.PageVar.DatetePicker.EndDate = event.detail.value;
     }           
-
     filterData() {  
         let TempList = [];
         if(this.PageVar.OppSimpleStatus == '') {
@@ -277,7 +271,21 @@ export default class MethodHome extends NavigationMixin(LightningElement) {
         this.PageVar.ReportDataFiltered = TempList;
         this.PageVar.FilterCount = this.PageVar.ReportDataFiltered.length;
     }       
-    
+    ShowMoreLines() {
+        console.log('ShowMoreLines');
+        var TempList = this.PageVar.ReportDataFiltered;
+        var LastVisibleIndex = TempList.findIndex(obj => obj.Visible == false)
+        for(let i = LastVisibleIndex;i < TempList.length;i++){
+            TempList[i].Visible = (i < LastVisibleIndex + 20) ? true : false;
+        } 
+    } 
+    get IsLoadMoreVisible() {
+        if(this.PageVar.ReportDataFiltered.findIndex(obj => obj.Visible == false) >= 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     
 
 }

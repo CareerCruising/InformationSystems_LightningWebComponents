@@ -1,5 +1,5 @@
 @import 'c/commonCSS';
-.DarkRow > td {
+.DarkRow > td, .DarkRow > th {
     background-color: rgb(245, 245, 245);
     border-bottom: solid 1px transparent;
 }
@@ -40,6 +40,13 @@
 }
 .tbl_LeftBorder {
     border-left: 1px solid #bdbdbd;
+}
+.tbl_FirstRowMainHeader > th {
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+    border-top: 1px solid transparent;
+    font-size: 16px;
+    text-transform: uppercase;
 }
 .RoundedBorder {
     border: 1px solid #bdbdbd;

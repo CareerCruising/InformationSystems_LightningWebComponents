@@ -55,199 +55,204 @@
                 </div>                                  
             </div>
             <!--Full table-->
-            <table if:true={PageVar.ReportDataFound} class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout">
-                <thead>
-                    <tr>
-                        <th class="tdOppColor"></th>
-                        <th style="width:30%;">
-                            <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="Account__r_Name">Opp School</span></div>
-                            <div><span class="HoverLink text-grey slds-text-body_small" onclick={sort} data-ascending="true" data-sortname="Name">Opportunity</span></div>
-                        </th>
-                        <th style="width:20%;">
-                            <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="Product2_Name">Opp Product</span></div>
-                            <div><span class="HoverLink text-grey slds-text-body_small" onclick={sort} data-ascending="true" data-sortname="Description">Opp SubDesc</span></div>                            
-                        </th>
-                        <th style="width:15%;">
-                            <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="OppStageSimple">Opp Stage</span></div>
-                            <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="StartDateFormatted">Opp Contract</span></div>
-                        </th>          
-                        <th style="width:8%;" class="slds-text-align_right">
-                            <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="TotalPrice" data-popovername="PopTotalPrice" onmouseover={PopoverShow} onmouseleave={PopoverHide}>
-                                Total Price
-                                <section if:true={popover.PopTotalPrice} class="slds-popover slds-nubbin_bottom-right slds-is-absolute" role="dialog" style="right:-10px;bottom:40px;white-space:normal;font-weight: normal;">
-                                    <div class="slds-popover__body slds-text-color_default">
-                                        Revenue from the line item                                     
-                                    </div>
-                                </section> 
-                            </span></div>
-                            <div>
-                                <span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="FinanceClass" data-popovername="PopOppLineType" onmouseover={PopoverShow} onmouseleave={PopoverHide}>
-                                    Rev
-                                    <section if:true={popover.PopOppLineType} class="slds-popover slds-nubbin_bottom-right slds-is-absolute" role="dialog" style="right:-10px;bottom:40px;white-space:normal;font-weight: normal;">
+            <div if:true={PageVar.ReportDataFound}>
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout">
+                    <thead>
+                        <tr>
+                            <th class="tdOppColor"></th>
+                            <th style="width:30%;">
+                                <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="Account__r_Name">Opp School</span></div>
+                                <div><span class="HoverLink text-grey slds-text-body_small" onclick={sort} data-ascending="true" data-sortname="Name">Opportunity</span></div>
+                            </th>
+                            <th style="width:20%;">
+                                <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="Product2_Name">Opp Product</span></div>
+                                <div><span class="HoverLink text-grey slds-text-body_small" onclick={sort} data-ascending="true" data-sortname="Description">Opp SubDesc</span></div>                            
+                            </th>
+                            <th style="width:15%;">
+                                <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="OppStageSimple">Opp Stage</span></div>
+                                <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="StartDateFormatted">Opp Contract</span></div>
+                            </th>          
+                            <th style="width:8%;" class="slds-text-align_right">
+                                <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="TotalPrice" data-popovername="PopTotalPrice" onmouseover={PopoverShow} onmouseleave={PopoverHide}>
+                                    Total Price
+                                    <section if:true={popover.PopTotalPrice} class="slds-popover slds-nubbin_bottom-right slds-is-absolute" role="dialog" style="right:-10px;bottom:40px;white-space:normal;font-weight: normal;">
                                         <div class="slds-popover__body slds-text-color_default">
-                                            <div><span class="LineInvoiced">$</span> = Invoiced</div>                                      
-                                            <div><span class="LinePaid">$</span> = Paid</div>  
+                                            Revenue from the line item                                     
                                         </div>
                                     </section> 
-                                </span> /&nbsp;
-                                <span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="Resub__c" data-popovername="PopResub" onmouseover={PopoverShow} onmouseleave={PopoverHide}>
-                                    Type
-                                    <section if:true={popover.PopResub} class="slds-popover slds-nubbin_bottom-right slds-is-absolute" role="dialog" style="right:-10px;bottom:40px;white-space:normal;font-weight: normal;">
-                                        <div class="slds-popover__body slds-text-color_default">
-                                            <div>
-                                                <lightning-icon icon-name="utility:sync" size="x-small"></lightning-icon>
-                                                = recurring
+                                </span></div>
+                                <div>
+                                    <span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="FinanceClass" data-popovername="PopOppLineType" onmouseover={PopoverShow} onmouseleave={PopoverHide}>
+                                        Rev
+                                        <section if:true={popover.PopOppLineType} class="slds-popover slds-nubbin_bottom-right slds-is-absolute" role="dialog" style="right:-10px;bottom:40px;white-space:normal;font-weight: normal;">
+                                            <div class="slds-popover__body slds-text-color_default">
+                                                <div><span class="LineInvoiced">$</span> = Invoiced</div>                                      
+                                                <div><span class="LinePaid">$</span> = Paid</div>  
                                             </div>
-                                            <div>
-                                                <lightning-icon icon-name="utility:new" size="x-small"></lightning-icon>
-                                                = new
+                                        </section> 
+                                    </span> /&nbsp;
+                                    <span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="Resub__c" data-popovername="PopResub" onmouseover={PopoverShow} onmouseleave={PopoverHide}>
+                                        Type
+                                        <section if:true={popover.PopResub} class="slds-popover slds-nubbin_bottom-right slds-is-absolute" role="dialog" style="right:-10px;bottom:40px;white-space:normal;font-weight: normal;">
+                                            <div class="slds-popover__body slds-text-color_default">
+                                                <div>
+                                                    <lightning-icon icon-name="utility:sync" size="x-small"></lightning-icon>
+                                                    = recurring
+                                                </div>
+                                                <div>
+                                                    <lightning-icon icon-name="utility:new" size="x-small"></lightning-icon>
+                                                    = new
+                                                </div>
                                             </div>
-                                        </div>
-                                    </section> 
-                                </span>                          
-                            </div>    
+                                        </section> 
+                                    </span>                          
+                                </div>    
 
-                        </th>
-                        <th style="width:6%;">
-                            <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="OppSeatQtyParsed" data-popovername="PopSeatsO" onmouseover={PopoverShow} onmouseleave={PopoverHide}>
-                                Seats (O)
-                                <section if:true={popover.PopSeatsO} class="slds-popover slds-nubbin_bottom-right slds-is-absolute" role="dialog" style="right:-10px;bottom:40px;white-space:normal;font-weight: normal;">
-                                    <div class="slds-popover__body slds-text-color_default">
-                                        Quantity in the Opportunity. Note that we extract the first number in the Sub-Description so it may not be 100% accurate.                                     
-                                    </div>
-                                </section> 
-                            </span></div>
-                            <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="NumberOfAccounts" data-popovername="PopSeatsM" onmouseover={PopoverShow} onmouseleave={PopoverHide}>
-                                Seats (M)
-                                <section if:true={popover.PopSeatsM} class="slds-popover slds-nubbin_bottom-right slds-is-absolute" role="dialog" style="right:-10px;bottom:40px;white-space:normal;font-weight: normal;">
-                                    <div class="slds-popover__body slds-text-color_default">
-                                        <div>Quantity / Seats in Methodize table</div>                                      
-                                    </div>
-                                </section> 
-                            </span></div>                            
-                        </th>  
-                        <th style="width:8%;">
-                            <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="EndDate__c" data-popovername="EndDateOpp" onmouseover={PopoverShow} onmouseleave={PopoverHide}>
-                                    End Date (O)
-                                    <section if:true={popover.EndDateOpp} class="slds-popover slds-nubbin_bottom-right slds-is-absolute" role="dialog" style="right:-10px;bottom:40px;white-space:normal;font-weight:normal;">
+                            </th>
+                            <th style="width:6%;">
+                                <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="OppSeatQtyParsed" data-popovername="PopSeatsO" onmouseover={PopoverShow} onmouseleave={PopoverHide}>
+                                    Seats (O)
+                                    <section if:true={popover.PopSeatsO} class="slds-popover slds-nubbin_bottom-right slds-is-absolute" role="dialog" style="right:-10px;bottom:40px;white-space:normal;font-weight: normal;">
                                         <div class="slds-popover__body slds-text-color_default">
-                                            <div>End date in Xello Opportunity. Note that we add a day for display purposes since Methodize stores the date as the first of the month.</div>                                      
+                                            Quantity in the Opportunity. Note that we extract the first number in the Sub-Description so it may not be 100% accurate.                                     
                                         </div>
                                     </section> 
-                            </span></div>
-                            <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="SubscriptionEndDate" data-popovername="EndDateMtp" onmouseover={PopoverShow} onmouseleave={PopoverHide}>
-                                End Date (M)
-                                <section if:true={popover.EndDateMtp} class="slds-popover slds-nubbin_bottom-right slds-is-absolute" role="dialog" style="right:-10px;bottom:40px;white-space:normal;font-weight:normal;">
-                                    <div class="slds-popover__body slds-text-color_default">
-                                        <div>SubscriptionEndDate date in the Method table</div>                                      
-                                    </div>
-                                </section> 
-                            </span></div>
-                        </th>                        
-                        <th style="width:13%;">
-                            <span class="HoverLink slds-p-left_x-small slds-is-relative" onclick={sort} data-ascending="true" data-sortname="MthTypeColor" data-popovername="MTH_StatusHelpPopover" onmouseover={PopoverShow} onmouseleave={PopoverHide}>
-                                MTH
-                                <section if:true={popover.MTH_StatusHelpPopover} class="slds-popover slds-nubbin_bottom-right slds-is-absolute" role="dialog" style="right:-10px;bottom:40px;white-space:normal;font-weight:normal;">
-                                    <div class="slds-popover__body slds-text-color_default">
-                                        <div>Methodize site exists with valid expiry date</div>
-                                        <div class="StatusBar">
-                                            <span class="Status-On">TRUE</span>
-                                            <span>FALSE</span>
-                                        </div>                                        
-                                    </div>
-                                </section> 
-                            </span>
-                            <span class="HoverLink slds-p-left_x-small slds-is-relative slds-p-left_x-small" onclick={sort} data-ascending="true" data-sortname="MethodStudentActive" data-popovername="S_StatusHelpPopover" onmouseover={PopoverShow} onmouseleave={PopoverHide}>
-                                S
-                                <section if:true={popover.S_StatusHelpPopover} class="slds-popover slds-nubbin_bottom-right slds-is-absolute" role="dialog" style="right:-10px;bottom:40px;white-space:normal;font-weight:normal;">
-                                    <div class="slds-popover__body slds-text-color_default">
-                                        <div>Visible to Students in Xello</div>
-                                        <div class="StatusBar">
-                                            <span class="Status-On">TRUE</span>
-                                            <span>FALSE</span>
-                                        </div>                                        
-                                    </div>
-                                </section> 
-                            </span>
-                            <span class="HoverLink slds-p-left_x-small slds-is-relative slds-p-left_x-small" onclick={sort} data-ascending="true" data-sortname="MethodEducatorActive" data-popovername="E_StatusHelpPopover" onmouseover={PopoverShow} onmouseleave={PopoverHide}>
-                                E
-                                <section if:true={popover.E_StatusHelpPopover} class="slds-popover slds-nubbin_bottom-right slds-is-absolute" role="dialog" style="right:-10px;bottom:40px;white-space:normal;font-weight:normal;">
-                                    <div class="slds-popover__body slds-text-color_default">
-                                        <div>Visible to Educators in Xello</div>
-                                        <div class="StatusBar">
-                                            <span class="Status-On">TRUE</span>
-                                            <span>FALSE</span>
-                                        </div>                                        
-                                    </div>
-                                </section> 
-                            </span>   
-                            <div>
-                                <span class="HoverLink slds-p-left_x-small slds-is-relative slds-p-left_x-small" onclick={sort} data-ascending="true" data-sortname="ModifiedDate" data-popovername="E_ModifiedDate" onmouseover={PopoverShow} onmouseleave={PopoverHide}>
-                                    ModifiedDate
-                                    <section if:true={popover.E_ModifiedDate} class="slds-popover slds-nubbin_bottom-right slds-is-absolute" role="dialog" style="right:-10px;bottom:40px;white-space:normal;font-weight:normal;">
+                                </span></div>
+                                <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="NumberOfAccounts" data-popovername="PopSeatsM" onmouseover={PopoverShow} onmouseleave={PopoverHide}>
+                                    Seats (M)
+                                    <section if:true={popover.PopSeatsM} class="slds-popover slds-nubbin_bottom-right slds-is-absolute" role="dialog" style="right:-10px;bottom:40px;white-space:normal;font-weight: normal;">
                                         <div class="slds-popover__body slds-text-color_default">
-                                            <div>Last known modified date in Methodize Table</div>                                       
+                                            <div>Quantity / Seats in Methodize table</div>                                      
                                         </div>
                                     </section> 
-                                </span>                                   
-                            </div>                                                                        
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <template for:each={PageVar.ReportDataFiltered} for:item="report">
-                        <tr key={report.Id} class={report.RowClass} if:true={report.Visible}>
-                            <td class={report.SimpleStatusClass}></td>                            
-                            <td class="slds-truncate">
-                                <div class="ClickableLink" data-id={report.Account__c} onclick={navigateToSFRecordId}>{report.Account__r_Name}</div>
-                                <!-- <div class="ClickableLink" data-id={report.Account__c} onclick={navigateToLink}>{report.Account__r_Name}</div> -->
-                                <div class="text-grey slds-text-body_small ClickableLink" data-id={report.OpportunityId} onclick={navigateToSFRecordId}>{report.Name}</div>
-                            </td>
-                            <td class="slds-truncate">
-                                <div>{report.Product2_Name}</div>
-                                <div class="text-grey slds-text-body_small">{report.Description}</div>
-                            </td>
-                            <td class="slds-truncate">
-                                {report.OppStageSimple}
-                                <div class="text-grey slds-text-body_small">{report.ContractDates}</div>
-                            </td>
-                            <td>
-                                <div class="hovertext slds-text-align_right" data-hover={report.TotalPriceCalc}>
-                                    <lightning-formatted-number value={report.TotalPrice} format-style="currency" maximum-fraction-digits="0"></lightning-formatted-number>
-                                </div>
-                                <div class="text-grey slds-text-body_small slds-text-align_right">
-                                    <span if:true={report.FinanceClass} class={report.FinanceClass}>$</span>
-                                    <lightning-icon class="slds-p-left_xx-small" icon-name={report.OppTypeIcon} size="x-small"></lightning-icon>
-                                </div>
-                            </td>
-                            <td class="slds-truncate">
+                                </span></div>                            
+                            </th>  
+                            <th style="width:8%;">
+                                <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="EndDate__c" data-popovername="EndDateOpp" onmouseover={PopoverShow} onmouseleave={PopoverHide}>
+                                        End Date (O)
+                                        <section if:true={popover.EndDateOpp} class="slds-popover slds-nubbin_bottom-right slds-is-absolute" role="dialog" style="right:-10px;bottom:40px;white-space:normal;font-weight:normal;">
+                                            <div class="slds-popover__body slds-text-color_default">
+                                                <div>End date in Xello Opportunity. Note that we add a day for display purposes since Methodize stores the date as the first of the month.</div>                                      
+                                            </div>
+                                        </section> 
+                                </span></div>
+                                <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="SubscriptionEndDate" data-popovername="EndDateMtp" onmouseover={PopoverShow} onmouseleave={PopoverHide}>
+                                    End Date (M)
+                                    <section if:true={popover.EndDateMtp} class="slds-popover slds-nubbin_bottom-right slds-is-absolute" role="dialog" style="right:-10px;bottom:40px;white-space:normal;font-weight:normal;">
+                                        <div class="slds-popover__body slds-text-color_default">
+                                            <div>SubscriptionEndDate date in the Method table</div>                                      
+                                        </div>
+                                    </section> 
+                                </span></div>
+                            </th>                        
+                            <th style="width:13%;">
+                                <span class="HoverLink slds-p-left_x-small slds-is-relative" onclick={sort} data-ascending="true" data-sortname="MthTypeColor" data-popovername="MTH_StatusHelpPopover" onmouseover={PopoverShow} onmouseleave={PopoverHide}>
+                                    MTH
+                                    <section if:true={popover.MTH_StatusHelpPopover} class="slds-popover slds-nubbin_bottom-right slds-is-absolute" role="dialog" style="right:-10px;bottom:40px;white-space:normal;font-weight:normal;">
+                                        <div class="slds-popover__body slds-text-color_default">
+                                            <div>Methodize site exists with valid expiry date</div>
+                                            <div class="StatusBar">
+                                                <span class="Status-On">TRUE</span>
+                                                <span>FALSE</span>
+                                            </div>                                        
+                                        </div>
+                                    </section> 
+                                </span>
+                                <span class="HoverLink slds-p-left_x-small slds-is-relative slds-p-left_x-small" onclick={sort} data-ascending="true" data-sortname="MethodStudentActive" data-popovername="S_StatusHelpPopover" onmouseover={PopoverShow} onmouseleave={PopoverHide}>
+                                    S
+                                    <section if:true={popover.S_StatusHelpPopover} class="slds-popover slds-nubbin_bottom-right slds-is-absolute" role="dialog" style="right:-10px;bottom:40px;white-space:normal;font-weight:normal;">
+                                        <div class="slds-popover__body slds-text-color_default">
+                                            <div>Visible to Students in Xello</div>
+                                            <div class="StatusBar">
+                                                <span class="Status-On">TRUE</span>
+                                                <span>FALSE</span>
+                                            </div>                                        
+                                        </div>
+                                    </section> 
+                                </span>
+                                <span class="HoverLink slds-p-left_x-small slds-is-relative slds-p-left_x-small" onclick={sort} data-ascending="true" data-sortname="MethodEducatorActive" data-popovername="E_StatusHelpPopover" onmouseover={PopoverShow} onmouseleave={PopoverHide}>
+                                    E
+                                    <section if:true={popover.E_StatusHelpPopover} class="slds-popover slds-nubbin_bottom-right slds-is-absolute" role="dialog" style="right:-10px;bottom:40px;white-space:normal;font-weight:normal;">
+                                        <div class="slds-popover__body slds-text-color_default">
+                                            <div>Visible to Educators in Xello</div>
+                                            <div class="StatusBar">
+                                                <span class="Status-On">TRUE</span>
+                                                <span>FALSE</span>
+                                            </div>                                        
+                                        </div>
+                                    </section> 
+                                </span>   
                                 <div>
-                                    <lightning-formatted-number value={report.OppSeatQtyParsed}></lightning-formatted-number>
-                                </div>
-                                <div class={report.QtyMatchClass}>
-                                    {report.NumberOfAccounts}
-                                </div>
-                            </td>
-                            <td class="slds-truncate">
-                                <div>{report.EndDatePlusOneFormatted}</div>
-                                <div class={report.DateMatchClass}>{report.SubscriptionEndDateFormatted}</div>
-                            </td>      
-                            <td class="slds-truncate">
-                                <div>
-                                    <div class="StatusBar">
-                                        <span class={report.MthTypeColor}>MTH</span>
-                                        <span class={report.MthStudentColor} title={report.MthStudentTitle}>S</span>
-                                        <span class={report.MthEducatorColor} title={report.MthEducatorTitle}>E</span>
+                                    <span class="HoverLink slds-p-left_x-small slds-is-relative slds-p-left_x-small" onclick={sort} data-ascending="true" data-sortname="ModifiedDate" data-popovername="E_ModifiedDate" onmouseover={PopoverShow} onmouseleave={PopoverHide}>
+                                        ModifiedDate
+                                        <section if:true={popover.E_ModifiedDate} class="slds-popover slds-nubbin_bottom-right slds-is-absolute" role="dialog" style="right:-10px;bottom:40px;white-space:normal;font-weight:normal;">
+                                            <div class="slds-popover__body slds-text-color_default">
+                                                <div>Last known modified date in Methodize Table</div>                                       
+                                            </div>
+                                        </section> 
+                                    </span>                                   
+                                </div>                                                                        
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={PageVar.ReportDataFiltered} for:item="report">
+                            <tr key={report.Id} class={report.RowClass} if:true={report.Visible}>
+                                <td class={report.SimpleStatusClass}></td>                            
+                                <td class="slds-truncate">
+                                    <div class="ClickableLink" data-id={report.Account__c} onclick={navigateToSFRecordId}>{report.Account__r_Name}</div>
+                                    <!-- <div class="ClickableLink" data-id={report.Account__c} onclick={navigateToLink}>{report.Account__r_Name}</div> -->
+                                    <div class="text-grey slds-text-body_small ClickableLink" data-id={report.OpportunityId} onclick={navigateToSFRecordId}>{report.Name}</div>
+                                </td>
+                                <td class="slds-truncate">
+                                    <div>{report.Product2_Name}</div>
+                                    <div class="text-grey slds-text-body_small">{report.Description}</div>
+                                </td>
+                                <td class="slds-truncate">
+                                    {report.OppStageSimple}
+                                    <div class="text-grey slds-text-body_small">{report.ContractDates}</div>
+                                </td>
+                                <td>
+                                    <div class="hovertext slds-text-align_right" data-hover={report.TotalPriceCalc}>
+                                        <lightning-formatted-number value={report.TotalPrice} format-style="currency" maximum-fraction-digits="0"></lightning-formatted-number>
                                     </div>
-                                </div>
-                                <div class="slds-p-left_xx-small">
-                                    {report.ModifiedDate}
-                                </div>
-                            </td>                  
-                        </tr>            
-                    </template>
-                </tbody>                                 
-            </table>
+                                    <div class="text-grey slds-text-body_small slds-text-align_right">
+                                        <span if:true={report.FinanceClass} class={report.FinanceClass}>$</span>
+                                        <lightning-icon class="slds-p-left_xx-small" icon-name={report.OppTypeIcon} size="x-small"></lightning-icon>
+                                    </div>
+                                </td>
+                                <td class="slds-truncate">
+                                    <div>
+                                        <lightning-formatted-number value={report.OppSeatQtyParsed}></lightning-formatted-number>
+                                    </div>
+                                    <div class={report.QtyMatchClass}>
+                                        {report.NumberOfAccounts}
+                                    </div>
+                                </td>
+                                <td class="slds-truncate">
+                                    <div>{report.EndDatePlusOneFormatted}</div>
+                                    <div class={report.DateMatchClass}>{report.SubscriptionEndDateFormatted}</div>
+                                </td>      
+                                <td class="slds-truncate">
+                                    <div>
+                                        <div class="StatusBar">
+                                            <span class={report.MthTypeColor}>MTH</span>
+                                            <span class={report.MthStudentColor} title={report.MthStudentTitle}>S</span>
+                                            <span class={report.MthEducatorColor} title={report.MthEducatorTitle}>E</span>
+                                        </div>
+                                    </div>
+                                    <div class="slds-p-left_xx-small">
+                                        {report.ModifiedDate}
+                                    </div>
+                                </td>                  
+                            </tr>            
+                        </template>
+                    </tbody>                                 
+                </table>
+                <div if:true={IsLoadMoreVisible} class="slds-p-top_x-small">
+                    <button class="slds-button slds-button_brand slds-button_stretch" onclick={ShowMoreLines}>Show More...</button>
+                </div>
+            </div>
             <div if:false={PageVar.ReportDataFound} class="slds-box slds-theme_shade slds-theme_shade">
                 <p>No opportunities found, please try adjusting the filters above.</p>
             </div>

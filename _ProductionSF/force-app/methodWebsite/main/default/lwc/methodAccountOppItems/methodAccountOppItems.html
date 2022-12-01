@@ -55,8 +55,8 @@
                     <tr>
                         <th class="tdOppColor"></th>
                         <th style="width:40%;">
+                            <div><span class="HoverLink slds-text-heading_small" onclick={sort} data-ascending="true" data-sortname="Product2_Name">Product</span></div>
                             <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="Name">Opportunity</span></div>
-                            <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="Product2_Name">Opp Product</span></div>
                         </th>
                         <th style="width:20%;">
                             <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="OppStageSimple">Opp Stage</span></div>
@@ -119,8 +119,8 @@
                         <tr key={report.Id} class={report.RowClass} if:true={report.Visible}>
                             <td class={report.SimpleStatusClass}></td>                            
                             <td class="slds-truncate">
+                                <div class="slds-text-heading_small">{report.Product2_Name}</div>
                                 <div class="ClickableLink" data-id={report.OpportunityId} onclick={navigateToSFRecordId}>{report.Name}</div>
-                                <div>{report.Product2_Name}</div>
                             </td>
                             <td class="slds-truncate">
                                 {report.OppStageSimple}

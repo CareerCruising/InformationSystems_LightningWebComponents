@@ -1,9 +1,7 @@
 import { LightningElement, api, track, wire } from 'lwc';
-import { getRecord } from 'lightning/uiRecordApi';
 import { NavigationMixin } from 'lightning/navigation';
-import { basicTest, JSON_CSV_Download } from 'c/commonJS';
+import { JSON_CSV_Download } from 'c/commonJS';
 import getAccountIdFromRecordId from'@salesforce/apex/Describe.getAccountIdFromRecordId';
-import DescribeObjectList from'@salesforce/apex/Describe.ObjectList';
 
 export default class AccountProductExpansion extends NavigationMixin(LightningElement) {
     @api recordId;
@@ -17,9 +15,10 @@ export default class AccountProductExpansion extends NavigationMixin(LightningEl
         SortAsc: true,     
         ShowInfo: false,
         ShowTestIssue: false,
-        ExpansionDetails: { Visible: false }
+        ExpansionDetails: { Visible: false },
+        HelpDetails: { Visible: false }
     };
-
+        
     connectedCallback() {  
         //We need to first get the AccountId depending on the object
          getAccountIdFromRecordId({strRecordId: this.recordId})
@@ -52,7 +51,6 @@ export default class AccountProductExpansion extends NavigationMixin(LightningEl
         fetch(URL).then((response) => response.json())
             .then((jsonResponse) => {
                 this.PageVar.ReportData = jsonResponse.ReportData;
-                this.PageVar.recordId = this.recordId;
 
                 if(this.PageVar.ReportData != null) {
                     for (var i = 0, len = this.PageVar.ReportData.length; i < len; i++) {
@@ -72,7 +70,7 @@ export default class AccountProductExpansion extends NavigationMixin(LightningEl
                         if(row.Level > 1) {
                             row.IconName = (row.ChildCount > 0) ? 'utility:chevronright' : 'utility:info_alt';
                         }
-                        if(row.Level > 2 && this.PageVar.recordId != row.CrmAccountId) {
+                        if(row.Level > 2 && this.PageVar.AccountId != row.CrmAccountId) {
                             row.IconName = (row.ChildCount > 0) ? 'utility:chevronright' : 'utility:info_alt';
                             row.Visible = false; 
                         }
@@ -89,7 +87,6 @@ export default class AccountProductExpansion extends NavigationMixin(LightningEl
                     this.PageVar.ReportDataFound = false;
                 }
                 this.PageVar.IsLoaded = true;  
-                console.log(this.PageVar.ReportData[0]);
                 this.filterData();
             })       
             .catch((error) => {console.log(error);this.PageVar.IsLoaded = true;});
@@ -103,8 +100,8 @@ export default class AccountProductExpansion extends NavigationMixin(LightningEl
         fetch(URL).then((response) => response.json())
             .then((jsonResponse) => {
                 this.PageVar.ExpansionDetails.Data = jsonResponse.ReportData;
-                this.PageVar.recordId = this.recordId;
-
+                this.PageVar.ExpansionDetails.CurrentTotal = 0;
+                this.PageVar.ExpansionDetails.PotentialTotal = 0;
                 if(this.PageVar.ExpansionDetails.Data != null) {
                     for (var i = 0, len = this.PageVar.ExpansionDetails.Data.length; i < len; i++) {
                         var row = this.PageVar.ExpansionDetails.Data[i];
@@ -113,6 +110,8 @@ export default class AccountProductExpansion extends NavigationMixin(LightningEl
                         if(row.ExpansionType == 'Cross Sell') row.ExpansionClass = 'text-purple'
                         if(row.ExpansionType == 'Price Increase') row.ExpansionClass = 'slds-text-color_success'
                         if(row.ExpansionType == 'New Sales') row.ExpansionClass = 'text-brown'
+                        this.PageVar.ExpansionDetails.CurrentTotal += row.CurrentLineArr;
+                        this.PageVar.ExpansionDetails.PotentialTotal += row.ArrMax;
                     }  
                     //this.PageVar.ReportDataFound = this.PageVar.ReportData.length > 0; //only make this true after confirmed so alert message does not appear (or flash) on screen
                 }
@@ -165,6 +164,7 @@ export default class AccountProductExpansion extends NavigationMixin(LightningEl
     filterData() {       
         this.PageVar.ReportDataFiltered = this.PageVar.ReportData;
         this.PageVar.FilterCount = this.PageVar.ReportDataFiltered.length;
+        console.log(this.PageVar);
     }
     DownloadJson(event) {
         let TempTable = JSON.parse(JSON.stringify(this.PageVar.ReportDataFiltered));
@@ -182,7 +182,8 @@ export default class AccountProductExpansion extends NavigationMixin(LightningEl
             delete TempTable[i].IconName;
             delete TempTable[i].Expanded;
         }; 
-        JSON_CSV_Download(TempTable, 'Expansion_' + this.ReportData[0].AccountName + '_' + MyDate);
+        var AccountName = this.PageVar.ReportData[0].AccountName.replaceAll(' ', '');
+        JSON_CSV_Download(TempTable, 'Expansion_' + AccountName + '_' + MyDate);
     }   
     ToggleHierarchy(event) {  
 
@@ -227,6 +228,9 @@ export default class AccountProductExpansion extends NavigationMixin(LightningEl
     }
     ToggleExpansionDetails(event){
         this.PageVar.ExpansionDetails.Visible = !this.PageVar.ExpansionDetails.Visible;
+    }
+    ToggleHelpDetails(event){
+        this.PageVar.HelpDetails.Visible = !this.PageVar.HelpDetails.Visible;
     }
     AlterDOM() {
 

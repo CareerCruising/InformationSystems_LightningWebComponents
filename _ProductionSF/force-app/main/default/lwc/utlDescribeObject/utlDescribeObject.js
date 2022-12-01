@@ -3,14 +3,18 @@ import DescribeSalesforceObject from'@salesforce/apex/Describe.SalesforceObject'
 import DescribeObjectList from'@salesforce/apex/Describe.ObjectList';
 
 export default class UtlDescribeObject extends LightningElement {
+    @track toggle = { //Handles all toggle logic;
+        ModalOther: false
+      }
     @track data = {
         IsLoaded: true,
         SortField: 'label',
         SortAsc: true,
         SfField: [],
-        SfObjects: []
+        SfObjects: [],
+        SfObjectTest: [],
+        CurrentField: {}
     };
-    
     @track ac = { //stores all autocomplete variables
         CurrentOption: {label:'',value:''},
         Visible: false,
@@ -68,6 +72,7 @@ export default class UtlDescribeObject extends LightningElement {
                 //onsole.log('result', result);
                 for(var i=0; i < result.length; i++){
                     var TempField = JSON.parse(result[i]);
+                    var SimpleArray = {};
                     TempField.keyIndex = i;
                     TempField.Pretty = JSON.stringify(TempField,undefined,2);
                     TempField.Hidden = true;
@@ -97,9 +102,12 @@ export default class UtlDescribeObject extends LightningElement {
                     // TempField[i].attrLength = TempField.length;
                     // TempField[i].Hidden = true;
                     this.data.SfField.push(TempField);
+                    SimpleArray.name = TempField.name;
+                    SimpleArray.inlineHelpText = TempField.inlineHelpText;
+                    this.data.SfObjectTest.push(SimpleArray);
                 }         
                 this.data.IsLoaded = true;      
-                //onsole.log('data', this.data);
+                console.log('SfObjectTest', this.data.SfObjectTest);
             })
             .catch(error => {
                 console.log('error',error);
@@ -125,9 +133,24 @@ export default class UtlDescribeObject extends LightningElement {
             } else {
                 return fa == fb ? 0 : fa > fb ? -1 : 1;
             }
-            
+            console.log('SortComplete');
         }); 
         this.data.SfField = TempList;
 
-    }       
+    }  
+    SetCurrentField(name) {
+        this.data.CurrentField = this.data.SfField.find(obj => obj.name == name)
+    }  
+    ShowOther(event) {
+        this.SetCurrentField([event.target.dataset.id]);
+        this.toggle.ModalOther = true;
+    }  
+    ToggleObj(event) {
+        console.log(event.target.dataset.id);
+        this.data.SfField[event.target.dataset.id].Hidden = !this.data.SfField[event.target.dataset.id].Hidden;
+        //this.event.Hidden = !this.event.Hidden;
+    }    
+    ToggleAnything(event){
+        this.toggle[event.target.dataset.togglename] = !this.toggle[event.target.dataset.togglename];
+    }          
 }
