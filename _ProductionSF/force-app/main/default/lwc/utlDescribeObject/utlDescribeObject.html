@@ -1,20 +1,39 @@
 <template>
     <lightning-spinner if:false={data.IsLoaded} size="medium" alternative-text="Loading"></lightning-spinner>
-    <div class="slds-p-left_xx-small">
-        <div class="MyDropDown">
-            <lightning-input type="text" value={ac.CurrentOption.label} onkeyup={SearchKeyUp} placeholder="Type object name..." class="slds-p-bottom_xx-small"></lightning-input>
-            <div if:true={ac.Visible} class="slds-dropdown slds-dropdown_left">
-                <ul class="slds-dropdown__list" role="menu" aria-label="Show More">
+    <div class="slds-grid slds-gutters slds-p-around_x-small">
+        <div class="slds-col">
+            <div class="MyDropDown">
+                <lightning-input data-id="ObjectInput" type="text" label="Object Name" value={ac.CurrentOption.Label} onkeyup={SearchKeyUp} placeholder="Type object name..." class="slds-p-bottom_xx-small"></lightning-input>
+                <select if:true={ac.Visible} data-id="ObjectInputDropMenu" class="slds-select slds-dropdown slds-dropdown_left" size="6" onclick={SetCurrentOption} onkeydown={SetCurrentOptionKeyCheck}>
                     <template for:each={ac.FilteredOptions} for:item="row">
-                        <li key={row.label} class="slds-dropdown__item" role="presentation">
-                            <a role="menuitem" onclick={SetCurrentOption} data-option={row.label}>{row.label}</a>
-                        </li>
-                    </template>
-                </ul>
+                            <option key={row.Label} data-option={row.Label}>{row.Label}</option>
+                    </template>                        
+                </select>
             </div>
+        </div>
+        <div class="slds-col">
+            <lightning-input data-id="SearchInput" type="text" label="Filter" placeholder="Type some text, then ENTER" value={Pill.SearchText} onkeyup={handleSearchPress}></lightning-input>
+            <template for:each={Pill.List} for:item="pill">
+                <lightning-pill data-label={pill.label} key={pill.label} label={pill.label} onremove={handleRemovePill}></lightning-pill>
+            </template>
+        </div>
+        <div class="slds-col slds-p-top_large">
+            <lightning-button-menu label="Record Types" icon-name="utility:down" icon-position="right" if:true={data.RecordTypes} class="slds-float_right" menu-alignment="right">
+                <div class="slds-dropdown__list slds-p-around_xx-small" role="menu">
+                    <table class="slds-table slds-table_cell-buffer slds-table_header-hidden slds-table_bordered">
+                        <template for:each={data.RecordTypes} for:item="row">
+                            <tr key={row.Id}>
+                                <td>{row.Id}</td>
+                                <td>{row.Name}</td>
+                            </tr>
+                        </template>
+                    </table>
+                </div>
+            </lightning-button-menu>
         </div>
     </div>
 
+    <!--MAIN TABLE-->
     <template if:true={data.SfField}>
         <table class="table-sticky slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout">
             <thead>
@@ -23,32 +42,27 @@
                         <div class="HoverLink" onclick={sort} data-sortname="label">Label</div>
                         <div onclick={sort} data-sortname="name" class="text-grey slds-text-body_small HoverLink">Name</div>
                     </th>
-                    <th style="width:10%" class="HoverLink" onclick={sort} data-ascending="true" data-sortname="type">Type</th>
-                    <th style="width:20%" class="HoverLink" onclick={sort} data-ascending="true" data-sortname="calculated">Calculated</th>
-                    <th style="width:50%" class="HoverLink" onclick={sort} data-ascending="true" data-sortname="inlineHelpText">HelpText</th>
+                    <th style="width:10%" class="HoverLink" onclick={sort} data-sortname="type">Type</th>
+                    <th style="width:20%" class="HoverLink" onclick={sort} data-sortname="calculated">Calculated</th>
+                    <th style="width:50%" class="HoverLink" onclick={sort} data-sortname="inlineHelpText">HelpText</th>
                 </tr>
             </thead>
             <tbody>
                 <template for:each={data.SfField} for:item="field">
                     <tr key={field.name}>
-                        <td class="ClickableLink" onclick={ShowOther} data-id={field.name}>
-                            <div class="ClickableLink" onclick={ShowOther} data-id={field.name}>{field.label}</div>
+                        <td>
+                            <div class="ClickableLink" onclick={ShowFieldDetails} data-id={field.name} data-tab="All">{field.label}</div>
                             <div class="text-grey slds-text-body_small">{field.name}</div>
                         </td>
                         <td>
-                            {field.type}
-                            <div class="text-grey slds-text-body_small">{field.byteLength} bytes</div>
-                            <!-- <lightning-icon icon-name="utility:right" alternative-text="Expand" size="x-small" title="Expand" onclick={ShowOther} data-id={field.name}></lightning-icon>
-                            <template for:each={field.fieldArray} for:item="attr" if:false={field.Hidden}>
-                                <div key={attr.key}>
-                                    <div>
-                                        {attr.key}: {attr.value}
-                                    </div>
-                                </div>            
-                            </template> -->
+                            <div if:true={field.IsPicklist} class="ClickableLink" onclick={ShowFieldDetails} data-id={field.name} data-tab="Picklist">{field.type}</div>
+                            <div if:false={field.IsPicklist}>{field.type}</div>
+                            <div if:true={field.RelatedObject} class="ClickableLink" onclick={ChangetoReference} data-id={field.RelatedObject}>{field.RelatedObject}</div>
+                            <div if:false={field.RelatedObject} class="text-grey slds-text-body_small">{field.byteLength} bytes</div>                         
                         </td>
                         <td>
-                            {field.calculated}
+                            <div if:true={field.FormulaExists} class="ClickableLink" onclick={ShowFieldDetails} data-id={field.name} data-tab="Formula">{field.calculated}</div>
+                            <div if:false={field.FormulaExists}>{field.calculated}</div>                            
                             <div class="text-grey slds-text-body_small" if:true={field.FormulaExists}>
                                 <p class="slds-truncate" title={field.calculatedFormula}>{field.calculatedFormula}</p>
                             </div>
@@ -65,24 +79,62 @@
 
     </template>  
 
+    <!--FIELD DETAILS MODAL-->
 	<template if:true={toggle.ModalOther}>
 		<section class="slds-modal slds-fade-in-open slds-modal_large">
 			<div class="slds-modal__container">
 				<!-- HEADER -->
 				<header class="slds-modal__header" style="background-color:#F3F3F3;">
-					<h2 class="slds-text-heading_medium slds-hyphenate">
-						<span class="slds-p-left_medium">{data.CurrentField.name}</span>
-					</h2>
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col">
+                            <h2 class="slds-text-heading_medium slds-hyphenate">
+                                <span class="slds-p-left_medium slds-float_left">{data.CurrentField.name}</span>
+                            </h2>
+                        </div>
+                        <div class="slds-col">
+                            <lightning-button-icon class="slds-float_right" icon-name="utility:clear" size="large" variant="bare" onclick={ToggleAnything} data-togglename="ModalOther"></lightning-button-icon>
+                        </div>
+                    </div>
+					
+                    
 				</header>
 
 				<!-- BODY -->
-				<div class="slds-modal__content slds-p-around_medium">
-					<pre>{data.CurrentField.Pretty}</pre>
+				<div class="slds-modal__content slds-p-horizontal_x-small" style="height:650px;">
+                    <lightning-tabset data-id="tabFieldDetails">
+                        <lightning-tab label="All" value="All">
+                            <pre>{data.CurrentField.Pretty}</pre>
+                        </lightning-tab>
+                        <lightning-tab label="Picklist" value="Picklist">
+                            <table class="table-sticky slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout">
+                                <thead>
+                                    <tr>
+                                        <th style="width:75%" class="HoverLink" onclick={sortPickList} data-ascending="true" data-sortname="label">Label</th>
+                                        <th style="width:25%" class="HoverLink" onclick={sortPickList} data-ascending="true" data-sortname="active">Active</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={data.CurrentField.picklistValues} for:item="field">
+                                        <tr key={field.label}>
+                                            <td>
+                                                {field.label}
+                                                <div class="text-grey slds-text-body_small">{field.value}</div>
+                                            </td>
+                                            <td>
+                                                <lightning-icon if:true={field.active} icon-name="utility:success" variant="success" size="small"></lightning-icon>
+                                                <lightning-icon if:false={field.active} icon-name="utility:error" variant="error" size="small"></lightning-icon>
+                                            </td>                       
+                                        </tr>            
+                                    </template>
+                                </tbody>                                 
+                            </table>
+                        </lightning-tab>                        
+                        <lightning-tab label="Formula" value="Formula">
+                            <pre>{data.CurrentField.calculatedFormula}</pre>
+                        </lightning-tab>
+
+                    </lightning-tabset>
 				</div>
-				<!-- FOOTER -->
-				<footer class="slds-modal__footer">
-					<button class="slds-button slds-button_brand" onclick={ToggleAnything} data-togglename="ModalOther" title="Close">Close</button>
-				</footer>
 			</div>
 		</section>
 		<div class="slds-backdrop slds-backdrop_open"></div>

@@ -21,8 +21,8 @@
                 </div>               
             </div>             
             <div class="slds-col">    
-                <div class="text-purple"><strong>Cross Sell</strong></div>    
-                <div class="slds-text-color_success"><strong>Price Increase</strong></div>   
+                <div class="text-purple"><strong>Cross Sell ($)</strong></div>    
+                <div class="slds-text-color_success"><strong>Price Increase ($)</strong></div>   
             </div> 
             
             <div class="slds-col">               
@@ -99,8 +99,8 @@
                             <lightning-formatted-number class="slds-text-color_success" value={row.Intel_PI}></lightning-formatted-number>
                         </td>
                         <td class="slds-text-align_right">
-                            <strong><lightning-formatted-number class="text-purple" value={row.Total_CS}></lightning-formatted-number></strong><br>
-                            <strong><lightning-formatted-number class="slds-text-color_success" value={row.Total_PI}></lightning-formatted-number></strong>
+                            <strong><lightning-formatted-number class="text-purple" value={row.Total_CS} format-style="currency" maximum-fraction-digits="0"></lightning-formatted-number></strong><br>
+                            <strong><lightning-formatted-number class="slds-text-color_success" value={row.Total_PI} format-style="currency" maximum-fraction-digits="0"></lightning-formatted-number></strong>
                         </td>                                                                                                                                                                        
                     </tr>            
                 </template>
@@ -236,8 +236,8 @@
                                     <lightning-formatted-number value={PageVar.ExpansionDetails.PotentialTotal} maximum-fraction-digits="0"></lightning-formatted-number>
                                 </td>
                                 <td class="tbl_LeftBorder slds-text-align_right bold-text">
-                                    <strong><lightning-formatted-number class="text-purple" value={PageVar.ExpansionDetails.Account.Total_CS} maximum-fraction-digits="0"></lightning-formatted-number></strong><br>
-                                    <strong><lightning-formatted-number class="slds-text-color_success" value={PageVar.ExpansionDetails.Account.Total_PI} maximum-fraction-digits="0"></lightning-formatted-number></strong>
+                                    <strong><lightning-formatted-number format-style="currency" class="text-purple" value={PageVar.ExpansionDetails.Account.Total_CS} maximum-fraction-digits="0"></lightning-formatted-number></strong><br>
+                                    <strong><lightning-formatted-number format-style="currency" class="slds-text-color_success" value={PageVar.ExpansionDetails.Account.Total_PI} maximum-fraction-digits="0"></lightning-formatted-number></strong>
                                 </td>
                                 <td>
                                     <div class="text-purple"><strong>Cross Sell</strong></div>    

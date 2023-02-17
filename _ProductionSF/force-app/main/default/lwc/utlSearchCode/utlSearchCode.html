@@ -1,3 +1,30 @@
 <template>
-    <div>Search Code</div>
+    <lightning-spinner if:false={data.IsLoaded} size="medium" alternative-text="Loading"></lightning-spinner>
+    <lightning-input type="text" label="Search" placeholder="Type some text, then ENTER" onkeyup={handleSearchPress} class=" slds-p-around_x-small" style="width:250px;display:inline-block;"></lightning-input>
+    <template if:true={data.SearchResults}>
+        <table class="table-sticky slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout">
+            <thead>
+                <tr>
+                    <th style="width:20%" class="HoverLink" onclick={sort} data-sortname="DatabaseName">DatabaseName</th>
+                    <th style="width:10%" class="HoverLink" onclick={sort} data-sortname="schema">Schema</th>
+                    <th style="width:30%" class="HoverLink" onclick={sort} data-sortname="ObjectName">ObjectName</th>
+                    <th style="width:10%" class="HoverLink" onclick={sort} data-sortname="ObjectType">ObjectType</th>
+                    <th style="width:30%" class="HoverLink" onclick={sort} data-sortname="SprocAroundText">Text</th>
+                </tr>
+            </thead>
+            <tbody>
+                <template for:each={data.SearchResults} for:item="row">
+                    <tr key={row.ObjectName}>
+                        <td>{row.DatabaseName}</td>
+                        <td>{row.schema}</td>
+                        <td>{row.ObjectName}</td>
+                        <td>{row.ObjectType}</td>
+                        <td class="slds-truncate">{row.SprocAroundText}</td>
+                    </tr>            
+                </template>
+            </tbody>                                 
+        </table>
+
+
+    </template>      
 </template>

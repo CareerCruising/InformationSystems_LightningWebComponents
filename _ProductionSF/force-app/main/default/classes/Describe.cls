@@ -19,13 +19,13 @@ public class Describe
     
     @AuraEnabled
     public static List<object> ObjectList() {
-        List<object> Objects = Database.query('SELECT SObjectType FROM ObjectPermissions GROUP BY SObjectType ORDER BY SObjectType ASC');
+        List<object> Objects = Database.query('SELECT Label, QualifiedApiName, IsCustomizable FROM EntityDefinition WHERE IsQueryable = true ORDER BY Label');
         return (Objects);
     }    
 
+    //This can be used when you have a component that depends on the AccountId but you want to display it on multiple record pages
     @AuraEnabled
-    public static String getAccountIdFromRecordId(Id strRecordId)
-    {
+    public static String getAccountIdFromRecordId(Id strRecordId) {
         String ObjectName = String.valueOf(strRecordId.getSobjectType());
         String AccountIdField = 'AccountId';
         switch on ObjectName {
@@ -52,4 +52,9 @@ public class Describe
         return String.valueOf(AnyObj.get(AccountIdField));
     }  
 
+    @AuraEnabled
+    public static List<object> RecordTypeList(string SfObjectName) {
+        List<object> MyList = Database.query('select Id, Name from RecordType where sObjectType=:SfObjectName ORDER BY Name');
+        return (MyList);
+    }       
 }

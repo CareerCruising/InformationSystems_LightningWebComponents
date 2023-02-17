@@ -5,17 +5,17 @@
     <div class="slds-tabs_default">
         <ul class="slds-tabs_default__nav" role="tablist">
             <li id="Tab1" onclick="TabChange(this)" class="slds-tabs_default__item slds-is-active">
-                <a class="slds-tabs_default__link">Search Code</a>
+                <a class="slds-tabs_default__link">Describe Object</a>
             </li>
             <li id="Tab2" onclick="TabChange(this)" class="slds-tabs_default__item">
-                <a class="slds-tabs_default__link">Describe Object</a>
+                <a class="slds-tabs_default__link">Search Code</a>
             </li>
             <li id="Tab3" onclick="TabChange(this)" class="slds-tabs_default__item">
                 <a class="slds-tabs_default__link">Item Three</a>
             </li>
         </ul>
-        <div id="TabContent1" data-parenttab="Tab1" data-initiated="true" data-component="UtlSearchCode" class="slds-tabs_default__content slds-show"></div>
-        <div id="TabContent2" data-parenttab="Tab2" data-initiated="false" data-component="UtlDescribeObject" class="slds-tabs_default__content slds-hide"></div>
+        <div id="TabContent1" data-parenttab="Tab1" data-initiated="true" data-component="UtlDescribeObject" class="slds-tabs_default__content slds-show"></div>
+        <div id="TabContent2" data-parenttab="Tab2" data-initiated="false" data-component="UtlSearchCode" class="slds-tabs_default__content slds-hide"></div>
         <div id="TabContent3" data-parenttab="Tab3" data-initiated="false" data-component="UtlOther" class="slds-tabs_default__content slds-hide"></div>
     </div>
            
@@ -67,7 +67,7 @@
                 );
             });         
         } 
-        InitiateComponent('TabContent1', 'UtlSearchCode');
+        InitiateComponent('TabContent1', 'UtlDescribeObject');
 
     </script>
 </apex:page>

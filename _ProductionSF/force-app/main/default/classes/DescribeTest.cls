@@ -18,5 +18,10 @@ private class DescribeTest {
         strResult = Describe.getAccountIdFromRecordId('01t41000004ezhWAAQ'); //Product (returns 'No Account Reference')
         strResult = Describe.getAccountIdFromRecordId('0061K00000e8Oxxxxx'); //Fail
         System.assertEquals(true,IsId,'MyMessage');
-    }       
+    }     
+    @isTest static void describeTestRecordTypeList(){
+        boolean isId = true;
+        List<object> toAddress = Describe.RecordTypeList('Account');
+        System.assertEquals(true,IsId,'MyMessage');
+    }     
 }

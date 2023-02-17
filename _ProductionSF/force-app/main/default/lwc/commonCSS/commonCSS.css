@@ -124,3 +124,9 @@
     box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
     z-index: 99;
 }
+.sort-asc::after {
+    content: " \2191";
+  }
+.sort-desc::after {
+    content: " \2193";
+}
