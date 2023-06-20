@@ -1,0 +1,9 @@
+@import 'c/commonCSS';
+
+.hover-element{
+    border-bottom: 2px dashed transparent;
+  }
+  .hover-element:hover, .hover-element:focus{
+  border-bottom: 1px dashed grey;
+  cursor: pointer;
+  }

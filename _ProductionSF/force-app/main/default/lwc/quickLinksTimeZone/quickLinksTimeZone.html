@@ -1,0 +1,80 @@
+<template>
+    <template if:true={accSF.Loaded}>
+        <div class="slds-grid">
+            <div class="slds-col">
+                <div class="slds-grid slds-wrap">
+                    <!--SYSTEM-->
+                    <div class="slds-col">
+                        <div if:false={System.Visible}>
+                            <div class="slds-float_left slds-p-around_x-small">
+                                <lightning-icon icon-name="custom:custom19" style="background-color:#939393;"></lightning-icon>
+                            </div>                     
+                            <div class="slds-float_left slds-p-top_xx-small">
+                                <div>System</div>
+                                <div class="slds-text-color_weak slds-text-body_small">Not found</div>
+                            </div> 
+                        </div>
+                        <div if:true={System.Visible}>
+                            <div class="slds-float_left slds-p-around_x-small">
+                                <lightning-icon icon-name="custom:custom19" title={System.Name}></lightning-icon>
+                            </div>                
+                            <div class="slds-float_left slds-p-top_xx-small">
+                                <a onclick={navigateToSystem} title={System.Name}>System</a>
+                                <div class="slds-text-color_weak slds-text-body_small">Status: {System.Status}</div>
+                            </div> 
+                        </div>
+                    </div>
+
+                    <!-- <div class="slds-col" if:false={System.Visible}>
+                        <div class="PopoverToolTipContainer slds-text-align_center" style="width: 80px;">
+                            <lightning-icon class="" icon-name="standard:custom"></lightning-icon>
+                            <div class="slds-text-color_weak">N/A</div>
+                            <div class="PopoverToolTipContent slds-popover slds-popover_tooltip slds-nubbin_bottom-left"
+                                style="bottom:60px;left:15px;min-width:200px;">
+                                <div class="slds-popover__body">No system found</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col" if:true={System.Visible}>
+                        <div onclick={navigateToSystem} class="PopoverToolTipContainer HoverLink slds-text-align_center"
+                            style="width: 90px;">
+                            <lightning-icon icon-name="custom:custom19"></lightning-icon>
+                            <div class="slds-text-color_weak">{System.Status}</div>
+                            <div class="PopoverToolTipContent slds-popover slds-popover_tooltip slds-nubbin_bottom-left"
+                                style="bottom:60px;left:15px;min-width:200px;">
+                                <div class="slds-popover__body">{System.Name}</div>
+                            </div>
+                        </div>
+                    </div> -->
+            
+                    <!--NEED ANALYSIS-->
+                    <div class="slds-col">
+                        <div if:false={Needs.Visible}>
+                            <div class="slds-float_left slds-p-around_x-small">
+                                <lightning-icon icon-name="custom:custom83" style="background-color:#939393;"></lightning-icon>
+                            </div>                     
+                            <div class="slds-float_left slds-p-top_xx-small">
+                                <div>Needs Analysis</div>
+                                <div class="slds-text-color_weak slds-text-body_small">Not found</div>
+                            </div>                          
+                        </div>                    
+                        <div if:true={Needs.Visible}>
+                            <div class="slds-float_left slds-p-around_x-small">
+                                <lightning-icon icon-name="custom:custom83"></lightning-icon>
+                            </div>                     
+                            <div class="slds-float_left slds-p-top_xx-small">
+                                <a onclick={navigateToNeeds} title={Needs.data.AccountName}>Needs Analysis</a>
+                                <div class="slds-text-color_weak slds-text-body_small">{Needs.data.LastModifiedDate} ({Needs.data.LastModifiedBy})</div>
+                            </div>                          
+                        </div>           
+                    </div>
+                </div>
+            </div>
+            <!--LOCAL TIME-->
+            <div class="slds-col slds-text-align_right" style="width:100px;">
+                <div class="slds-text-heading_medium">{ClientTime.Display}</div>
+                <div class="slds-text-color_weak slds-text-body_small">Local Time</div>
+            </div>
+        </div>
+    </template>
+</template>

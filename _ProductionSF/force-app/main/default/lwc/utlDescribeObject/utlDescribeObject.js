@@ -14,7 +14,8 @@ export default class UtlDescribeObject extends LightningElement {
         SfField: [],
         SfFieldOriginal: [],
         SfObjects: [],
-        CurrentField: {}
+        CurrentField: {},
+        CurrentObject: ''
     };
     @track ac = { //stores all autocomplete variables
         CurrentOption: {},
@@ -82,7 +83,7 @@ export default class UtlDescribeObject extends LightningElement {
     SetCurrentOption(event) { 
         this.ac.CurrentOption = this.ac.AllOptions.find(obj => obj.Label == event.target.value);
         this.ac.Visible = false;
-        this.DescribeObj(this.ac.CurrentOption.QualifiedApiName)
+        this.DescribeObj(this.ac.CurrentOption.QualifiedApiName);
     }   
 
     ChangetoReference(event) { 
@@ -98,6 +99,7 @@ export default class UtlDescribeObject extends LightningElement {
         this.data.SfField = [];
         DescribeSalesforceObject({SfObjectName: sfObjectName})
             .then(result => {
+                this.data.CurrentObject = sfObjectName;
                 //onsole.log('result', result);
                 for(var i=0; i < result.length; i++){
                     var TempField = JSON.parse(result[i]);

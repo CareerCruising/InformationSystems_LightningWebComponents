@@ -1,0 +1,96 @@
+<template>
+
+        <!-- SFTP REPORT TABLE -->
+        <div if:true={PageVar.IsLoaded}>
+            <template if:true={PageVar.ReportDataFound}>
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout">
+                    <thead>
+                        <tr>
+                            <th style="width:5%;">
+                                <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="Type">Type</span></div>
+                            </th>                            
+                            <th style="width:10%;">
+                                <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="ErrorDate">ErrorDate</span></div>
+                            </th>                                                      
+                            <th style="width:25%;">
+                                <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="Error">Error</span></div>   
+                                <div><span class="HoverLink text-grey slds-text-body_small" onclick={sort} data-ascending="true" data-sortname="Details">Details</span></div>                         
+                            </th>
+                            <th style="width:30%;">
+                                <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="Result">Result</span></div>
+                            </th>                     
+                            <th style="width:20%;">
+                                <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="UrlPath">UrlPath</span></div>
+                                <div><span class="HoverLink text-grey slds-text-body_small" onclick={sort} data-ascending="true" data-sortname="ObjectId">ObjectId</span></div>
+                            </th>                                  
+                            <th style="width:10%;">
+                                <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="Severity">Severity</span></div>
+                                <div><span class="HoverLink text-grey slds-text-body_small" onclick={sort} data-ascending="true" data-sortname="Occurances">Occurances</span></div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={PageVar.ReportData} for:item="report">
+                            <tr key={report.Id} style={report.OpacityStyle}>
+                                <td>
+                                    <lightning-icon icon-name={report.IconForType} title={report.Type}></lightning-icon>  
+                                </td>                                 
+                                <td>
+                                    {report.ErrorDateDay}
+                                    <div class="text-grey slds-text-body_small">{report.ErrorDateTime}</div>
+                                </td>                                                        
+                                <td class="slds-truncate">
+                                    <div>{report.Error}</div>
+                                    <div class="text-grey slds-text-body_small">{report.Details}</div>
+                                </td>
+                                <td class="slds-truncate">
+                                    <span class="hover-element" onclick={ShowRowDetails} data-id={report.Id}>{report.Result}</span>
+                                </td>
+                                <td>
+                                    <div class="ClickableLink" data-id={report.ObjectId} onclick={navigateToSFRecordId}>{report.ObjectName}</div>
+                                    <div class="text-grey slds-text-body_small">{report.ObjectId}</div>
+                                </td>                                       
+                                <td>
+                                    <span class={report.SeverityClass}>{report.Occurances}</span>
+                                </td>                   
+                            </tr>            
+                        </template>
+                    </tbody>                                 
+                </table>
+            </template>  
+            <template if:false={PageVar.ReportDataFound}>
+                <div class="slds-box slds-theme_shade slds-theme_shade">
+                    <p>No data found.</p>
+                </div>
+            </template>
+        </div>    
+
+    <!--FIELD DETAILS MODAL-->
+	<template if:true={toggle.ModalOther}>
+		<section class="slds-modal slds-fade-in-open slds-modal_large">
+			<div class="slds-modal__container">
+				<!-- HEADER -->
+				<header class="slds-modal__header" style="background-color:#F3F3F3;">
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col">
+                            <h2 class="slds-text-heading_medium slds-hyphenate">
+                                <span class="slds-p-left_medium slds-float_left">{PageVar.CurrentRow.Type}</span>
+                            </h2>
+                        </div>
+                        <div class="slds-col">
+                            <lightning-button-icon class="slds-float_right" icon-name="utility:clear" size="large" variant="bare" onclick={ToggleAnything} data-togglename="ModalOther"></lightning-button-icon>
+                        </div>
+                    </div>
+				</header>
+
+				<!-- BODY -->
+				<div class="slds-modal__content slds-p-horizontal_x-small" style="height:650px;">
+                    <div>{PageVar.CurrentRow.Error}</div>
+                    <div class="text-grey slds-text-body_small">{PageVar.CurrentRow.Details}</div>
+                    <pre>{PageVar.CurrentRow.ResultClean}</pre> 
+				</div>
+			</div>
+		</section>
+		<div class="slds-backdrop slds-backdrop_open"></div>
+	</template>         
+</template>

@@ -1,0 +1,35 @@
+<template>
+    <lightning-spinner if:false={Report.IsLoaded} size="medium" alternative-text="Loading"></lightning-spinner>
+    <div class="slds-grid slds-gutters slds-p-around_x-small">
+        <div class="slds-col">
+            <lightning-combobox
+                name="Report"
+                label="Report"
+                value={Report.Current.value}
+                options={Report.List}
+                onchange={handleReportChange} 
+            ></lightning-combobox>  
+          
+        </div>
+        <div class="slds-col">
+            <div if:true={Report.Current.ShowDates}>
+                <c-child-date-picker get-date-picker-values-from-parent={ChildDatePicker} ongetdatepickervalues={handleDatePickerChange}></c-child-date-picker>
+            </div>
+        </div>
+        <div class="slds-col">
+
+        </div>
+    </div>
+
+    <lightning-datatable
+        key-field="id"
+        data={Report.data}
+        columns={Report.columns}
+        sorted-by={sortBy}
+        sorted-direction={sortDirection}
+        onsort={doSorting}
+        hide-checkbox-column="true"
+        >
+    </lightning-datatable>
+
+</template>

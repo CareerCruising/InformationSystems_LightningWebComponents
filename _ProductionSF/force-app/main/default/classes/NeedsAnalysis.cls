@@ -1,9 +1,10 @@
-public with sharing class QuickUtils {
+public with sharing class NeedsAnalysis {
 
     @AuraEnabled
-    public static Needs_Analysis__c NeedsAnalysisFromAccountId(string AccountId) {
+    //This returns an object (instead of Needs_Analysis__c) since we may want other values in the future that are not in the object itself
+    public static object FindFirstFromAccountId(string AccountId) {
         Id childAccountId = AccountId;
-        Needs_Analysis__c NeedsAnalysisFirstFound = null;
+        Map<String, Object> NeedsAnalysisFirstFound = new Map<String, Object>(); //Create a dynamic object
 
         //Loop up through the hierarchy until we find a Needs Analysis (or reach the top)
         while (childAccountId != null) {
@@ -21,7 +22,11 @@ public with sharing class QuickUtils {
                         LIMIT 1
                     ];    
                     if (NeedsAnalysisTempList.size() > 0) { //found a Needs Analysis, exit the loop
-                        NeedsAnalysisFirstFound = NeedsAnalysisTempList[0];
+                        NeedsAnalysisFirstFound.put('NeedsId', NeedsAnalysisTempList[0].Id);
+                        NeedsAnalysisFirstFound.put('AccountName', childAccount.Name);
+                        NeedsAnalysisFirstFound.put('LastModifiedDate', NeedsAnalysisTempList[0].LastModifiedDate);
+                        NeedsAnalysisFirstFound.put('LastModifiedFirstName', NeedsAnalysisTempList[0].LastModifiedBy.FirstName);
+                        NeedsAnalysisFirstFound.put('LastModifiedLastName', NeedsAnalysisTempList[0].LastModifiedBy.LastName);
                         childAccountId = null;
                     }        
                 } else { //There are no more parent account records, exit the loop
@@ -34,29 +39,4 @@ public with sharing class QuickUtils {
 
         return (NeedsAnalysisFirstFound);
     }
-
-    @AuraEnabled
-    public static string CopyOpp(String SourceOppId, Boolean IsTest) {
-        String UserId = UserInfo.getUserId();
-        LogResult resultLog = new LogResult();
-        resultLog.Error = '';   
-        resultLog.Id = '';
-
-        Opportunity NewOpp = new Opportunity();
-
-        if(IsTest) { //Just hacked it by passing IsTest and creating a fake Opp. Tried for hours - I can execute the code, but the test breaks and I don't understand the errors.
-            NewOpp = new Opportunity(Id = '0063i0000035hBOGUS', Name = 'Testing Name', StageName = 'Prospecting');
-            NewOpp.CloseDate = Date.newInstance(2000, 1, 1);
-        }
-             
-        return JSON.serialize(resultLog);
-
-    }
-
-    public class LogResult{
-        string Id { get; set; }
-        string Error { get; set; }
-    }
-
 }
-

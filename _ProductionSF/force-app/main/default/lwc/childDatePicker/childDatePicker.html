@@ -1,0 +1,22 @@
+<template>
+	<div class="slds-grid">
+		<div class="slds-col slds-m-left_xx-small">
+			<lightning-input type="date" name="input2" label="StartDate" value={StartDate} onchange={handleStartDateChange}>
+			</lightning-input>
+			<!-- <div>{StartDate}</div> -->
+		</div>
+		<div class="slds-col slds-m-left_xx-small">
+			<lightning-input type="date" name="input2" label="EndDate" value={EndDate} onchange={handleEndDateChange}>
+			</lightning-input>
+			<!-- <div>{EndDate}</div> -->
+		</div>
+		<div class="slds-col slds-m-left_xx-small">
+			<div>
+				<div style="margin-top:4px;">&nbsp;</div>
+				<lightning-button id="ButtonXX" label="GO" onclick={DispatchEventToParent}>
+				</lightning-button>
+			</div>
+		</div>
+	</div>
+	<!-- <div>getDatePickerValuesFromParent: {getDatePickerValuesFromParent.StartDate}</div> -->
+</template>

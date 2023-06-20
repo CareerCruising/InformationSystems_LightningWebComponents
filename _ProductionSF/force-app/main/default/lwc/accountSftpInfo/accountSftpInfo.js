@@ -1,4 +1,5 @@
 import { LightningElement, api, track, wire } from 'lwc';
+import LightningAlert from 'lightning/alert';
 import { getRecord } from 'lightning/uiRecordApi';
 import SfUserId from '@salesforce/user/Id';
 import UserPreferencesShowCityToExternalUsers from '@salesforce/schema/User.UserPreferencesShowCityToExternalUsers';
@@ -13,6 +14,7 @@ export default class AccountSftpInfo extends LightningElement {
         ,'Account.SftpFolder__c'
         ,'Account.SftpIntegrationDistrictId__c'
         ,'Account.OwnerId'
+        ,'Account.BillingCountryCode'
     ] }) accSF;   
 
     @track sftp = {
@@ -23,14 +25,21 @@ export default class AccountSftpInfo extends LightningElement {
         IsAnthony:false, 
         IsOwner:false,
         IsLoaded:false,
+        Is_accSF_Loaded:false,
         Debug:false,
         SftpInfo: {},
+        SftpServerOption: [
+            { label: 'ftp.careercruising.com', value: 'ftp.careercruising.com' },
+            { label: 'ftp.xello.us', value: 'ftp.xello.us' },
+            { label: 'ftp.xello.ca', value: 'ftp.xello.ca' },
+            { label: 'ftp.xello.co.uk', value: 'ftp.xello.co.uk' }
+        ],
         SourceServerOption: [
             { label: 'AzureUS', value: 'AzureUS' },
             { label: 'AzureCA', value: 'AzureCA' },
             { label: 'AzureUK', value: 'AzureUK' },
             { label: 'CC', value: 'CC' }
-        ],
+        ],        
         FrequencyOption: [
             { label: 'Nightly', value: 'D' },
             { label: 'Weekly', value: 'W' },
@@ -40,12 +49,15 @@ export default class AccountSftpInfo extends LightningElement {
 
     error;
     @track blFalse = false;
-    
-    get accSF_Loaded() {  //Repeatedly checks until true
-        if(this.accSF.data !== undefined){
-            this.acc = this.accSF.data.fields;
-            this.sftp.IsOwner = (SfUserId == '00541000002RNSMAA4' || SfUserId == this.accSF.data.fields.OwnerId.value) ? true : false;
-            this.sftp.Debug = (SfUserId == '00541000002RNSMAA4' || SfUserId == this.accSF.data.fields.OwnerId.value) ? true : false;
+
+    get accSF_Loaded() {  //Repeatedly checks until true - TODO: Still convinced there is a better way to wait until the @wire loads
+        if(this.accSF.data !== undefined){ 
+            if(!this.sftp.Is_accSF_Loaded) { //Run once
+                this.acc = this.accSF.data.fields;
+                this.sftp.IsOwner = (SfUserId == '00541000002RNSMAA4' || SfUserId == this.accSF.data.fields.OwnerId.value) ? true : false;
+                this.sftp.Debug = (SfUserId == '00541000002RNSMAA4' || SfUserId == this.accSF.data.fields.OwnerId.value) ? true : false;
+                this.sftp.Is_accSF_Loaded = true;
+            }
             return true;
         } else {
             return false;
@@ -56,23 +68,33 @@ export default class AccountSftpInfo extends LightningElement {
     fetchSftpData() {
         this.sftp.IsLoaded = false;
         console.log('ShowReportEdit2', this.sftp.ShowReportEdit);
-        // Use standard Fetch API 
+        
         fetch('https://is.xello.world/api/Integrations/GetSftpForAccount?AccId=' + this.recordId).then((response) => response.json())
             .then((jsonResponse) => {
                 this.sftp.SftpInfo = jsonResponse.SftpInfo;
                 this.sftp.SftpReports = jsonResponse.SftpReports;  
                 if(this.sftp.SftpInfo != null) {
                     this.sftp.HasReports = this.sftp.SftpReports.length > 0; //only make this true after confirmed so alert message does not appear (or flash) on screen
-                    console.log('ShowReportEdit3', this.sftp.ShowReportEdit);
-                    this.sftp.SftpReports.forEach(function(entry) {
+                    this.sftp.SftpInfo.SftpPathOld = this.sftp.SftpInfo.SftpPath;
+                    this.sftp.SftpInfo.Port = (this.sftp.SftpInfo.SftpServer == 'ftp.xello.us') ? '5087' : '22';
+                    //open sftp://charlevoixemmetinter:c7ttcqj2@ftp.xello.us:5087/ -hostkey=*
+                    if(this.sftp.SftpInfo.SftpServer.toLowerCase().indexOf('xello.us') > 1) {
+                        this.sftp.SftpInfo.SftpPath = 'sftp://' + this.sftp.SftpInfo.UserName + ':' + this.sftp.SftpInfo.Password + '@ftp.xello.us:5087/ -hostkey=*';
+                    }
+                    if(this.sftp.SftpInfo.SftpServer.toLowerCase().indexOf('xello.co.uk') > 1) {
+                        this.sftp.SftpInfo.SftpPath = 'sftp://' + this.sftp.SftpInfo.UserName + ':' + this.sftp.SftpInfo.Password + '@ftp.xello.co.uk:22/ -hostkey=*';
+                    }
+                    if(this.sftp.SftpInfo.SftpServer.toLowerCase().indexOf('xello.ca') > 1) {
+                        this.sftp.SftpInfo.SftpPath = 'sftp://' + this.sftp.SftpInfo.UserName + ':' + this.sftp.SftpInfo.Password + '@ftp.xello.ca:22/ -hostkey=*';
+                    }
+
+                    this.sftp.SftpInfo.OldFtpActiveReportsExist = false;
+                    this.sftp.SftpReports.forEach((entry) => {
                         entry.IsXello = (entry.SourceServer == 'CC') ? false : true;
                         if(entry.LastRunDate != null) entry.LastRunDate = new Date(entry.LastRunDate);
                         if(entry.CreatedDate != null) entry.CreatedDate = new Date(entry.CreatedDate);
                         entry.IsMonthly = (entry.Frequency == 'M') ? true: false;
-                        entry.HasExtractsFolder = (entry.FileFolder.indexOf('\\Extracts\\') != -1) ? true: false;
-                        //console.log('ShowReportEdit4', this.sftp.ShowReportEdit);
-                        //entry.FrequencyText = 
-                        entry.FileFolder = entry.FileFolder.substring(28, 500);  
+                        entry.HasSubFolder = (entry.FileSubFolder != '' && entry.FileSubFolder != null) ? true : false;
                         switch(entry.Frequency) {
                             case 'M':
                                 entry.FrequencyText = 'Monthly'
@@ -85,9 +107,16 @@ export default class AccountSftpInfo extends LightningElement {
                         }
                         if(entry.DurationSeconds == null) entry.DurationSeconds = 0;
                         entry.IsTooLong = (entry.DurationSeconds > 60 && entry.IsActive)  ? true: false;
+                        
+                        //Check if OLD reports exists that are of concern
+                        entry.ReportOnOldFtpButNewSftpActive = false;
+                        if(entry.SftpServer == 'ftp.careercruising.com' && this.sftp.SftpInfo.SftpServer.toLowerCase().indexOf('xello') > 1) {
+                            if(entry.IsActive) this.sftp.SftpInfo.OldFtpActiveReportsExist = true;
+                            entry.ReportOnOldFtpButNewSftpActive = true; //the report is still on the OLD ftp server but the account is using the NEW sftp server
+                        }
                     });
-
                     this.sftp.HasFolder = true;
+                    console.log('SftpReports',this.sftp.SftpReports);
                 }
                 else {
                     this.sftp.HasFolder = false;
@@ -98,6 +127,7 @@ export default class AccountSftpInfo extends LightningElement {
             })       
             .catch((error) => {console.log(error);});
     }
+
     connectedCallback() {
         console.log('ShowReportEdit1', this.sftp.ShowReportEdit);       
         this.fetchSftpData();
@@ -114,9 +144,16 @@ export default class AccountSftpInfo extends LightningElement {
         this.CurrentReport.StoredProcedure = 'Extracts.';
         this.CurrentReport.ReportName = '';
         this.CurrentReport.ReportDescription = null;
-        this.CurrentReport.FileLocation = this.sftp.SftpInfo.SftpPath + '\Extracts\\';
+        this.CurrentReport.FileLocation = this.sftp.SftpInfo.SftpFolder + '\\Extracts\\';
+        //this.CurrentReport.SftpServer = this.sftp.SftpServerOption[0].value;
+        this.CurrentReport.SftpServer = this.sftp.SftpServerOption.find(obj => obj.value == this.sftp.SftpInfo.SftpServer).value;
         this.CurrentReport.IsActive = 0;
+
+        //Source server
         this.CurrentReport.SourceServer = 'AzureUS';
+        if(this.sftp.SftpInfo.SftpServer == 'ftp.xello.co.uk') this.CurrentReport.SourceServer = 'AzureUK';
+        if(this.sftp.SftpInfo.SftpServer == 'ftp.xello.ca') this.CurrentReport.SourceServer = 'AzureCA';
+        
         this.CurrentReport.Frequency = 'M';
         this.sftp.ShowReportEdit = true;
     }
@@ -124,6 +161,7 @@ export default class AccountSftpInfo extends LightningElement {
         //Find report based on data.id, use {...object} to make a copy
         this.CurrentReport = {...this.sftp.SftpReports.find( ({ ID }) => ID == event.target.dataset.id)};
         this.sftp.ShowReportEdit = true;
+        console.log(this.CurrentReport);
     }
     handleReportCancel(event) {
         this.sftp.ShowReportEdit = false;
@@ -133,18 +171,16 @@ export default class AccountSftpInfo extends LightningElement {
         //Hitting a wall with CORS using POST so using a larger (silly) GET - argghhhh
         var params = ''
         var params = params + '?ID=' + encodeURIComponent(this.CurrentReport.ID)
-        var params = params + '&ReportName=' + encodeURIComponent(this.CurrentReport.ReportName)
-        if(this.CurrentReport.ReportDescription == null) {
-            var params = params + '&ReportDescription=' + encodeURIComponent(this.CurrentReport.ReportName)
-        } else {
-            var params = params + '&ReportDescription=' + encodeURIComponent(this.CurrentReport.ReportDescription)
-        }
+        var params = params + '&CrmAccountId=' + this.recordId
         var params = params + '&StoredProcedure=' + encodeURIComponent(this.CurrentReport.StoredProcedure)
         var params = params + '&Frequency=' + encodeURIComponent(this.CurrentReport.Frequency)
-        //var params = params + '&Frequency=' + encodeURIComponent(this.CurrentReport.IsMonthly ? 'M' : 'D')
         var params = params + '&FileLocation=' + encodeURIComponent(this.CurrentReport.FileLocation)
+        var params = params + '&SftpServer=' + encodeURIComponent(this.CurrentReport.SftpServer)
         var params = params + '&SourceServer=' + encodeURIComponent(this.CurrentReport.SourceServer)
         var params = params + '&IsActive=' + encodeURIComponent(this.CurrentReport.IsActive ? 1 : 0)
+
+        //onsole.log(params);
+        //return;
 
         fetch('https://is.xello.world/api/Integrations/SaveSftpReport' + params).then((response) => response.json())
             .then((jsonResponse) => {
@@ -181,17 +217,64 @@ export default class AccountSftpInfo extends LightningElement {
         //     .catch((error) => {console.log(error);})
         // );
     }
+    handleReportReRun(event) {
+        
+        fetch('https://is.xello.world/api/Integrations/QueryBySprocId?SprocId=959892&string&Numeric1=' + encodeURIComponent(this.CurrentReport.ID)).then((response) => response.json())
+            .then((jsonResponse) => {
+                this.ResultMessage = jsonResponse.QueryResults[0];
+                LightningAlert.open({
+                    message: this.ResultMessage.Detail,
+                    theme: this.ResultMessage.alertColor, // a red theme intended for error states
+                    label: this.ResultMessage.Message, // this is the header text
+                });
+
+                this.fetchSftpData(); 
+                this.sftp.ShowReportEdit = false;
+            })       
+            .catch((error) => {console.log(error);});
+
+        
+        // Use standard Fetch API 
+        // fetch('https://is.xello.world/api/Integrations/SaveSftpReport',
+        //     {
+        //         method: "POST",
+        //         body: JSON.stringify(params),
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             'Origin': 'https://is.xello.world',
+        //             'Access-Control-Allow-Origin': '*'
+        //         }
+        //      }).then((response) => response.json())
+        //          .then((jsonResponse) => {
+        //              console.log(jsonResponse.SftpReport);
+        //          })       
+        //          .catch((error) => {console.log(error);});
+
+        // fetch('https://is.xello.world/api/Integrations/SaveSftpReport',
+        // {
+        //     method: "POST",
+        //     body: params
+        // }.then((response) => response.json())
+        //     .then((jsonResponse) => {
+        //         console.log(jsonResponse.SftpReport);
+        //     })       
+        //     .catch((error) => {console.log(error);})
+        // );
+    }    
     handleReportInputChange(event) {
         this.CurrentReport[event.target.name] = event.target.value;
         if(event.target.name == 'StoredProcedure' && this.CurrentReport.ID == null) {
             var SprocNameOnly = this.CurrentReport.StoredProcedure.replace('Extracts.','');
             this.CurrentReport.ReportName = SprocNameOnly;
-            this.CurrentReport.FileLocation = this.sftp.SftpInfo.SftpPath + '\Extracts\\' + SprocNameOnly + '.csv';
+            this.CurrentReport.FileLocation = this.sftp.SftpInfo.SftpFolder + '\\Extracts\\' + SprocNameOnly + '.csv';
         }
     }
     handleChangeSourceServer(event) {
         this.CurrentReport.SourceServer = event.detail.value;
-    }
+    }  
+    handleChangeSftpServer(event) {
+        this.CurrentReport.SftpServer = event.detail.value;
+    }    
     handleChangeFrequency(event) {
         this.CurrentReport.Frequency = event.detail.value;
     }    
@@ -200,7 +283,5 @@ export default class AccountSftpInfo extends LightningElement {
     }
     handleToggleAnyBooleanSftp(event) {
         this.sftp[event.target.dataset.fieldname] = !this.sftp[event.target.dataset.fieldname];
-        
     }
-
 }

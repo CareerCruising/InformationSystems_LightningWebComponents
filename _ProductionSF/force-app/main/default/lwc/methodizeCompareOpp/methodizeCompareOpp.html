@@ -30,7 +30,8 @@
                             </th>
                             <th>
                                 <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="Account__r_InstitutionId__c">InstitutionId</span></div>
-                            </th>                        
+                            </th>          
+                            <th if:true={PageVar.AllowItemRemovals}></th>                                            
                             <th>
                                 <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="SeatQtyParsed">Opp Qty</span></div>
                                 <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="NumberOfAccounts">Method Qty</span></div>
@@ -40,7 +41,7 @@
                                 <div><span class="HoverLink" onclick={sort} data-ascending="true" data-sortname="SubscriptionEndDate">Method Date</span></div>                     
                             </th>
                             <th>
-                                Link
+                                Link 
                             </th>
                         </tr>
                     </thead>
@@ -56,6 +57,9 @@
                                     <div class="text-grey slds-text-body_small">{report.Description}</div>
                                 </td>
                                 <td>{report.Account__r_InstitutionId__c}</td>
+                                <td if:true={PageVar.AllowItemRemovals}>
+                                    <lightning-icon onclick={SetIdAndShowRemoveWarning} data-removeid={report.Id} icon-name="utility:delete" size="xx-small" class="slds-p-right_xx-small ClickableLink"></lightning-icon>
+                                </td>
                                 <td>
                                     <div><lightning-formatted-number value={report.SeatQtyParsed}></lightning-formatted-number></div>
                                     <div>
@@ -132,6 +136,43 @@
             </section>
             <div class="slds-backdrop slds-backdrop_open"></div>
         </template>        
+
+        <!--IGNORE ITEM MODAL -->
+        <template if:true={PageVar.ShowRemoveWarning}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-02" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+
+                    <lightning-icon onclick={HideRemoveWarning} class="slds-modal__close HoverLink" variant="inverse" icon-name="utility:close"
+                        alternative-text="Close" title="Close"></lightning-icon>
+            
+                    <!-- Modal/Popup Box LWC header here -->
+                    <header class="slds-modal__header">
+                        <h2 class="slds-text-heading_medium slds-hyphenate"><strong>Ignore Issue</strong></h2>
+                    </header>
+                    <!-- Modal/Popup Box LWC body starts here -->
+                    <div class="slds-modal__content slds-p-around_medium" style="height:fit-content">
+                        <div>
+                            <strong>In some cases, we cannot correctly match a product line item with the
+                            Method data. Clicking Proceed will
+                            remove this item from the Metodize Sync report.</strong>
+                        </div>
+                        <div class="slds-p-top_medium">The main reason for this is that the Method data (cc3.Mtp.MethodizeSchool) has only
+                            1 row per site regardless of how many Method Learning products they purchase:</div>
+                        <ul class="slds-list_dotted" style="line-height:200%">
+                            <li>This single row can only store one value for QTY and one value for Expiry.</li>
+                            <li>We cannot accomodate multiple Method products (ie FinLit and Methodize) on 1 single site unless they have
+                                the same QTY and ExpiryDate.</li>
+                        </ul>
+                    </div>
+                    <div class="slds-modal__footer">
+                        <strong class="slds-p-right_medium slds-text-color_error">DS Admin is correct and I want to ignore this item / issue</strong>
+                        <button class="slds-button slds-button_neutral" aria-label="Cancel and close" onclick={HideRemoveWarning}>Cancel</button>
+                        <button class="slds-button slds-button_brand" onclick={RemoveItem}>Proceed</button>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>          
     </div>
 
 </template>

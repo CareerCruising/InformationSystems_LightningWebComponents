@@ -18,6 +18,7 @@
             </template>
         </div>
         <div class="slds-col slds-p-top_large">
+            <div class="text-grey slds-text-body_small slds-float_right">{data.CurrentObject}</div>
             <lightning-button-menu label="Record Types" icon-name="utility:down" icon-position="right" if:true={data.RecordTypes} class="slds-float_right" menu-alignment="right">
                 <div class="slds-dropdown__list slds-p-around_xx-small" role="menu">
                     <table class="slds-table slds-table_cell-buffer slds-table_header-hidden slds-table_bordered">

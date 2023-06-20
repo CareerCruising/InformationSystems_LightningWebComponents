@@ -1,7 +1,8 @@
 //Decide here what to use api / wire / track
-import { LightningElement, api, track } from 'lwc';
+import { LightningElement, api, track, wire } from 'lwc';
 import DescribeSalesforceObject from'@salesforce/apex/Describe.SalesforceObject';
 import DescribeObjectList from'@salesforce/apex/Describe.ObjectList';
+import NeedsAnalysisFromAccountId from'@salesforce/apex/NeedsAnalysis.FindFirstFromAccountId';
 
 export default class TestBasicV1 extends LightningElement {    
     @api recordId;
@@ -13,22 +14,29 @@ export default class TestBasicV1 extends LightningElement {
         SortAsc: true,
         SfField: []
     };
-    fields = [
-        'Id'
-        ,'Name'
-        ,'Amount'
-        ,'ArrRollup__c'
-        ,'ArrRollup__c'
-        ,'ArrRollup__c'
-        ,'ArrRollup__c'
-        ,'ArrRollup__c'
-        ,'ArrRollup__c'
-        ,'ArrRollup__c'
-        ,'ArrRollup__c'
-        ,'ArrRollup__c'
-    ];
 
     @track Popover1Visible = false;
+    // @wire(GetNeedsAnalysisFromAccountId, { AccountId: '$recordId' })
+    // NeedsAnalysis({ error, data }) {
+    //     if (data) {
+    //         this.customObjectData = data;
+    //         console.log('NeedsAnalysis',data);
+    //     } else if (error) {
+    //         // Handle error
+    //         console.error('Error retrieving CustomObject__c record:', error);
+    //     }
+    // }
+
+    GetNeedsAnalysisFromAccountId() {
+        //onsole.log({AccountId: this.recordId});
+        NeedsAnalysisFromAccountId({AccountId: this.recordId})
+            .then(result => {
+                console.log('result', result);
+            })
+            .catch(error => {
+                console.log('error',error);
+            });
+    }
 
     DescribeObj() {
         DescribeSalesforceObject({SfObjectName: 'Opportunity'})

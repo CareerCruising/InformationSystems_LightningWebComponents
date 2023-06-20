@@ -130,3 +130,15 @@
 .sort-desc::after {
     content: " \2193";
 }
+.PopoverToolTipContainer {
+    position:relative;
+}
+.PopoverToolTipContent {
+    visibility: visible;
+    opacity: 0;
+    position:absolute;
+  }
+.PopoverToolTipContainer:hover .PopoverToolTipContent {
+    visibility: visible;
+    opacity: 1;
+}

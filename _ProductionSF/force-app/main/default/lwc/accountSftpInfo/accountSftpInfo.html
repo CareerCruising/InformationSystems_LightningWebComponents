@@ -17,7 +17,10 @@
                     <p class="MyFieldTitle">SftpFolder</p>
                     <div if:true={sftp.HasFolder}>
                         <p class="MyFieldValue">{sftp.SftpInfo.SftpFolder}</p>
-                        <p if:true={sftp.IsAnthony} class="text-grey slds-text-body_small">{sftp.SftpInfo.SftpPath}</p>
+                        <p if:true={sftp.IsAnthony} class="text-grey slds-text-body_small">
+                            {sftp.SftpInfo.SftpPath}
+                            <span if:true={sftp.SftpInfo.OldFtpActiveReportsExist}>{sftp.SftpInfo.SftpPathOld}</span>
+                        </p>
                     </div>
                 </div>          
                 <div class="slds-col slds-size_3-of-12 slds-p-bottom_small">
@@ -54,8 +57,11 @@
                         <td>{report.ID}</td>
                         <td>
                             <div>{report.FileName}</div>
-                            <div if:true={report.HasExtractsFolder} class="text-grey slds-text-body_small">in folder <strong>\Extracts</strong></div>
-                            <div if:false={report.HasExtractsFolder} class="text-grey slds-text-body_small">\</div>
+                            <div>
+                                <span if:true={report.HasSubFolder} class="text-grey slds-text-body_small">in folder <strong>{report.FileSubFolder}</strong></span>
+                                <span if:false={report.HasSubFolder} class="text-grey slds-text-body_small">&nbsp;</span>
+                                <span if:true={report.ReportOnOldFtpButNewSftpActive} class="slds-m-left_large text-grey slds-text-body_small rounded-outline" title="Extracts to old FTP server but client is on the new SFTP server">Old FTP</span>
+                            </div>
                         </td>
                         <td>
                             <div><lightning-formatted-date-time value={report.LastRunDate} month="short" day="numeric" year="numeric"></lightning-formatted-date-time></div>
@@ -66,8 +72,8 @@
                             </div>
                         </td>
                         <td>
-                            <lightning-badge if:true={report.IsActive} label="Active" data-id={report.ID} onclick={handleToggleActive} class="slds-badge_inverse BadgeMinPadding"></lightning-badge>
-                            <lightning-badge if:false={report.IsActive} label="Inactive" data-id={report.ID} onclick={handleToggleActive} class="slds-badge_lightest BadgeMinPadding"></lightning-badge>
+                            <lightning-badge if:true={report.IsActive} label="Active" data-id={report.ID} class="slds-badge_inverse BadgeMinPadding"></lightning-badge>
+                            <lightning-badge if:false={report.IsActive} label="Inactive" data-id={report.ID} class="slds-badge_lightest BadgeMinPadding"></lightning-badge>
                             <div class="slds-p-left_x-small text-grey slds-text-body_small">
                                 <lightning-icon icon-name="utility:event" size="xx-small" class="Opacity5 slds-p-right_xx-small"></lightning-icon>
                                 <span>{report.FrequencyText}</span>
@@ -118,13 +124,28 @@
                             This is highly sensitive information that gives access to private student data. Please be careful when passing this information to a client.
                         </div>
                         <div class="slds-p-around_x-small">
-                            Please find your SFTP details below. You will need file transfer software installed on your computer (e.g. WinSCP, FileZilla, Cute FTP Professional) to complete the step of placing your data files in the account.<br>
+                            Please find your SFTP details below. You will need file transfer software installed on your computer (e.g. WinSCP, FileZilla, Cute FTP Professional) to complete the step of placing or receiving your data files in the account.<br>
                             <br>
-                            Host: ftp.careercruising.com <br>
-                            Port: 22<br>
+                            Host: {sftp.SftpInfo.SftpServer}<br>
+                            Port: {sftp.SftpInfo.Port}<br>
                             Username: {sftp.SftpInfo.UserName}<br>
                             Password: {sftp.SftpInfo.Password}<br>
+
+                            <div if:true={sftp.SftpInfo.OldFtpActiveReportsExist}>
+                                <div>
+                                    <br>
+                                    OLD SFTP SERVER (Custom Extracts still are active on this server)
+                                    <br>
+                                    Host: ftp.careercruising.com<br>
+                                    Port: 22<br>
+                                    Username: {sftp.SftpInfo.UserName}<br>
+                                    Password: {sftp.SftpInfo.Password}<br>                                      
+                                </div>
+                            </div>                            
                         </div>
+
+                        <br>
+
                     </div>
 
 
@@ -150,8 +171,15 @@
                 <div class="slds-modal__content slds-p-around_medium" id="modal-content-EditReport" style="height:fit-content">
                     
                     <lightning-input onchange={handleReportInputChange} name="StoredProcedure" value={CurrentReport.StoredProcedure} label="Stored Procedure" required></lightning-input>
-                    <lightning-input onchange={handleReportInputChange} name="ReportName" value={CurrentReport.ReportName} label="ReportName" required></lightning-input>
-                    <lightning-input onchange={handleReportInputChange} name="FileLocation" value={CurrentReport.FileLocation} label="File name/location (SFTP)" required></lightning-input>                       
+                    <!-- <lightning-input onchange={handleReportInputChange} name="ReportName" value={CurrentReport.ReportName} label="ReportName" required></lightning-input> -->
+                    <lightning-input onchange={handleReportInputChange} name="FileLocation" value={CurrentReport.FileLocation} label="File name/location (SFTP)" required></lightning-input>                        
+                    <lightning-combobox
+                        name="progress"
+                        label="Sftp Target Server"
+                        value={CurrentReport.SftpServer}
+                        options={sftp.SftpServerOption}
+                        onchange={handleChangeSftpServer} 
+                    ></lightning-combobox>                                      
                     <div class="slds-grid slds-gutters">
                         <div class="slds-col">
                             <!-- <label class="slds-form-element__label">Type</label> -->
@@ -194,6 +222,7 @@
                 </div>
                 <!-- Modal/Popup Box LWC footer starts here -->
                 <footer class="slds-modal__footer">
+                    <lightning-button label="Run Report" onclick={handleReportReRun} variant="base" class="slds-m-left_x-small slds-float_left"></lightning-button>
                     <lightning-button label="Cancel" onclick={handleReportCancel} class="slds-m-left_x-small"></lightning-button>
                     <lightning-button label="Save" onclick={handleReportSave} class="slds-m-left_x-small" variant="brand"></lightning-button>
                 </footer>
@@ -204,31 +233,33 @@
 
     <!-- DEBUG TOGGLES -->
     <template if:true={sftp.Debug}>
-        <div class="slds-form-element">
-            <div class="slds-form-element__control">
-              <div class="slds-checkbox">
-                <input type="checkbox" id="chkIsAnthony" data-fieldname="IsAnthony" onclick={handleToggleAnyBooleanSftp}/>
-                <label class="slds-checkbox__label" for="chkIsAnthony">
-                  <span class="slds-checkbox_faux"></span>
-                  <span class="slds-form-element__label">Is user Anthony? {sftp.IsAnthony}</span>
-                </label>
+        <div class="slds-p-around_x-small">
+            <div class="slds-text-heading_small slds-p-bottom_x-small">Debug (Anthony Only)</div>
+            <div class="slds-form-element">
+                <div class="slds-form-element__control">
+                  <div class="slds-checkbox">
+                    <input type="checkbox" id="chkIsAnthony" data-fieldname="IsAnthony" onclick={handleToggleAnyBooleanSftp}/>
+                    <label class="slds-checkbox__label" for="chkIsAnthony">
+                      <span class="slds-checkbox_faux"></span>
+                      <span class="slds-form-element__label">Is user Anthony? {sftp.IsAnthony}</span>
+                    </label>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-    
-          <div class="slds-form-element">
-            <div class="slds-form-element__control">
-              <div class="slds-checkbox">
-                <input type="checkbox" id="chkIsOwner" data-fieldname="IsOwner" onclick={handleToggleAnyBooleanSftp}/>
-                <label class="slds-checkbox__label" for="chkIsOwner">
-                  <span class="slds-checkbox_faux"></span>
-                  <span class="slds-form-element__label">Is user the Account owner? {sftp.IsOwner}</span>
-                </label>
-              </div>
-            </div>
-          </div>
+        
+              <div class="slds-form-element">
+                <div class="slds-form-element__control">
+                  <div class="slds-checkbox">
+                    <input type="checkbox" id="chkIsOwner" data-fieldname="IsOwner" onclick={handleToggleAnyBooleanSftp}/>
+                    <label class="slds-checkbox__label" for="chkIsOwner">
+                      <span class="slds-checkbox_faux"></span>
+                      <span class="slds-form-element__label">Is user the Account owner? {sftp.IsOwner}</span>
+                    </label>
+                  </div>
+                </div>
+              </div>            
+        </div>
     </template>
-
 
 </template>
 
