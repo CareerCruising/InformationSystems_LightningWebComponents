@@ -1,0 +1,47 @@
+@import 'c/commonCSS';
+
+/* SORT ESSENTIALS */
+.headerSortUp::after, .headerSortDown::after {
+    vertical-align: middle; /* Aligns the arrow with the middle of the text */
+    display: inline-block;
+    width: 0; 
+    height: 0; 
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;    
+    content: "";
+    margin-left: 3px; /* Adjust as needed for spacing */
+    opacity: 0.3; /* Fades the arrow slightly */
+}
+
+.headerSortUp::after {
+    border-bottom: 10px solid black;
+}
+
+.headerSortDown::after {
+    border-top: 10px solid black;
+}
+
+/* CONTRACT DATES */
+.tdContract > div {
+    position: relative;
+    width: 45px;
+}
+div.ContractFaded {
+    opacity: 0.5;
+}
+div.ContractDuration {
+    color: #a81c1c;
+    font-size: 10px;
+    position: absolute;
+    top: -3px;
+    right:5px;
+}
+div.ContractMonth {
+    font-size: 14px;
+    line-height: 13px;
+}
+div.ContractYear {
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 16px;
+}

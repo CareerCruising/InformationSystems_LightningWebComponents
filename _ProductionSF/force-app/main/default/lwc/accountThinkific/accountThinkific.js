@@ -11,7 +11,8 @@ export default class AccountThinkific extends LightningElement {
         SortField: 'LastName',
         SortAsc: true,     
         ShowInfo: false,
-        DropMenu1Value: 'Educators with Courses'
+        DropMenu1Value: 'Educators with Courses',
+        ShowTooManyNote: false
     };
     @wire(getRecord, { recordId: '$recordId', fields: [
         'Account.Name'
@@ -32,10 +33,10 @@ export default class AccountThinkific extends LightningElement {
         fetch(URL).then((response) => response.json())
             .then((jsonResponse) => {
                 this.PageVar.ReportData = jsonResponse.ReportData;
-
+                this.PageVar.FilterCount = 0;
                 if(this.PageVar.ReportData != null) {
                     this.PageVar.ReportData.forEach(function(entry) {
-                        entry.Visible = true;
+                        entry.Visible = false;
                         if(entry.PercentCompleted != '') {
                             entry.Percent = parseFloat(entry.PercentCompleted) * 100;
                             entry.Percent = entry.Percent.toFixed(0) + '%';
@@ -47,8 +48,8 @@ export default class AccountThinkific extends LightningElement {
                 else {
                     this.PageVar.ReportDataFound = false;
                 }
-                this.PageVar.IsLoaded = true;  
                 this.filterData();
+                this.PageVar.IsLoaded = true;  
             })       
             .catch((error) => {console.log(error);this.PageVar.IsLoaded = true;});
     }    
@@ -77,7 +78,7 @@ export default class AccountThinkific extends LightningElement {
             TempList[i].Visible = (i<20) ? true : false;
          }        
         this.PageVar.ReportDataFiltered = TempList;
-        this.PageVar.FilterCount = this.PageVar.ReportDataFiltered.length;
+        //this.PageVar.FilterCount = this.PageVar.ReportDataFiltered.length;
     }       
 
     DropMenu1Change(event) {
@@ -86,18 +87,19 @@ export default class AccountThinkific extends LightningElement {
     }    
 
     filterData() {  
+        console.log(this.PageVar.ReportData.length);
         let TempList = [];
         if(this.PageVar.DropMenu1Value == 'All Educators') {
-            TempList = this.PageVar.ReportData; //JSON.parse(JSON.stringify(this.PageVar.ReportData));
+            TempList = this.PageVar.ReportData; 
         } else {
             TempList = this.PageVar.ReportData.filter(obj => obj.CourseName != '');
         }
-        //let TempList = this.PageVar.ReportData.filter(obj => obj.OppStageSimple == this.PageVar.OppSimpleStatus);
-        for(let i = 0;i < TempList.length;i++){
-            TempList[i].Visible = (i<20) ? true : false;
-            }        
+        for(let i = 0;i < TempList.length;i++) {  //Only show the first 200 for performance reasons
+            if(i<200) TempList[i].Visible = true; 
+        }
         this.PageVar.ReportDataFiltered = TempList;
         this.PageVar.FilterCount = this.PageVar.ReportDataFiltered.length;
+        this.PageVar.ShowTooManyNote = (this.PageVar.ReportDataFiltered.length > 200) ? true : false;
     }
 
     DownloadEducators(event) {

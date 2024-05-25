@@ -1,0 +1,18 @@
+@import 'c/commonCSS';
+
+.QuickRefSection {
+    left:25px;
+    bottom:60px;
+    position: absolute;
+    transform: translateX(-50%);
+}
+.ColorLabel{
+    width: 20px;
+    height: 10px;
+    border-radius: 2px;
+    display: inline-block;
+    margin: 0px 6px;
+}
+.table-right-align td:not(:first-child), .table-right-align th:not(:first-child) {
+    text-align: right;
+  }

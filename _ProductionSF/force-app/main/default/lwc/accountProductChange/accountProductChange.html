@@ -20,30 +20,44 @@
             <div class="slds-col">               
                 <lightning-button-group class="slds-float_right">			
                     <lightning-button label="Download" title="Download" icon-name="utility:download" onclick={DownloadEducators}></lightning-button>
-                </lightning-button-group>                
+                </lightning-button-group>
+                <lightning-button-group class="slds-float_right">			
+                    <lightning-button label="Refresh" title="Refresh" icon-name="utility:refresh" onclick={connectedCallback}></lightning-button>
+                </lightning-button-group>                            
             </div>    
                                 
         </div>
         <!--Full table-->
         <table if:true={PageVar.ReportDataFound} class="slds-table slds-no-row-hover slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout">
-            <thead style="background-color:rgb(228, 228, 228)">
+            <thead style="background-color:rgb(255, 255, 255)">
                 <tr>
-                    <th style="width:20%;">
-                        <div>StartYear</div>
+                    <th style="width:16%;">
+                        <div>StartYear : BillingCycle</div>
                         <div class="text-grey slds-text-body_small">OppType</div>
                     </th>
-                    <th style="width:20%;">
-                        <div>Product</div>
+                    <th style="width:17%;">
+                        <div>
+                            <lightning-combobox
+                            label=""
+                            value={PageVar.ProductFilterName}
+                            options={PageVar.UniqueProducts}
+                            onchange={handleProductChange} 
+                            ></lightning-combobox>                             
+                        </div>
                         <div class="text-grey slds-text-body_small">UnitMeasure</div>                            
                     </th>
-                    <th style="width:20%;" class="slds-text-align_right">
-                        <div>Arr</div>
+                    <th style="width:16%;" class="slds-text-align_right">
+                        <div>ArrCurrent</div>
                         <div class="text-grey slds-text-body_small">Price x Qty</div>
                     </th>
-                    <th style="width:20%;" class="slds-text-align_right">
+                    <th style="width:16%;" class="slds-text-align_right">
+                        <div>ArrPrevious</div>
+                        <div class="text-grey slds-text-body_small">Price x Qty</div>
+                    </th>                    
+                    <th style="width:16%;" class="slds-text-align_right">
                         <div>ArrChange</div>                   
                     </th>      
-                    <th style="width:20%;" class="slds-text-align_right">
+                    <th style="width:16%;" class="slds-text-align_right">
                         <div>ChangeType</div>
                         <div class="text-grey slds-text-body_small">Notes</div>
                     </th>                                                                 
@@ -53,24 +67,36 @@
                 <template for:each={PageVar.ReportDataFiltered} for:item="report">
                     <tr key={report.Id} class={report.RowClass}>                          
                         <td class="slds-truncate">
-                            <div>{report.StartYear}</div>
-                            <div if:true={report.OppType}>
-                                <div class="ClickableLink text-grey slds-text-body_small slds-is-relative" data-id={report.OpportunityId} onclick={navigateToSFRecordId} title={report.OpportunityId}>{report.OppType}</div>                             
+                            <div if:true={report.ShowLevelIcon}>
+                                <lightning-icon icon-name="utility:level_down" size="x-small"></lightning-icon>
                             </div>
-                             
+                            <div if:false={report.ShowLevelIcon}>
+                                <div>{report.StartYear} : {report.BillingCycle}</div>
+                                <div if:true={report.OppType}>
+                                    <div class="ClickableLink text-grey slds-text-body_small slds-is-relative" data-id={report.OpportunityId} onclick={navigateToSFRecordId} title={report.OpportunityId}>{report.OppType}</div>                             
+                                </div>                                
+                            </div>
                         </td>
                         <td class="slds-truncate">
                             <div>{report.Product}</div>
-                            <div class="text-grey slds-text-body_small">{report.UnitMeasure}</div>
+                            <div class="text-grey slds-text-body_small">{report.UnitMeasureCurrent}</div>
                         </td>
                         <td class="slds-text-align_right">
-                            <div><lightning-formatted-number value={report.Arr} maximum-fraction-digits="2" minimum-fraction-digits="2"></lightning-formatted-number></div>
+                            <div><lightning-formatted-number value={report.ArrCurrent} maximum-fraction-digits="2" minimum-fraction-digits="2"></lightning-formatted-number></div>
                             <div class="text-grey slds-text-body_small">
-                                <lightning-formatted-number value={report.AnnualPrice} maximum-fraction-digits="2" minimum-fraction-digits="2"></lightning-formatted-number>
-                                <span if:true={report.Quantity}> x </span>
-                                <lightning-formatted-number value={report.Quantity} maximum-fraction-digits="2" minimum-fraction-digits="2"></lightning-formatted-number>
+                                <lightning-formatted-number value={report.AnnualPriceCurrent} maximum-fraction-digits="2" minimum-fraction-digits="2"></lightning-formatted-number>
+                                <span if:true={report.QuantityCurrent}> x </span>
+                                <lightning-formatted-number value={report.QuantityCurrent} maximum-fraction-digits="2" minimum-fraction-digits="2"></lightning-formatted-number>
                             </div>
                         </td> 
+                        <td class="slds-text-align_right">
+                            <div><lightning-formatted-number value={report.ArrPrevious} maximum-fraction-digits="2" minimum-fraction-digits="2"></lightning-formatted-number></div>
+                            <div class="text-grey slds-text-body_small">
+                                <lightning-formatted-number value={report.AnnualPricePrevious} maximum-fraction-digits="2" minimum-fraction-digits="2"></lightning-formatted-number>
+                                <span if:true={report.QtyPrevious}> x </span>
+                                <lightning-formatted-number value={report.QtyPrevious} maximum-fraction-digits="2" minimum-fraction-digits="2"></lightning-formatted-number>
+                            </div>
+                        </td>                        
                         <td class="slds-text-align_right">
                             <div if:true={report.ChangeType} class="">
                                 <lightning-formatted-number value={report.ArrChange} maximum-fraction-digits="2" minimum-fraction-digits="2"></lightning-formatted-number>
@@ -88,7 +114,7 @@
             </tbody>                                 
         </table>
         <div if:false={PageVar.ReportDataFound} class="slds-box slds-theme_shade slds-theme_shade">
-            <p>No Educator data found</p>
+            <p>No Product data found</p>
         </div>
     </div>    
 </template>

@@ -1,0 +1,75 @@
+<template>
+    <div class="scrollable-container" style="height: 600px; overflow-y: auto;">
+
+        <table if:true={T01.data} class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout">
+            <thead>
+                <tr>
+                    <th style="width:40%;">
+                        <div>
+                            <span class="HoverLink" onclick={sort} data-sortname="Account__r_Name">Opp School</span>
+                        </div>
+                        <div>
+                            <span class="HoverLink text-grey slds-text-body_small" onclick={sort} data-sortname="Name">Opportunity</span>
+                        </div>
+                    </th>
+                    <th style="width:30%;">
+                        <div>
+                            <span class="HoverLink" onclick={sort} data-sortname="Product2_Name">Opp Product</span>
+                        </div>
+                        <div>
+                            <span class="HoverLink text-grey slds-text-body_small" onclick={sort} data-sortname="Description">Opp SubDesc</span>
+                        </div>
+                    </th>
+                    <th style="width:15%;">
+                        <span class="HoverLink" onclick={sort} data-sortname="Quantity" data-popovername="PopSeatsO" onmouseover={PopoverShow} onmouseleave={PopoverHide} style="border: 1px solid red;">
+                                    Seats (O)
+                                    <section if:true={popover.PopSeatsO} class="slds-popover slds-nubbin_bottom-right slds-is-absolute" role="dialog" style="right:-10px;bottom:40px;white-space:normal;font-weight: normal;">
+                                        <div class="slds-popover__body slds-text-color_default">
+                                            Quantity in the Opportunity. Note that we extract the first number in the Sub-Description so it may not be 100% accurate.                                     
+                                        </div>
+                                    </section> 
+                                </span>
+                    </th>
+                    <th style="width:10%;" class="HoverLink" onclick={sort} data-sortname="StartDate__c">
+                        Contract
+                    </th>
+                    <th style="width:5%;">
+                        Info
+                    </th>                
+                </tr>
+            </thead>
+            <tbody>
+                <template for:each={T01.data} for:item="report">
+                    <tr key={report.Id} if:true={report.Visible}>
+                        <td class="slds-truncate">
+                            <div class="ClickableLink" data-item={report} data-id={report.Id} data-parentid={report.Product2_Name} onclick={navigateToSFRecordId}>{report.Account__r_Name}</div>
+                            <div class="text-grey slds-text-body_small ClickableLink" data-id={report.OpportunityId} onclick={navigateToSFRecordId}>{report.Name}</div>
+                        </td>
+                        <td class="slds-truncate">                     
+                            <div>{report.Product2_Name}</div>
+                            <div class="text-grey slds-text-body_small">{report.Description}</div>
+                        </td>
+                        <td class="slds-truncate">
+                            <div>
+                                <lightning-formatted-number value={report.Quantity}></lightning-formatted-number>
+                            </div>
+                        </td>
+                        <td class="slds-truncate tdContract">
+                            <div class={report.ContractClass}>
+                                <div class="ContractDuration">{report.ContractDuration}</div>
+                                <div class="ContractMonth">{report.ContractMonth}</div>
+                                <div class="ContractYear">{report.ContractYear}</div>
+                            </div>
+                        </td>
+                        <td>
+                            <lightning-button-icon icon-name="utility:settings" data-id={report.Id} onclick={GetRowDetails}></lightning-button-icon>
+                        </td>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+        <div if:false={T01.data} class="slds-box slds-theme_shade slds-theme_shade">
+            <p>No opportunities found, please try adjusting the filters above.</p>
+        </div>
+    </div>    
+</template>

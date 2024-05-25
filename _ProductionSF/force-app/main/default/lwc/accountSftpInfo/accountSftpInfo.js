@@ -11,8 +11,6 @@ export default class AccountSftpInfo extends LightningElement {
         'Account.Name'
         ,'Account.SchoolId__c'
         ,'Account.InstitutionId__c'
-        ,'Account.SftpFolder__c'
-        ,'Account.SftpIntegrationDistrictId__c'
         ,'Account.OwnerId'
         ,'Account.BillingCountryCode'
     ] }) accSF;   
@@ -38,7 +36,8 @@ export default class AccountSftpInfo extends LightningElement {
             { label: 'AzureUS', value: 'AzureUS' },
             { label: 'AzureCA', value: 'AzureCA' },
             { label: 'AzureUK', value: 'AzureUK' },
-            { label: 'CC', value: 'CC' }
+            { label: 'CC', value: 'CC' },
+            { label: 'ISAdmin', value: 'ISAdmin' }
         ],        
         FrequencyOption: [
             { label: 'Nightly', value: 'D' },
@@ -79,13 +78,16 @@ export default class AccountSftpInfo extends LightningElement {
                     this.sftp.SftpInfo.Port = (this.sftp.SftpInfo.SftpServer == 'ftp.xello.us') ? '5087' : '22';
                     //open sftp://charlevoixemmetinter:c7ttcqj2@ftp.xello.us:5087/ -hostkey=*
                     if(this.sftp.SftpInfo.SftpServer.toLowerCase().indexOf('xello.us') > 1) {
-                        this.sftp.SftpInfo.SftpPath = 'sftp://' + this.sftp.SftpInfo.UserName + ':' + this.sftp.SftpInfo.Password + '@ftp.xello.us:5087/ -hostkey=*';
+                        this.sftp.SftpInfo.SftpPath = '\\\\10.4.10.4\\SchoolUpload\\' + this.sftp.SftpInfo.UserName + '\\' + this.sftp.SftpInfo.UserName;
+                        this.sftp.SftpInfo.Command = 'sftp://' + this.sftp.SftpInfo.UserName + ':' + this.sftp.SftpInfo.Password + '@ftp.xello.us:5087/ -hostkey=*';
                     }
                     if(this.sftp.SftpInfo.SftpServer.toLowerCase().indexOf('xello.co.uk') > 1) {
-                        this.sftp.SftpInfo.SftpPath = 'sftp://' + this.sftp.SftpInfo.UserName + ':' + this.sftp.SftpInfo.Password + '@ftp.xello.co.uk:22/ -hostkey=*';
+                        this.sftp.SftpInfo.SftpPath = '\\\\10.1.0.10\\SchoolUpload\\' + this.sftp.SftpInfo.UserName + '\\' + this.sftp.SftpInfo.UserName;
+                        this.sftp.SftpInfo.Command = 'sftp://' + this.sftp.SftpInfo.UserName + ':' + this.sftp.SftpInfo.Password + '@ftp.xello.co.uk:22/ -hostkey=*';
                     }
                     if(this.sftp.SftpInfo.SftpServer.toLowerCase().indexOf('xello.ca') > 1) {
-                        this.sftp.SftpInfo.SftpPath = 'sftp://' + this.sftp.SftpInfo.UserName + ':' + this.sftp.SftpInfo.Password + '@ftp.xello.ca:22/ -hostkey=*';
+                        this.sftp.SftpInfo.SftpPath = '\\\\10.0.0.16\\SchoolUpload\\' + this.sftp.SftpInfo.UserName + '\\' + this.sftp.SftpInfo.UserName;
+                        this.sftp.SftpInfo.Command = 'sftp://' + this.sftp.SftpInfo.UserName + ':' + this.sftp.SftpInfo.Password + '@ftp.xello.ca:22/ -hostkey=*';
                     }
 
                     this.sftp.SftpInfo.OldFtpActiveReportsExist = false;
@@ -148,6 +150,7 @@ export default class AccountSftpInfo extends LightningElement {
         //this.CurrentReport.SftpServer = this.sftp.SftpServerOption[0].value;
         this.CurrentReport.SftpServer = this.sftp.SftpServerOption.find(obj => obj.value == this.sftp.SftpInfo.SftpServer).value;
         this.CurrentReport.IsActive = 0;
+        this.CurrentReport.SchoolId = null;
 
         //Source server
         this.CurrentReport.SourceServer = 'AzureUS';
@@ -178,6 +181,7 @@ export default class AccountSftpInfo extends LightningElement {
         var params = params + '&SftpServer=' + encodeURIComponent(this.CurrentReport.SftpServer)
         var params = params + '&SourceServer=' + encodeURIComponent(this.CurrentReport.SourceServer)
         var params = params + '&IsActive=' + encodeURIComponent(this.CurrentReport.IsActive ? 1 : 0)
+        var params = params + '&SchoolId=' + encodeURIComponent((this.CurrentReport.SchoolId == '') ? 'null' : this.CurrentReport.SchoolId)
 
         //onsole.log(params);
         //return;

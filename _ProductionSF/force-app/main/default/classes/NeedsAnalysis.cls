@@ -1,7 +1,11 @@
 public with sharing class NeedsAnalysis {
 
+    /*--------------------------------------------------------------------------------------
+    Author: Anthony Abbott June 20, 2023
+    Description:    When on an account, we want to find the first Needs Analysis found by traversing up the hierarchy
+                    This returns the object (instead of Needs_Analysis__c) since we may want other values in the future that are not in the object itself
+    --------------------------------------------------------------------------------------*/
     @AuraEnabled
-    //This returns an object (instead of Needs_Analysis__c) since we may want other values in the future that are not in the object itself
     public static object FindFirstFromAccountId(string AccountId) {
         Id childAccountId = AccountId;
         Map<String, Object> NeedsAnalysisFirstFound = new Map<String, Object>(); //Create a dynamic object

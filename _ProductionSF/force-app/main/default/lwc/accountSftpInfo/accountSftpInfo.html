@@ -19,7 +19,7 @@
                         <p class="MyFieldValue">{sftp.SftpInfo.SftpFolder}</p>
                         <p if:true={sftp.IsAnthony} class="text-grey slds-text-body_small">
                             {sftp.SftpInfo.SftpPath}
-                            <span if:true={sftp.SftpInfo.OldFtpActiveReportsExist}>{sftp.SftpInfo.SftpPathOld}</span>
+                            <br>{sftp.SftpInfo.Command}
                         </p>
                     </div>
                 </div>          
@@ -90,7 +90,10 @@
                         </td>                           
                         <td if:true={sftp.IsAnthony}>
                             <div class="ClickableLink" data-id={report.ID} onclick={handleReportEdit}>{report.StoredProcedure}</div>
-                            <div class="text-grey slds-text-body_small">CreatedDate: <lightning-formatted-date-time value={report.CreatedDate} month="short" day="numeric" year="numeric"></lightning-formatted-date-time></div>
+                            <div class="text-grey slds-text-body_small">
+                                CreatedDate: <lightning-formatted-date-time value={report.CreatedDate} month="short" day="numeric" year="numeric"></lightning-formatted-date-time>
+                                <span if:true={report.SchoolId} class="slds-p-left_x-small">SchoolId: {report.SchoolId}</span>
+                            </div>
                         </td>
                     </tr>            
                 </template>
@@ -202,6 +205,9 @@
                                 <lightning-badge if:false={CurrentReport.IsActive} data-fieldname="IsActive" label="Inactive" onclick={handleToggleAnyBoolean} class="slds-badge_lightest"></lightning-badge>
                             </div>
                         </div>
+                        <div class="slds-col">
+                            <lightning-input onchange={handleReportInputChange} name="SchoolId" value={CurrentReport.SchoolId} label="SchoolId"></lightning-input>
+                        </div>                        
                         <div class="slds-col BadgeButton">
                             <lightning-combobox
                                 name="progress"

@@ -14,9 +14,13 @@ export default class AccountProductChange extends NavigationMixin(LightningEleme
         SortAsc: true,     
         ShowInfo: false,
         ShowTestIssue: false,
+        UniqueProducts: [],
+        ProductFilterName: '',
         TestIssueOptions: [
             { label: 'Select an Option', value: '' },
-            { label: 'Duplication; 2022 ARR change looks weird', value: '0011K00002PPsCnQAL' }
+            { label: 'Standard Price Change', value: '0011K00002PPsCnQAL' },
+            { label: 'Price & Quantity (Split Example)', value: '0011K00002ESzqkQAD' },
+            { label: 'Migration (Strange)', value: '00141000019h44QAAQ' }
         ],
         TestIssueValue: ''
     };
@@ -45,17 +49,37 @@ export default class AccountProductChange extends NavigationMixin(LightningEleme
                 if(this.PageVar.ReportData != null) {
                     var RowClass = 'DarkRow';
                     var StartYear = this.PageVar.ReportData[0].StartYear;
+
+                    const uniqueProducts = new Set();
                     this.PageVar.ReportData.forEach(function(entry) {
                         if(StartYear != entry.StartYear) {
                             StartYear = entry.StartYear;
                             RowClass = (RowClass == 'DarkRow') ? 'LightRow':'DarkRow';
-                        }
+                        }                       
                         entry.RowClass = RowClass;
-                        entry.Visible = true;     
+                        entry.Visible = true;
+
                         entry.ChangeType = (entry.ChangeType == null) ? '--' : entry.ChangeType;
-                        entry.Note = (entry.Note == null) ? '--' : entry.Note;                                           
-                    });             
+                        entry.Note = (entry.Note == null) ? '--' : entry.Note;  
+                        entry.ShowLevelIcon = (entry.Note.startsWith("Split"));
+
+                        uniqueProducts.add(entry.Product);                                         
+                    });    
+
                     this.PageVar.ReportDataFound = this.PageVar.ReportData.length > 0; //only make this true after confirmed so alert message does not appear (or flash) on screen
+                    
+                    //Creates a list of unique products
+                    this.PageVar.UniqueProducts = [...uniqueProducts].map(product => ({
+                        label: product,
+                        value: product
+                    }));
+
+                    //add the "All Products"
+                    this.PageVar.UniqueProducts.unshift({
+                        label: 'All Products',
+                        value: ''
+                    });
+
                 }
                 else {
                     this.PageVar.ReportDataFound = false;
@@ -130,6 +154,19 @@ export default class AccountProductChange extends NavigationMixin(LightningEleme
         location.href = 'https://xello--c.vf.force.com/apex/a_ComponentTester?Id=' + this.PageVar.TestIssueValue + '&comp=AccountProductChange'
     } 
 
+    handleProductChange(event) {
+        this.PageVar.ProductFilterName = event.detail.value;
+        let TempList = [];
+        if(this.PageVar.ProductFilterName == '') {
+            TempList = this.PageVar.ReportData; 
+        } else {
+            TempList = this.PageVar.ReportData.filter(obj => obj.Product == this.PageVar.ProductFilterName);
+        }
+        this.PageVar.ReportDataFiltered = TempList;
+
+        console.log(this.PageVar);
+    } 
+
     DownloadEducators(event) {
         let TempTable = JSON.parse(JSON.stringify(this.PageVar.ReportDataFiltered));
         let MyDate = new Date().toISOString().substring(0,10);
@@ -137,7 +174,7 @@ export default class AccountProductChange extends NavigationMixin(LightningEleme
             delete entry.Id;
             delete entry.RowClass;
         }); 
-        JSON_CSV_Download(TempTable, 'XelloAcademy_' + this.accSF.data.fields.Name.value + '_' + MyDate);
+        JSON_CSV_Download(TempTable, 'ProductChargeByARR_' + this.accSF.data.fields.Name.value + '_' + MyDate);
     }   
 
     PopoverShow(event) {

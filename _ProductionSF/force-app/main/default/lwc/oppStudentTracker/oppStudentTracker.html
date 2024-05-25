@@ -1,0 +1,156 @@
+<template>
+    <div style="width:1200px;">
+        <lightning-spinner if:true={PageVar.PageLoading} size="medium" alternative-text="Loading"></lightning-spinner>
+
+        <table if:true={T01.data} class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layoutxxx" style="width:100%;">
+            <thead>
+                <tr>
+                    <th>
+                        <div><span class="HoverLink" onclick={sort} data-sortname="Account__r_Name">Account</span></div>
+                        <div><span class="HoverLink text-grey slds-text-body_small" onclick={sort} data-sortname="Account__r_BillingCity">Location</span></div>
+                    </th>
+                    <th>
+                        <div><span class="HoverLink" onclick={sort} data-sortname="StartDate__c">Contract</span></div>
+                    </th>                   
+                    <th>
+                        <div><span class="HoverLink" onclick={sort} data-sortname="ActCode">Xello Act</span></div>
+                        <div><span class="HoverLink text-grey slds-text-body_small" onclick={sort} data-sortname="NSCAccountNumber">Xello Nsc</span></div>
+                    </th>                
+                    <th>
+                        <div><span class="HoverLink" onclick={sort} data-sortname="Account__r_g09_12__c">Enrollment</span></div>
+                    </th>
+                    <th>
+                        <div><span class="HoverLink" onclick={sort} data-sortname="SalesorderId__c">ACT Code</span></div>
+                    </th>       
+                    <th>
+                        <div><span class="HoverLink" onclick={sort} data-sortname="Salesorderitemsid__c">NSC Number</span></div>
+                    </th>                                  
+                    <th>
+                        Info
+                    </th>                
+                </tr>
+            </thead>
+            <tbody>
+                <template for:each={T01.data} for:item="report">
+                    <tr key={report.Id}>
+                        <td class="slds-truncate">
+                            <div class="ClickableLink" data-item={report} data-id={report.Id} data-parentid={report.Product2_Name} onclick={navigateToSFRecordId}>{report.Account__r_Name}</div>
+                            <div class="text-grey slds-text-body_small">{report.Account__r_BillingCity}, {report.Account__r_BillingStateCode}</div>
+                        </td>
+                        <td class="slds-truncate tdContract">
+                            <div class={report.ContractClass}>
+                                <div class="ContractDuration">{report.ContractDuration}</div>
+                                <div class="ContractMonth">{report.ContractMonth}</div>
+                                <div class="ContractYear">{report.ContractYear}</div>
+                            </div>
+                        </td>                  
+                        <td class="slds-truncate">
+                            <lightning-icon icon-name="utility:success" variant="success" size="small" class="slds-float_right slds-p-top_xx-small"></lightning-icon>
+                            <div>{report.ActCode}</div>
+                            <div>{report.NSCAccountNumber}</div>
+                        </td>                    
+                        <td>
+                            <a target="_blank" data-id={report.NCES} onclick={getFullNCESUrl}>
+                                <lightning-button-icon if:false={report.NCES} icon-name="utility:new_window" variant="bare"></lightning-button-icon> 
+                                <span if:true={report.NCES}>{report.Account__r_g09_12__c}</span>
+                            </a>                               
+                        </td>
+                        <td>
+                            <lightning-button-icon icon-name="utility:search" variant="bare" class="slds-float_left" data-id={report.Id} onclick={ActStartSearch}></lightning-button-icon>   
+                            <div>{report.SalesorderId__c}</div>                                     
+                        </td>                        
+                        <td>{report.Salesorderitemsid__c}</td>                    
+                        <td>
+                            <lightning-button-icon icon-name="utility:settings"></lightning-button-icon>                   
+                        </td>                    
+
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+        <div if:false={T01.data} class="slds-box slds-theme_shade slds-theme_shade">
+            <p>No data found, please try adjusting the filters above.</p>
+        </div>
+
+        <div if:true={modal.ACTResults}>
+            <!--MODAL-->
+            <section role="dialog" class="slds-modal slds-fade-in-open slds-modal_small">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__header">
+                        <lightning-button-icon  data-modalname="ACTResults" onclick={ModalHide} icon-name="utility:close" variant="bare" class="slds-float_right"></lightning-button-icon>
+                        <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Act Code Search</h1>
+                    </div>
+                    <div class="slds-modal__content">
+                        <div class="slds-grid slds-gutters slds-p-around_medium">
+                            <div class="slds-col slds-size_1-of-2">
+                                <div>{Act.CurrentSite.Account__r_Name}</div>
+                                <div class="text-grey slds-text-body_small">{Act.CurrentSite.Account__r_BillingCity}, {Act.CurrentSite.Account__r_BillingStateCode}</div>  
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <div onkeyup={ActSearchString} class="slds-float_right" style="width:300px;">
+                                    <lightning-input
+                                        name="enter-search"
+                                        label="Search"
+                                        type="search"
+                                        value={Act.SearchText}
+                                    ></lightning-input>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="height: 300px;overflow-y: auto;">
+                            <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layoutxxx" style="width:100%;">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <span class="HoverLink" onclick={sort} data-sortname="name">Name</span>
+                                            <div class="text-grey slds-text-body_small"><span class="HoverLink" onclick={sort} data-sortname="city">Location</span></div>
+                                        </th>
+                                        <th><span class="HoverLink" onclick={sort} data-sortname="type">Type</span></th>                   
+                                        <th><span class="HoverLink" onclick={sort} data-sortname="code">Act Code</span></th>               
+                                        <th>Select</th>               
+                                    </tr>
+                                </thead>
+                                <tbody if:false={Act.DataLoading}>
+                                    <template for:each={Act.ResultList} for:item="row">
+                                        <tr key={row.partyId}>
+                                            <td class="slds-truncate">
+                                                <div>{row.name}</div>
+                                                <div class="text-grey slds-text-body_small">{row.address1}</div>
+                                                <div class="text-grey slds-text-body_small">{row.city}, {row.state}</div>
+                                            </td>                
+                                            <td class="slds-truncate">{row.type}</td>                    
+                                            <td class="slds-truncate">{row.code}</td>                   
+                                            <td>
+                                                <lightning-button-icon data-id={row.partyId} onclick={ActSelectCode} icon-name="utility:reassign"></lightning-button-icon>                   
+                                            </td>                    
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                            <div if:true={Act.DataLoading} class="slds-box slds-theme_shade slds-theme_shade">
+                                <div class="demo-only demo-only_viewport" style="height:6rem;position:relative">
+                                    <div role="status" class="slds-spinner slds-spinner_medium">
+                                      <div class="slds-spinner__dot-a"></div>
+                                      <div class="slds-spinner__dot-b"></div>
+                                    </div>
+                                </div>
+                            </div>                            
+                            <div if:false={Act.ResultList.length} class="slds-box slds-theme_shade slds-theme_shade">
+                                <p>No data found, please try searching for less words</p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- <div class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" aria-label="Cancel and close">Cancel</button>
+                        <button class="slds-button slds-button_brand">Save</button>
+                    </div> -->
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>    
+        </div>    
+
+    </div>
+</template>
+

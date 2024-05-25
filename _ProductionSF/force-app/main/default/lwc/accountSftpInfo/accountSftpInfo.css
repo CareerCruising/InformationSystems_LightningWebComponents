@@ -4,7 +4,9 @@
     border-radius: 5px;
 }
 .rounded-outline{
-    border: 1px solid;
+    border: 0px solid;
     border-radius: 5px;
     padding: 0px 4px;
+    background-color: rgb(248, 173, 81);
+    color: rgb(138, 91, 34);
 }

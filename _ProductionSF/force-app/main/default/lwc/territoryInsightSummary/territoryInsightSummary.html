@@ -1,0 +1,274 @@
+<template>
+    <div if:true={Report.IsLoaded} class="slds-grid slds-wrap slds-p-around_small" style='background-color:#ffffff;border-radius:5px;'>
+        <div class="slds-col slds-p-around_x-small">
+
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-text-heading_small">Quick Reference</div>
+                <div class="slds-col">
+                    <lightning-combobox name="progress_1X" label="" value={FilterData.Current} options={FilterData.List}
+                        onchange={ChangeFilterType} style="width:150px;" class="slds-float_right"></lightning-combobox>
+                </div>
+            </div>
+
+            <div class="slds-p-around_xx-small">
+
+                <!--ProgressBar Districts with Xello-->
+                <div class="slds-p-bottom_x-small slds-is-relative">
+                    <div class="slds-float_left ClickableLink" 
+                        onclick={navigateToDistrictReport} 
+                        data-popovername="DistrictsWithXello" 
+                        onmouseover={PopoverShow}
+                        onmouseleave={PopoverHide}
+                        data-fv2=""
+                        data-fv3="0"
+                        >Districts with Xello ({FilterData.Type.District.AssetPercentPretty})</div>
+
+                    <div class="text-grey slds-text-align_right">
+                        <lightning-formatted-number value={FilterData.Type.District.TotalAccounts} maximum-fraction-digits="0">
+                        </lightning-formatted-number>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress bg-green-xello" style={FilterData.Type.District.AssetProgressBarStyle}></div>
+                    </div>
+
+                    <!--Popover content-->
+                    <section if:true={popover.DistrictsWithXello} class="QuickRefSection slds-popover slds-nubbin_bottom"
+                        style="bottom:50px;">
+                        <div class="slds-popover__body">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <span class="ColorLabel bg-green-xello"></span>With Xello
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-formatted-number value={FilterData.Type.District.TotalWithAsset} maximum-fraction-digits="0">
+                                    </lightning-formatted-number>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <span class="ColorLabel bg-darkgrey"></span>Total Count
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-formatted-number value={FilterData.Type.District.TotalAccounts} maximum-fraction-digits="0">
+                                    </lightning-formatted-number>
+                                </div>
+                            </div>
+
+                        </div>
+                    </section>
+                </div>
+
+                <!--ProgressBar Districts Current ARR-->
+                <div class="slds-p-bottom_x-small slds-is-relative">
+
+                    <div class="slds-float_left ClickableLink" 
+                        onclick={navigateToDistrictReport} 
+                        data-popovername="DistrictsARR" 
+                        onmouseover={PopoverShow}
+                        onmouseleave={PopoverHide}
+                        data-fv2=""
+                        data-fv3="0"                            
+                        >Current ARR ({FilterData.Type.District.ArrPercentPretty})</div>
+
+                    <div class="text-grey slds-text-body_small slds-text-align_right">$<lightning-formatted-number
+                            value={FilterData.Type.District.ArrMax} maximum-fraction-digits="0"></lightning-formatted-number>
+                    </div>
+
+                    <div class="progress-bar">
+                        <div class="progress bg-blue" style={FilterData.Type.District.ArrProgressBarStyle}></div>
+                    </div>
+
+                    <!--Popover content-->
+                    <section if:true={popover.DistrictsARR} class="QuickRefSection slds-popover slds-nubbin_bottom"
+                        style="bottom:50px;">
+                        <div class="slds-popover__body">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <span class="ColorLabel bg-blue"></span>ARR Current
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    $<lightning-formatted-number value={FilterData.Type.District.ArrCurrent} maximum-fraction-digits="0">
+                                    </lightning-formatted-number>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <span class="ColorLabel bg-darkgrey"></span>ARR Max
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    $<lightning-formatted-number value={FilterData.Type.District.ArrMax} maximum-fraction-digits="0">
+                                    </lightning-formatted-number>
+                                </div>
+                            </div>
+
+                        </div>
+                    </section>
+
+                </div>
+
+                <!--ProgressBar District Risk-->
+                <div class="slds-p-bottom_x-small slds-is-relative">
+
+                    <div class="slds-float_left ClickableLink" 
+                        onclick={navigateToDistrictReport} 
+                        data-popovername="DistrictsRisk" 
+                        onmouseover={PopoverShow}
+                        onmouseleave={PopoverHide}
+                        data-fv2=""
+                        data-fv3="1"                            
+                        >Districts at Risk</div>
+
+                    <div class="text-grey slds-text-body_small slds-text-align_right">
+                        <lightning-formatted-number value={FilterData.Type.District.TotalWithAsset} maximum-fraction-digits="0">
+                        </lightning-formatted-number>
+                    </div>
+
+
+                    <div class="progress-bar">
+                        <div class="progress bg-red" style={FilterData.Type.District.RiskHighStyle}></div>
+                        <div class="progress bg-amber" style={FilterData.Type.District.RiskMedStyle}></div>
+                        <div class="progress bg-green" style={FilterData.Type.District.RiskLowStyle}></div>
+                    </div>
+
+
+                    <!--Popover content-->
+                    <section if:true={popover.DistrictsRisk} class="QuickRefSection slds-popover slds-nubbin_bottom"
+                        style="bottom:50px;">
+                        <div class="slds-popover__body">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <span class="ColorLabel bg-red"></span>High
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-formatted-number value={FilterData.Type.District.RiskHigh} maximum-fraction-digits="0"></lightning-formatted-number>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <span class="ColorLabel bg-amber"></span>Med
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-formatted-number value={FilterData.Type.District.RiskMed} maximum-fraction-digits="0"></lightning-formatted-number>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <span class="ColorLabel bg-green"></span>Low
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-formatted-number value={FilterData.Type.District.RiskLow} maximum-fraction-digits="0"></lightning-formatted-number>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <span class="ColorLabel bg-darkgrey"></span>Not Assessed
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-formatted-number value={FilterData.Type.District.RiskNA} maximum-fraction-digits="0"></lightning-formatted-number>
+                                </div>
+                            </div>
+
+                        </div>
+                    </section>
+
+                </div>
+
+            </div>
+
+			<!--ACCOUNTS-->
+			<div class="slds-is-relative slds-p-around_xx-small">             
+                Accounts
+				<!-- <div class="ClickableLink" onclick={navigateToSiteReport} data-popovername="AccountSummary" onmouseover={PopoverShow} onmouseleave={PopoverHide}>Accounts</div> -->
+				<!--Popover content-->
+				<section if:true={popover.AccountSummary} class="QuickRefSection slds-popover slds-nubbin_bottom"
+					style="width:500px;bottom:24px;">
+					<header class="slds-popover__header bg-lightgrey">
+						<h2 class="slds-truncate slds-text-heading_small">
+							Account Information
+						</h2>
+					</header>
+					<div class="slds-popover__body">
+						<table class="PopoverTable table-right-align slds-table slds-table_fixed-layout slds-table_bordered slds-no-row-hover">
+							<thead>
+								<tr>
+									<th>Type</th>
+									<th>HS</th>
+									<th>MS</th>
+									<th>ES</th>
+									<th>Oth</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><span class="ColorLabel bg-green-xello"></span>Xello Sites</td>
+									<td><lightning-formatted-number value={FilterData.Type.HS.TotalWithAsset} maximum-fraction-digits="0"></lightning-formatted-number></td>
+									<td><lightning-formatted-number value={FilterData.Type.MS.TotalWithAsset} maximum-fraction-digits="0"></lightning-formatted-number></td>
+									<td><lightning-formatted-number value={FilterData.Type.ES.TotalWithAsset} maximum-fraction-digits="0"></lightning-formatted-number></td>
+									<td><lightning-formatted-number value={FilterData.Type.Other.TotalWithAsset} maximum-fraction-digits="0"></lightning-formatted-number></td>
+								</tr>
+								<tr>
+									<td><span class="ColorLabel bg-darkgrey"></span>Total Sites</td>
+									<td><lightning-formatted-number value={FilterData.Type.HS.TotalAccounts} maximum-fraction-digits="0"></lightning-formatted-number></td>
+									<td><lightning-formatted-number value={FilterData.Type.MS.TotalAccounts} maximum-fraction-digits="0"></lightning-formatted-number></td>
+									<td><lightning-formatted-number value={FilterData.Type.ES.TotalAccounts} maximum-fraction-digits="0"></lightning-formatted-number></td>
+									<td><lightning-formatted-number value={FilterData.Type.Other.TotalAccounts} maximum-fraction-digits="0"></lightning-formatted-number></td>
+								</tr>   
+								<tr>
+									<td><span class="ColorLabel bg-blue"></span>Current ARR</td>
+									<td>$<lightning-formatted-number value={FilterData.Type.HS.ArrCurrent} maximum-fraction-digits="0"></lightning-formatted-number></td>
+									<td>$<lightning-formatted-number value={FilterData.Type.MS.ArrCurrent} maximum-fraction-digits="0"></lightning-formatted-number></td>
+									<td>$<lightning-formatted-number value={FilterData.Type.ES.ArrCurrent} maximum-fraction-digits="0"></lightning-formatted-number></td>
+									<td>$<lightning-formatted-number value={FilterData.Type.Other.ArrCurrent} maximum-fraction-digits="0"></lightning-formatted-number></td>
+								</tr>
+								<tr>
+									<td><span class="ColorLabel bg-darkgrey"></span>Max ARR</td>
+									<td>$<lightning-formatted-number value={FilterData.Type.HS.ArrMax} maximum-fraction-digits="0"></lightning-formatted-number></td>
+									<td>$<lightning-formatted-number value={FilterData.Type.MS.ArrMax} maximum-fraction-digits="0"></lightning-formatted-number></td>
+									<td>$<lightning-formatted-number value={FilterData.Type.ES.ArrMax} maximum-fraction-digits="0"></lightning-formatted-number></td>
+									<td>$<lightning-formatted-number value={FilterData.Type.Other.ArrMax} maximum-fraction-digits="0"></lightning-formatted-number></td>
+								</tr>                                                                                             
+							</tbody>
+						</table>
+					</div>
+				</section>
+			</div>
+
+
+			<div class="slds-grid">
+				<div class="slds-col slds-size_1-of-4 slds-text-align_center">
+					<div class="text-grey slds-text-body_small" style="width:50px;">HS</div>
+				</div>
+				<div class="slds-col slds-size_1-of-4 slds-text-align_center">
+					<div class="text-grey slds-text-body_small" style="width:50px;">MS</div>
+				</div>
+				<div class="slds-col slds-size_1-of-4 slds-text-align_center">
+					<div class="text-grey slds-text-body_small" style="width:50px;">ES</div>
+				</div>
+				<div class="slds-col slds-size_1-of-4 slds-text-align_center">
+					<div class="text-grey slds-text-body_small" style="width:50px;">Oth</div>
+				</div>
+			</div>
+
+			<div class="slds-grid slds-p-bottom_x-small">
+				<div class="slds-col slds-size_1-of-4 slds-text-align_center">
+					<div class="simple-progress-ring green-xello" data-progress={FilterData.Type.HS.AssetPercentPretty} style={FilterData.Type.HS.AssetProgressCircle}></div>
+				</div>
+				<div class="slds-col slds-size_1-of-4 slds-text-align_center">
+					<div class="simple-progress-ring green-xello" data-progress={FilterData.Type.MS.AssetPercentPretty} style={FilterData.Type.MS.AssetProgressCircle}></div>
+				</div>
+				<div class="slds-col slds-size_1-of-4 slds-text-align_center">
+					<div class="simple-progress-ring green-xello" data-progress={FilterData.Type.ES.AssetPercentPretty} style={FilterData.Type.ES.AssetProgressCircle}></div>
+				</div>
+				<div class="slds-col slds-size_1-of-4 slds-text-align_center">
+					<div class="simple-progress-ring green-xello" data-progress={FilterData.Type.Other.AssetPercentPretty} style={FilterData.Type.Other.AssetProgressCircle}></div>
+				</div>
+			</div>
+
+			<div class="slds-grid slds-p-bottom_x-small">
+				<div class=" slds-col slds-size_1-of-4 slds-text-align_center">
+					<div class="simple-progress-ring blue" data-progress={FilterData.Type.HS.ArrPercentPretty} style={FilterData.Type.HS.ArrProgressCircle}></div>
+				</div>
+				<div class="slds-col slds-size_1-of-4 slds-text-align_center">
+					<div class="simple-progress-ring blue" data-progress={FilterData.Type.MS.ArrPercentPretty} style={FilterData.Type.MS.ArrProgressCircle}></div>
+				</div>
+				<div class="slds-col slds-size_1-of-4 slds-text-align_center">
+					<div class="simple-progress-ring blue" data-progress={FilterData.Type.ES.ArrPercentPretty} style={FilterData.Type.ES.ArrProgressCircle}></div>
+				</div>
+				<div class="slds-col slds-size_1-of-4 slds-text-align_center">
+					<div class="simple-progress-ring blue" data-progress={FilterData.Type.Other.ArrPercentPretty} style={FilterData.Type.Other.ArrProgressCircle}></div>
+				</div>
+			</div>
+
+        </div>
+    </div>
+</template>

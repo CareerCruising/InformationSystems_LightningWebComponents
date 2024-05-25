@@ -8,6 +8,11 @@
     border-bottom: solid 1px transparent;
 }
 .DarkRow:hover > td, .LightRow:hover > td {
-    border-top-color: gray;
-    border-bottom-color: gray;
+    background-color: rgb(226, 226, 226);
+    /* border-top-color: gray;
+    border-bottom-color: gray; */
+}
+.slds-table thead tr th {
+    background-color: rgb(255, 255, 255);
+    border-bottom: solid 2px gray;;
 }

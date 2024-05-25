@@ -5,7 +5,8 @@
         <!--Header / filters-->
         <div class="slds-grid slds-gutters slds-p-around_xx-small">
             <div class="slds-col slds-p-top_x-small">
-                Count: {PageVar.ReportDataFiltered.length}
+                Count: <strong>{PageVar.FilterCount}</strong>
+                <span if:true={PageVar.ShowTooManyNote} class="slds-text-color_error"> (Only showing top 200 - click download for full list)</span>
             </div>   
             <div class="slds-col">               
                 <!-- <div class="slds-col slds-p-top_small slds-float_right slds-text-align_right">
@@ -42,7 +43,7 @@
             </thead>
             <tbody>
                 <template for:each={PageVar.ReportDataFiltered} for:item="report">
-                    <tr key={report.Id}>                          
+                    <tr key={report.Id} if:true={report.Visible}>                          
                         <td class="slds-truncate">
                             <div>{report.FirstName} {report.LastName}</div>
                             <div class="text-grey slds-text-body_small">{report.InstitutionName}</div>
