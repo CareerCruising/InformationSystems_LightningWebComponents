@@ -68,12 +68,13 @@
                             <div if:true={report.LastRowCount} class="text-grey slds-text-body_small">
                                 <lightning-formatted-number value={report.LastRowCount}></lightning-formatted-number> rows
                                 (<lightning-formatted-number value={report.DurationSeconds}></lightning-formatted-number> sec)
-                                <lightning-icon if:true={report.IsTooLong} icon-name="utility:warning" size="small" class="slds-p-right_xx-small hovertext" variant="warning" data-hover="This report is requires a lot of processing power. It might be overly complex or have inefficient code."></lightning-icon>
+                                
                             </div>
                         </td>
                         <td>
                             <lightning-badge if:true={report.IsActive} label="Active" data-id={report.ID} class="slds-badge_inverse BadgeMinPadding"></lightning-badge>
                             <lightning-badge if:false={report.IsActive} label="Inactive" data-id={report.ID} class="slds-badge_lightest BadgeMinPadding"></lightning-badge>
+                            <lightning-icon if:true={report.IsTooLong} icon-name="utility:warning" size="small" class="slds-p-right_xx-small hovertext" variant="warning" data-hover="This report is requires a lot of processing power. It might be overly complex or have inefficient code."></lightning-icon>
                             <div class="slds-p-left_x-small text-grey slds-text-body_small">
                                 <lightning-icon icon-name="utility:event" size="xx-small" class="Opacity5 slds-p-right_xx-small"></lightning-icon>
                                 <span>{report.FrequencyText}</span>
