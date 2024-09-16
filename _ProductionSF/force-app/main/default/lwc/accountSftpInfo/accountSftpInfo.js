@@ -40,9 +40,18 @@ export default class AccountSftpInfo extends LightningElement {
             { label: 'ISAdmin', value: 'ISAdmin' }
         ],        
         FrequencyOption: [
-            { label: 'Nightly', value: 'D' },
-            { label: 'Weekly', value: 'W' },
-            { label: 'Monthly', value: 'M' }
+            { label: 'Daily', value: 'Daily' },
+            { label: 'Weekly-Sun', value: 'Weekly-Sun' },
+            { label: 'Weekly-Mon', value: 'Weekly-Mon' },
+            { label: 'Weekly-Tue', value: 'Weekly-Tue' },
+            { label: 'Weekly-Wed', value: 'Weekly-Wed' },
+            { label: 'Weekly-Thu', value: 'Weekly-Thu' },
+            { label: 'Weekly-Fri', value: 'Weekly-Fri' },
+            { label: 'Weekly-Sat', value: 'Weekly-Sat' },
+            { label: 'Monthly-Day1', value: 'Monthly-Day1' },
+            { label: 'Monthly-Day7', value: 'Monthly-Day7' },
+            { label: 'Monthly-Day14', value: 'Monthly-Day14' },
+            { label: 'Monthly-Day21', value: 'Monthly-Day21' }
         ]        
     };
 
@@ -95,18 +104,18 @@ export default class AccountSftpInfo extends LightningElement {
                         entry.IsXello = (entry.SourceServer == 'CC') ? false : true;
                         if(entry.LastRunDate != null) entry.LastRunDate = new Date(entry.LastRunDate);
                         if(entry.CreatedDate != null) entry.CreatedDate = new Date(entry.CreatedDate);
-                        entry.IsMonthly = (entry.Frequency == 'M') ? true: false;
+                        entry.FrequencyText = entry.Frequency;
                         entry.HasSubFolder = (entry.FileSubFolder != '' && entry.FileSubFolder != null) ? true : false;
-                        switch(entry.Frequency) {
-                            case 'M':
-                                entry.FrequencyText = 'Monthly'
-                              break;
-                            case 'W':
-                                entry.FrequencyText = 'Weekly'
-                              break;
-                            default:
-                                entry.FrequencyText = 'Nightly'
-                        }
+                        // switch(entry.Frequency) {
+                        //     case 'M':
+                        //         entry.FrequencyText = 'Monthly'
+                        //       break;
+                        //     case 'W':
+                        //         entry.FrequencyText = 'Weekly'
+                        //       break;
+                        //     default:
+                        //         entry.FrequencyText = 'Nightly'
+                        // }
                         if(entry.DurationSeconds == null) entry.DurationSeconds = 0;
                         entry.IsTooLong = (entry.DurationSeconds > 60 && entry.IsActive)  ? true: false;
                         
@@ -157,7 +166,7 @@ export default class AccountSftpInfo extends LightningElement {
         if(this.sftp.SftpInfo.SftpServer == 'ftp.xello.co.uk') this.CurrentReport.SourceServer = 'AzureUK';
         if(this.sftp.SftpInfo.SftpServer == 'ftp.xello.ca') this.CurrentReport.SourceServer = 'AzureCA';
         
-        this.CurrentReport.Frequency = 'M';
+        this.CurrentReport.Frequency = 'Monthly-Day1';
         this.sftp.ShowReportEdit = true;
     }
     handleReportEdit(event){
