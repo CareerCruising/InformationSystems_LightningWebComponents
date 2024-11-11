@@ -51,6 +51,7 @@ export default class AccountSftpInfo extends LightningElement {
             { label: 'Monthly-Day1', value: 'Monthly-Day1' },
             { label: 'Monthly-Day7', value: 'Monthly-Day7' },
             { label: 'Monthly-Day14', value: 'Monthly-Day14' },
+            { label: 'Monthly-Day15', value: 'Monthly-Day15' },
             { label: 'Monthly-Day21', value: 'Monthly-Day21' }
         ]        
     };
