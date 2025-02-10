@@ -49,6 +49,7 @@ export default class AccountSftpInfo extends LightningElement {
             { label: 'Weekly-Fri', value: 'Weekly-Fri' },
             { label: 'Weekly-Sat', value: 'Weekly-Sat' },
             { label: 'Monthly-Day1', value: 'Monthly-Day1' },
+            { label: 'Monthly-Day3', value: 'Monthly-Day3' },            
             { label: 'Monthly-Day7', value: 'Monthly-Day7' },
             { label: 'Monthly-Day14', value: 'Monthly-Day14' },
             { label: 'Monthly-Day15', value: 'Monthly-Day15' },
@@ -88,15 +89,15 @@ export default class AccountSftpInfo extends LightningElement {
                     this.sftp.SftpInfo.Port = (this.sftp.SftpInfo.SftpServer == 'ftp.xello.us') ? '5087' : '22';
                     //open sftp://charlevoixemmetinter:c7ttcqj2@ftp.xello.us:5087/ -hostkey=*
                     if(this.sftp.SftpInfo.SftpServer.toLowerCase().indexOf('xello.us') > 1) {
-                        this.sftp.SftpInfo.SftpPath = '\\\\10.4.10.4\\SchoolUpload\\' + this.sftp.SftpInfo.UserName + '\\' + this.sftp.SftpInfo.UserName;
+                        this.sftp.SftpInfo.SftpPath = '\\SchoolUpload\\' + this.sftp.SftpInfo.UserName + '\\' + this.sftp.SftpInfo.UserName;
                         this.sftp.SftpInfo.Command = 'sftp://' + this.sftp.SftpInfo.UserName + ':' + this.sftp.SftpInfo.Password + '@ftp.xello.us:5087/ -hostkey=*';
                     }
                     if(this.sftp.SftpInfo.SftpServer.toLowerCase().indexOf('xello.co.uk') > 1) {
-                        this.sftp.SftpInfo.SftpPath = '\\\\10.1.0.10\\SchoolUpload\\' + this.sftp.SftpInfo.UserName + '\\' + this.sftp.SftpInfo.UserName;
+                        this.sftp.SftpInfo.SftpPath = '\\SchoolUpload\\' + this.sftp.SftpInfo.UserName + '\\' + this.sftp.SftpInfo.UserName;
                         this.sftp.SftpInfo.Command = 'sftp://' + this.sftp.SftpInfo.UserName + ':' + this.sftp.SftpInfo.Password + '@ftp.xello.co.uk:22/ -hostkey=*';
                     }
                     if(this.sftp.SftpInfo.SftpServer.toLowerCase().indexOf('xello.ca') > 1) {
-                        this.sftp.SftpInfo.SftpPath = '\\\\10.0.0.16\\SchoolUpload\\' + this.sftp.SftpInfo.UserName + '\\' + this.sftp.SftpInfo.UserName;
+                        this.sftp.SftpInfo.SftpPath = '\\SchoolUpload\\' + this.sftp.SftpInfo.UserName + '\\' + this.sftp.SftpInfo.UserName;
                         this.sftp.SftpInfo.Command = 'sftp://' + this.sftp.SftpInfo.UserName + ':' + this.sftp.SftpInfo.Password + '@ftp.xello.ca:22/ -hostkey=*';
                     }
 

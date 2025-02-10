@@ -95,7 +95,7 @@ export default class AccountKeyStats extends NavigationMixin(LightningElement) {
         this.LastContactClass = 'metric Grade' + this.LastContactGrade;
 
         this.AccountType = getFieldValue(this.account.data, 'Account.Type')
-        if('Regional or Government Office, School District Office'.indexOf(this.AccountType) >= 0){ //Is AccountType in the defined list?
+        if('Regional or Government Office, School District Office, Adult or Continuing Education'.indexOf(this.AccountType) >= 0){ //Is AccountType in the defined list?
             return true;
         } else {
             return false;
