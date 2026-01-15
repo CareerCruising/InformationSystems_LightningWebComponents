@@ -23,22 +23,22 @@ export default class CallOutOppCopy extends NavigationMixin(LightningElement) {
         fetch('https://is.xello.world/api/Integrations/OpportunityCopy?OppId=' + this.recordId).then((response) => response.json())
             .then((jsonResponse) => {
                 console.log('jsonResponse',jsonResponse);
-                if(jsonResponse.result == null && jsonResponse.MessageDetail != null) {
+                if(jsonResponse.Result == null && jsonResponse.MessageDetail != null) {
                     this.ActionPanelMessage = jsonResponse.Message;
                     return;
                 }
-                var data = jsonResponse.result;
-                if(data.success) {
+                var data = jsonResponse.Result;
+                if(data.Success) {
                     this.dispatchEvent(new CloseActionScreenEvent());
                     this[NavigationMixin.Navigate]({
                         type: 'standard__recordPage',
                         attributes: {
-                            recordId: data.detail,
+                            recordId: data.Detail,
                             actionName: 'view',
                         },
                     });      
                 } else {
-                    this.ActionPanel.Message = data.message + ': ' + data.detail;   
+                    this.ActionPanel.Message = data.Message + ': ' + data.Detail;   
                     this.ActionPanel.Spinner = false;
                     this.ActionPanel.Alert = true;
                     SendEmail({toAddress: ['anthonya@xello.world'], subject: 'callOutOppCopy Issue (OppSource: ' + this.recordId + ')', body: this.ActionPanel.Message})
