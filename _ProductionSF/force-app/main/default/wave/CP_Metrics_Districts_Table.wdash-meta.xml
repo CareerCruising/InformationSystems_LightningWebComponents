@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WaveDashboard xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <content xsi:nil="true"/>
+    <application>CP_Metrics</application>
+    <description>This table is a reference to make sure that we are including all managed accounts in the course planner reports</description>
+    <masterLabel>Managed Accounts Table</masterLabel>
+</WaveDashboard>

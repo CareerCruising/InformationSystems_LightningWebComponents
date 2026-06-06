@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WaveDashboard xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <content xsi:nil="true"/>
+    <application>Pardot_Embedded_Analytics</application>
+    <masterLabel>Contact Detail - Engagement History</masterLabel>
+    <templateAssetSourceName>Contact_Detail_tp_sfdcinternal</templateAssetSourceName>
+</WaveDashboard>

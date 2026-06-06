@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WaveDashboard xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <content xsi:nil="true"/>
+    <application>RevOpps</application>
+    <description>Archived version to preserve older Territory Groups that would change moving into 2022</description>
+    <masterLabel>Revenue Summary 2021</masterLabel>
+</WaveDashboard>

@@ -9,7 +9,6 @@ export default class UtlIssueTracking extends LightningElement {
         Current:'962198',
         List: [
             { label: 'All Issues', value: '961045', filter: '' },
-            { label: 'Custom Extracts', value: '961045', filter: 'Custom Extracts' },
             { label: 'Custom Extracts', value: '961045', filter: 'Custom Extracts' }
         ],
         data:[],

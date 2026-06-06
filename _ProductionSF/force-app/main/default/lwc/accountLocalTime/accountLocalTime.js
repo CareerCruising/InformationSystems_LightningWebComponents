@@ -1,115 +1,190 @@
-import { LightningElement, api, track, wire } from 'lwc';
+import { LightningElement, api, wire } from 'lwc';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 import { NavigationMixin } from 'lightning/navigation';
+import {
+    buildLocationLabel,
+    formatTimeWithShortZoneForZone,
+    resolveTimeZoneConfig
+} from 'c/localTimeUtils';
+
+const ACCOUNT_FIELDS = [
+    'Account.BillingStateCode',
+    'Account.BillingState',
+    'Account.BillingCountryCode',
+    'Account.BillingCountry',
+    'Account.System__c',
+    'Account.System__r.Name',
+    'Account.System__r.System_Status__c',
+    'Account.Parent.System__c',
+    'Account.Parent.System__r.Name',
+    'Account.Parent.System__r.System_Status__c'
+];
 
 export default class AccountLocalTime extends NavigationMixin(LightningElement) {
-
     @api objectApiName;
     @api recordId;
-    @track record;
-    @wire(getRecord, { recordId: '$recordId', fields: [
-        'Account.BillingStateCode'
-        ,'Account.TimeZoneDifferenceGMT__c'
-        ,'Account.System__c'
-        ,'Account.System__r.Name'
-        ,'Account.System__r.System_Status__c'
-        ,'Account.Parent.System__c'
-        ,'Account.Parent.System__r.Name'
-        ,'Account.Parent.System__r.System_Status__c'
-    ] }) accSF; 
-    @track Timer1 = {Interval:61000, Progress:0,MaxRunTime: null};
-    @track JavaTime = {};
-    @track PageVar = {
-        getRecordLoaded:false,
-        fetchDataLoaded:false,
-        AccountLocalTime: {}    
-    };
 
-    @track System = {
-        Id:null,
-        Name:null,
-        Status:null,
+    displayedTime;
+    localTimeLabel = 'Local Time';
+    timezoneKey;
+    errorMessage;
+    isLoading = true;
+    refreshTimeout;
+    refreshInterval;
+    activeTimeZone;
+    initializedRecordId;
+
+    System = {
+        Id: null,
+        Name: null,
+        Status: null,
         Visible: false
     };
 
-    get accSF_Loaded() {  //Repeatedly checks until true
-        if(this.accSF.data !== undefined){
-            if(!this.PageVar.getRecordLoaded) {
-                this.PageVar.getRecordLoaded = true;
-                this.acc = this.accSF.data.fields;
-
-                if(getFieldValue(this.accSF.data, 'Account.System__c') != null) {
-                    this.System.Id = getFieldValue(this.accSF.data, 'Account.System__c');
-                    this.System.Name = getFieldValue(this.accSF.data, 'Account.System__r.Name');
-                    this.System.Status = getFieldValue(this.accSF.data, 'Account.System__r.System_Status__c');
-                    this.System.Visible = true;
-                } else if(getFieldValue(this.accSF.data, 'Account.Parent.System__c') != null) {
-                    this.System.Id = getFieldValue(this.accSF.data, 'Account.Parent.System__c');
-                    this.System.Name = getFieldValue(this.accSF.data, 'Account.Parent.System__r.Name');
-                    this.System.Status = getFieldValue(this.accSF.data, 'Account.Parent.System__r.System_Status__c');
-                    this.System.Visible = true;
-                }
-                //console.log(this.acc);
-                //console.log(this.acc.Parent.System__c);
-                //console.log(getFieldValue(this.accSF.data, 'Account.Parent.System__r.System_Status__c'));
-                this.fetchData();          
-                
-                //Below code alerts every x seconds until we hit x seconds total
-                this.Timer1.IntObj = setInterval(() => {  
-                    this.Timer1.Progress = this.Timer1.Progress + this.Timer1.Interval; 
-                    
-                    const ClientTime = new Date();  
-                    ClientTime.setHours(ClientTime.getHours() + this.JavaTime.LocalDelta);
-                    this.JavaTime.ClientTime = ClientTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-
-                    //Use this if we want to stop after a period of time
-                    if ( this.Timer1.MaxRunTime != null && this.Timer1.Progress > this.Timer1.MaxRunTime ) {  
-                        clearInterval(this.Timer1.IntObj);  
-                    }  
-                }, this.Timer1.Progress + this.Timer1.Interval);
-
-            }
-            return true;
-        } else {
-            return false;
-        }
-            
+    disconnectedCallback() {
+        this.clearRefreshTimers();
     }
 
-    fetchData() {
-        this.PageVar.fetchDataLoaded = false;
-        // Use standard Fetch API 
-        fetch('https://is.xello.world/api/Integrations/AccountLocalTime?StateProv=' + this.acc.BillingStateCode.value).then((response) => response.json())
-            .then((jsonResponse) => {
-                if(jsonResponse.AccountLocalTime != null){
-                    
-                    this.PageVar.AccountLocalTime = jsonResponse.AccountLocalTime;
-                    this.PageVar.fetchDataLoaded = true;  
+    @wire(getRecord, { recordId: '$recordId', fields: ACCOUNT_FIELDS })
+    wiredAccount({ data, error }) {
+        if (error) {
+            this.isLoading = false;
+            this.errorMessage = 'Unable to load the record data needed for local time.';
+            return;
+        }
 
-                    //We only want to execute a call to the server once, then compare ClientTime with BrowserTime and update in javascript every minute
-                    const date1 = new Date();                    
-                    const date2 = new Date(jsonResponse.AccountLocalTime.LocalDateTime); // ClientTime
-                    const diffInMilliseconds = date2.getTime() - date1.getTime();
-                    const diffInHours = Math.round(diffInMilliseconds / (1000 * 60 * 60));
-                    this.JavaTime.LocalDelta = diffInHours;
-                    
-                    const ClientTime = new Date();  
-                    ClientTime.setHours(ClientTime.getHours() + this.JavaTime.LocalDelta);
-                    this.JavaTime.ClientTime = ClientTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+        if (!data) {
+            return;
+        }
 
-                }
-            })       
-            .catch((error) => {console.log(error);});
+        this.initializeSystem(data);
+
+        const locationInfo = {
+            stateCode: getFieldValue(data, 'Account.BillingStateCode'),
+            stateLabel: getFieldValue(data, 'Account.BillingState'),
+            countryCode: getFieldValue(data, 'Account.BillingCountryCode'),
+            countryLabel: getFieldValue(data, 'Account.BillingCountry')
+        };
+
+        this.localTimeLabel = buildLocationLabel(locationInfo);
+
+        if (
+            this.initializedRecordId === this.recordId &&
+            this.displayedTime &&
+            !this.shouldRefreshForLocation(locationInfo)
+        ) {
+            return;
+        }
+
+        this.initializedRecordId = this.recordId;
+        this.lastLocationInfo = locationInfo;
+        this.initializeLocalTime(locationInfo);
+    }
+
+    initializeSystem(data) {
+        this.System = {
+            Id: null,
+            Name: null,
+            Status: null,
+            Visible: false
+        };
+
+        if (getFieldValue(data, 'Account.System__c')) {
+            this.System = {
+                Id: getFieldValue(data, 'Account.System__c'),
+                Name: getFieldValue(data, 'Account.System__r.Name'),
+                Status: getFieldValue(data, 'Account.System__r.System_Status__c'),
+                Visible: true
+            };
+            return;
+        }
+
+        if (getFieldValue(data, 'Account.Parent.System__c')) {
+            this.System = {
+                Id: getFieldValue(data, 'Account.Parent.System__c'),
+                Name: getFieldValue(data, 'Account.Parent.System__r.Name'),
+                Status: getFieldValue(data, 'Account.Parent.System__r.System_Status__c'),
+                Visible: true
+            };
+        }
+    }
+
+    shouldRefreshForLocation(locationInfo) {
+        return (
+            locationInfo.stateCode !== this.lastLocationInfo?.stateCode ||
+            locationInfo.stateLabel !== this.lastLocationInfo?.stateLabel ||
+            locationInfo.countryCode !== this.lastLocationInfo?.countryCode ||
+            locationInfo.countryLabel !== this.lastLocationInfo?.countryLabel
+        );
+    }
+
+    initializeLocalTime(locationInfo) {
+        this.clearRefreshTimers();
+        this.isLoading = true;
+
+        const timeZoneConfig = resolveTimeZoneConfig(locationInfo);
+
+        if (!timeZoneConfig) {
+            this.displayedTime = null;
+            this.timezoneKey = null;
+            this.activeTimeZone = null;
+            this.isLoading = false;
+            this.errorMessage = 'No native timezone mapping was found for this address.';
+            return;
+        }
+
+        this.activeTimeZone = timeZoneConfig.timeZone;
+        this.timezoneKey = `${timeZoneConfig.label} (${timeZoneConfig.timeZone})`;
+        this.errorMessage = null;
+        this.updateDisplayedTime();
+        this.startMinuteRefresh();
+        this.isLoading = false;
+    }
+
+    updateDisplayedTime() {
+        this.displayedTime = formatTimeWithShortZoneForZone(this.activeTimeZone);
+    }
+
+    startMinuteRefresh() {
+        const now = new Date();
+        const msUntilNextMinute = 60000 - (now.getSeconds() * 1000 + now.getMilliseconds());
+
+        this.refreshTimeout = setTimeout(() => {
+            this.updateDisplayedTime();
+            this.refreshInterval = setInterval(() => {
+                this.updateDisplayedTime();
+            }, 60000);
+        }, msUntilNextMinute);
+    }
+
+    clearRefreshTimers() {
+        if (this.refreshTimeout) {
+            clearTimeout(this.refreshTimeout);
+            this.refreshTimeout = null;
+        }
+
+        if (this.refreshInterval) {
+            clearInterval(this.refreshInterval);
+            this.refreshInterval = null;
+        }
     }
 
     navigateToSystem() {
+        if (!this.System.Id) {
+            return;
+        }
+
         this[NavigationMixin.Navigate]({
             type: 'standard__recordPage',
             attributes: {
                 recordId: this.System.Id,
-                actionName: 'view',
-            },
+                actionName: 'view'
+            }
         });
-    } 
+    }
+
+    get hasTime() {
+        return Boolean(this.displayedTime);
+    }
 
 }
