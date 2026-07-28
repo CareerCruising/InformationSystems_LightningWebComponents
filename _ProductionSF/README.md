@@ -18,3 +18,13 @@ The `sfdx-project.json` file contains useful configuration information for your 
 - [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
 - [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
 - [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm)
+
+## CRM Analytics Schemas
+
+Export dataset field metadata from the authenticated org with:
+
+```bash
+npm run analytics:schemas -- --target-org <alias-or-username> --out scripts/analytics/dataset-schema-index.csv --format csv
+```
+
+Add `--search <term>` to filter the exported rows by dataset name, field name, label, type, or path.
